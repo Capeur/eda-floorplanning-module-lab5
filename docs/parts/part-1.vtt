@@ -1,0 +1,70 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.469
+Five blocks, one frame, and a tree that says where each block goes.
+
+00:00:04.469 --> 00:00:07.537
+Can you build the picture from the tree alone?
+
+00:00:07.537 --> 00:00:12.072
+By the end, you will, and you will find the tightest picture of all.
+
+00:00:12.072 --> 00:00:16.184
+A chip is made of large rectangular parts, called blocks.
+
+00:00:16.184 --> 00:00:18.709
+Ours has five blocks, named A to E.
+
+00:00:18.709 --> 00:00:23.904
+They are drawn on squared paper, so you can count each width and height.
+
+00:00:23.904 --> 00:00:27.396
+A floorplan says where each block sits on the chip.
+
+00:00:27.396 --> 00:00:31.231
+Every block must stay inside a frame called the outline.
+
+00:00:31.231 --> 00:00:34.998
+Our outline is ten squares wide and eight squares tall.
+
+00:00:34.998 --> 00:00:39.312
+The tighter the blocks are packed, the smaller the chip can be.
+
+00:00:39.312 --> 00:00:45.284
+Writing down every position is slow, so we use a recipe instead: a B-star tree.
+
+00:00:45.284 --> 00:00:47.929
+Each block is one node of the tree.
+
+00:00:47.929 --> 00:00:50.650
+The top node, A, is called the root.
+
+00:00:50.650 --> 00:00:55.488
+Each node can have two children: a left child and a right child.
+
+00:00:55.488 --> 00:00:59.100
+The root goes in the lower-left corner of the outline.
+
+00:00:59.100 --> 00:01:03.984
+From that corner, x counts squares to the right, and y counts squares up.
+
+00:01:03.984 --> 00:01:08.760
+A left child goes next door, right against its parent's right side.
+
+00:01:08.760 --> 00:01:14.106
+A right child goes upstairs, on top of its parent, with the same left edge.
+
+00:01:14.106 --> 00:01:20.023
+The names sound backwards, so remember: left means next door, right means upstairs.
+
+00:01:20.023 --> 00:01:25.440
+In the tree, a solid line means next door, and a dashed line means upstairs.
+
+00:01:25.440 --> 00:01:29.171
+A is three squares wide and two squares tall.
+
+00:01:29.171 --> 00:01:30.829
+B is A's left child.
+
+00:01:30.829 --> 00:01:34.560
+Pause and guess: where does B's left edge go?

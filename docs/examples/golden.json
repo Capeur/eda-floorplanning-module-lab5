@@ -1,0 +1,38 @@
+{
+  "id": "golden",
+  "title": "The golden tree",
+  "idea": "Left child = next door: x is the parent's x plus the parent's width. Right child = upstairs: same x as the parent. Here D lands exactly on top of A.",
+  "tree": "A(B(C(E,-),-),D)",
+  "rotated": [],
+  "expect": {
+    "pos": {
+      "A": [
+        0,
+        0
+      ],
+      "B": [
+        3,
+        0
+      ],
+      "C": [
+        5,
+        0
+      ],
+      "D": [
+        0,
+        2
+      ],
+      "E": [
+        7,
+        0
+      ]
+    },
+    "bbox": [
+      9,
+      3
+    ],
+    "area": 27,
+    "wasted": 4,
+    "legal": true
+  }
+}

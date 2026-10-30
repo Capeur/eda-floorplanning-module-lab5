@@ -1,0 +1,103 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.220
+Oui : beaucoup d'arbres battent vingt-sept.
+
+00:00:03.220 --> 00:00:07.189
+Les meilleurs n'ont besoin que de vingt-quatre cases.
+
+00:00:07.189 --> 00:00:09.585
+Voici l'un des meilleurs arbres.
+
+00:00:09.585 --> 00:00:13.704
+Son parcours place A, D, C et E, et B vient en dernier.
+
+00:00:13.704 --> 00:00:18.664
+Sous B, la ligne d'horizon est le haut de D, donc B arrive en y égal un.
+
+00:00:18.664 --> 00:00:24.244
+Il comble le trou, et la boîte fait six de large et quatre de haut : vingt-quatre
+
+00:00:24.244 --> 00:00:24.657
+cases.
+
+00:00:24.657 --> 00:00:26.448
+Une seule case est perdue.
+
+00:00:26.448 --> 00:00:31.512
+Une boîte de vingt-trois cases, sans case perdue, pourrait-elle contenir les cinq
+
+00:00:31.512 --> 00:00:31.950
+blocs ?
+
+00:00:31.950 --> 00:00:36.202
+Vingt-trois cases ne forment qu'un rectangle épais d'une seule case.
+
+00:00:36.202 --> 00:00:41.016
+Le bloc B est trop épais pour cela : vingt-quatre est donc le mieux possible.
+
+00:00:41.016 --> 00:00:44.291
+Construisez maintenant des plans de masse vous-même.
+
+00:00:44.291 --> 00:00:49.581
+Dans le lab du navigateur, vous modifiez l'arbre et vous regardez chaque bloc tomber
+
+00:00:49.581 --> 00:00:51.030
+sur la ligne d'horizon.
+
+00:00:51.030 --> 00:00:54.305
+Les défis vérifient l'arbre que vous avez construit.
+
+00:00:54.305 --> 00:00:59.280
+Soulevez D plus haut, faites tenir la longue rangée, et atteignez vingt-quatre.
+
+00:00:59.280 --> 00:01:03.582
+Si vous aimez programmer, écrivez la fonction de placement en Python.
+
+00:01:03.582 --> 00:01:06.513
+Le fichier d'exemples donne les règles exactes.
+
+00:01:06.513 --> 00:01:11.376
+Lancez une fois le vérificateur pour afficher toutes les bonnes réponses, puis
+
+00:01:11.376 --> 00:01:13.122
+lancez-le sur votre fichier.
+
+00:01:13.122 --> 00:01:17.424
+Il compare votre placement au bon sur les cinq mille quarante arbres.
+
+00:01:17.424 --> 00:01:19.071
+Enfant gauche : à côté.
+
+00:01:19.071 --> 00:01:22.722
+Enfant droit : à l'étage, avec le même bord gauche.
+
+00:01:22.722 --> 00:01:27.949
+Parcourez l'arbre : le nœud, tout son côté gauche, puis son enfant droit.
+
+00:01:27.949 --> 00:01:31.743
+Chaque bloc tombe jusqu'à toucher la ligne d'horizon.
+
+00:01:31.743 --> 00:01:37.614
+On note un plan de masse avec sa boîte englobante, et on compte les cases perdues.
+
+00:01:37.614 --> 00:01:42.912
+Un arbre ne chevauche jamais, mais il peut dépasser : vérifiez le contour.
+
+00:01:42.912 --> 00:01:47.763
+Choisissez un parcours : le lab dans le navigateur, Python, ou les deux.
+
+00:01:47.763 --> 00:01:52.479
+Cochez chaque case de la liste de contrôle, puis faites le court quiz.
+
+00:01:52.479 --> 00:01:57.802
+La suite, c'est la paire de séquences : deux listes de noms au lieu d'un arbre.
+
+00:01:57.802 --> 00:02:03.529
+Faites une pause et devinez : deux listes décrivent-elles notre plan à vingt-quatre ?
+
+00:02:03.529 --> 00:02:05.415
+Oui : deux listes suffisent.
+
+00:02:05.415 --> 00:02:08.784
+C'est la paire de séquences, dans le prochain lab.

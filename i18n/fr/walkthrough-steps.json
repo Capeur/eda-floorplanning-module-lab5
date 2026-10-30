@@ -1,0 +1,73 @@
+{
+  "algo": "Arbre B*",
+  "explanation": "Explication",
+  "step_word": "Étape",
+  "steps": [
+    {
+      "file": "01-root.png",
+      "title": "B va à côté, en x = 3",
+      "caption": "B va à côté, en x égal trois : A commence à zéro, et A fait trois de large. Rien n'est sous B, donc il repose sur le sol, en y égal zéro.",
+      "bullets": [
+        "À côté de A",
+        "x = 0 + 3 = 3",
+        "Sur le sol : y = 0"
+      ],
+      "metrics": [
+        "B en x = 3, y = 0"
+      ]
+    },
+    {
+      "file": "02-left-chain.png",
+      "title": "Le parcours : A, B, C, E, puis D",
+      "caption": "On place les blocs un par un, dans un ordre de parcours fixe. On place un nœud, puis tout son côté gauche, et seulement ensuite son enfant droit. Le parcours donne donc A, B, C et E, et D vient en dernier.",
+      "bullets": [
+        "On place un nœud",
+        "puis tout son côté gauche",
+        "seulement ensuite son enfant droit"
+      ],
+      "metrics": [
+        "parcours : A, B, C, E, D"
+      ]
+    },
+    {
+      "file": "03-right-d.png",
+      "title": "C et E vont à côté",
+      "caption": "C est l'enfant gauche de B, donc il va à côté de B, en x égal cinq. E est l'enfant gauche de C, donc il arrive à côté de C, en x égal sept. Les largeurs s'additionnent : trois, plus deux, plus deux, font sept.",
+      "bullets": [
+        "C en x = 5",
+        "E en x = 7",
+        "3 + 2 + 2 = 7"
+      ],
+      "metrics": [
+        "C en x = 5",
+        "E en x = 7"
+      ]
+    },
+    {
+      "file": "04-legal.png",
+      "title": "D monte à l'étage, sur A",
+      "caption": "Le côté gauche est fini, donc le parcours revient à D, l'enfant droit de A. D monte à l'étage, donc il commence en x égal zéro, comme A. Il se pose sur A, en y égal deux.",
+      "bullets": [
+        "D : enfant droit de A",
+        "À l'étage : x = 0",
+        "Sur A : y = 2"
+      ],
+      "metrics": [
+        "D en x = 0, y = 2"
+      ]
+    },
+    {
+      "file": "05-takeaway.png",
+      "title": "Cinq blocs placés",
+      "caption": "Les cinq blocs sont placés, et chacun est dans le contour. Faites une pause et devinez : si on échange A et C dans l'arbre, D arrive-t-il encore en y égal deux ?",
+      "bullets": [
+        "Les cinq dans le contour",
+        "On échange A et C :",
+        "D est-il encore en y = 2 ?"
+      ],
+      "metrics": [
+        "5 sur 5 placés"
+      ]
+    }
+  ]
+}

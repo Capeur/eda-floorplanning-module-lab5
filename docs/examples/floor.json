@@ -1,0 +1,40 @@
+{
+  "id": "floor",
+  "title": "A left child is not on the same row",
+  "idea": "A left child gets its x from its parent but its y from the skyline. Here E is the left child of D, D is at y = 2, and E still falls to y = 0.",
+  "tree": "A(B(C(-,D(E,-)),-),-)",
+  "rotated": [
+    "A"
+  ],
+  "expect": {
+    "pos": {
+      "A": [
+        0,
+        0
+      ],
+      "B": [
+        2,
+        0
+      ],
+      "C": [
+        4,
+        0
+      ],
+      "D": [
+        4,
+        2
+      ],
+      "E": [
+        7,
+        0
+      ]
+    },
+    "bbox": [
+      9,
+      3
+    ],
+    "area": 27,
+    "wasted": 4,
+    "legal": true
+  }
+}

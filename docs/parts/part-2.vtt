@@ -1,0 +1,40 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.883
+B goes next door, at x equals three: A starts at zero, and A is three wide.
+
+00:00:05.883 --> 00:00:10.824
+Nothing is under B, so it rests on the floor, at y equals zero.
+
+00:00:10.824 --> 00:00:15.171
+We place the blocks one at a time, in a fixed walk order.
+
+00:00:15.171 --> 00:00:21.271
+Place a node, then everything down its left side, and only then its right child.
+
+00:00:21.271 --> 00:00:25.008
+So the walk goes A, B, C and E, and D comes last.
+
+00:00:25.008 --> 00:00:30.314
+C is B's left child, so it goes next door to B, at x equals five.
+
+00:00:30.314 --> 00:00:35.782
+E is C's left child, so it lands next door to C, at x equals seven.
+
+00:00:35.782 --> 00:00:41.088
+The widths simply add up: three, plus two, plus two, makes seven.
+
+00:00:41.088 --> 00:00:46.698
+The left side is done, so the walk comes back to D, A's right child.
+
+00:00:46.698 --> 00:00:51.235
+D goes upstairs, so it starts at x equals zero, like A.
+
+00:00:51.235 --> 00:00:54.288
+It sits on top of A, at y equals two.
+
+00:00:54.288 --> 00:00:58.823
+All five blocks are placed, and every one is inside the outline.
+
+00:00:58.823 --> 00:01:04.704
+Pause and guess: if we swap A and C in the tree, does D still land at y equals two?

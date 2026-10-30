@@ -1,0 +1,93 @@
+{
+  "module": "module02-03-bstar-tree",
+  "title": "B*-tree floorplan representation check",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "Golden tree A(B(C(E,-),-),D): D is A's right child and lands at y = 2. Swap the names A and C (tree C(B(A(E,-),-),D)). Where does D land now?",
+      "choices": [
+        "y = 2",
+        "y = 3",
+        "y = 0",
+        "y = 5"
+      ],
+      "answer": 1,
+      "explain": "D is the root's right child, so it starts at the same x as C and falls onto the highest thing under its 3-wide footprint. B is 3 high and sticks out under D, so the skyline there is 3, not C's 2. D lands at (0,3), the box grows to 9x4 = 36 and a hole of 2 squares is left above C."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "In tree C(B(A(E,-),-),D), A is at (4,0) and is 3 wide. Where does its left child E start?",
+      "choices": [
+        "x = 3",
+        "x = 4",
+        "x = 7",
+        "x = 9"
+      ],
+      "answer": 2,
+      "explain": "A left child is next door: x = parent.x + parent.w = 4 + 3 = 7. E lands at (7,0). A right child would keep x = 4."
+    },
+    {
+      "id": "q3",
+      "type": "true_false",
+      "prompt": "A left child always has the same y as its parent.",
+      "answer": false,
+      "explain": "Only x is copied from the parent; y comes from the skyline. In A(B(C(-,D(E,-)),-),-) with A turned, D is at (4,2) and its left child E falls to (7,0): nothing is under it."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Placing the right child before the left subtree gives the same packing for every tree on A to E.",
+      "answer": false,
+      "explain": "The course walks node, whole left subtree, then right child. With the other order, 1764 of the 5040 trees pack differently. In A(B(C(-,E),D),-) the box is 7x5 left first but 7x8 right first."
+    },
+    {
+      "id": "q5",
+      "type": "multiple_choice",
+      "prompt": "A(B(C(D(E,-),-),-),-) puts all five blocks in one row: 3+2+2+3+2 = 12 wide, but the outline is 10 wide. Which single block, turned 90 degrees, makes the row fit?",
+      "choices": [
+        "A (3x2)",
+        "C (2x2)",
+        "D (3x1)",
+        "E (2x2)"
+      ],
+      "answer": 2,
+      "explain": "Turning D makes it 1x3, so the row is 3+2+2+1+2 = 10 wide: the box is 10x3 = 30 and legal. Turning C or E changes nothing (they are squares), and turning A only saves 1 (11 wide)."
+    },
+    {
+      "id": "q6",
+      "type": "multiple_choice",
+      "prompt": "Start tree A(B(C(D,-),-),E) has a 10x4 box (area 40). Which swap of two names gives the golden 9x3 box (area 27)?",
+      "choices": [
+        "A and B",
+        "B and C",
+        "D and E",
+        "C and E"
+      ],
+      "answer": 2,
+      "explain": "swap(D, E) gives A(B(C(E,-),-),D), the golden tree. Of the ten possible swaps it is the only one that reaches 27; the next best is swapping A and D with 30, and the rest give 40 to 50."
+    },
+    {
+      "id": "q7",
+      "type": "true_false",
+      "prompt": "Some single swap, turn or leaf move of the golden tree gives a bounding box smaller than 27.",
+      "answer": false,
+      "explain": "All 10 swaps, all 5 turns and all 8 leaf moves give 27 or more (4 swaps, 2 turns and 1 move keep exactly 27). The golden tree is tidy, but a better tree is more than one step away (216 legal trees beat it)."
+    },
+    {
+      "id": "q8",
+      "type": "multiple_choice",
+      "prompt": "The five blocks have a total area of 23. What is the smallest bounding-box area any of the 5040 trees can reach?",
+      "choices": [
+        "23",
+        "24",
+        "25",
+        "27"
+      ],
+      "answer": 1,
+      "explain": "23 is prime, so a rectangle of area 23 would be 1x23 or 23x1, but block B is 3 high. The best is 6x4 = 24 (1 wasted square), reached by 8 trees, for example A(D,C(E(B,-),-)) where B is lifted onto D."
+    }
+  ]
+}

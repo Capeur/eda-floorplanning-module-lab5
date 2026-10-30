@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lab 05 — Plan de masse par arbre B* · Plan de masse pour l'EDA</title>
+  <meta name="description" content="Lab 05 du cours Plan de masse pour l'EDA : transformer un arbre B* en plan de masse, le noter avec sa boîte englobante, et le changer en échangeant, tournant ou déplaçant, avec vidéo commentée, diapositives, lab interactif dans le navigateur et quiz.">
+  <link rel="alternate" hreflang="en" href="../index.html">
+  <link rel="preload" href="../fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../page.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <span class="crumb">Plan de masse pour l'EDA · <strong>Lab 05</strong></span>
+      <nav class="toc" aria-label="Sur cette page">
+        <a href="#video">Vidéo</a>
+        <a href="#slides">Diapositives</a>
+        <a href="#walkthrough">Pas à pas</a>
+        <a href="#lab">Lab interactif</a>
+        <a href="#implement">Implémentation</a>
+        <a href="#quiz">Quiz</a>
+        <a href="#transcript">Transcription</a>
+        <a class="lang-switch" href="../index.html" hreflang="en" lang="en" title="Read this page in English">English</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="hero">
+      <p class="eyebrow">Lab 05 · Représentations</p>
+      <h1>Plan de masse par arbre B*</h1>
+      <p class="lead">Un plan de masse à cinq blocs peut s'écrire comme un arbre. Ce lab construit l'image à partir de l'arbre (l'enfant gauche va à côté, l'enfant droit va à l'étage, chaque bloc tombe sur la ligne d'horizon), la note avec sa boîte englobante, et la change en échangeant deux noms, en tournant un bloc ou en déplaçant une feuille. Le recuit simulé, dans un lab plus tard, fait exactement ces changements des milliers de fois.</p>
+    </div>
+
+    <section id="video">
+      <div class="card video-card">
+        <div class="player" data-lang="fr" data-subs-label="Français"><video controls preload="metadata" poster="slides/poster-1.webp"><source src="parts/part-1.mp4" type="video/mp4"><track kind="subtitles" src="parts/part-1.vtt" srclang="fr" label="Français" default>Votre navigateur ne prend pas en charge la balise vidéo.</video><div class="speed" role="group" aria-label="Vitesse"><span>Vitesse</span><button type="button" class="chip" data-speed="1" aria-pressed="true">1×</button><button type="button" class="chip" data-speed="1.25" aria-pressed="false">1.25×</button><button type="button" class="chip" data-speed="1.5" aria-pressed="false">1.5×</button><button type="button" class="chip" data-speed="1.75" aria-pressed="false">1.75×</button><button type="button" class="chip" data-speed="2" aria-pressed="false">2×</button></div><p class="parts-note">Cinq courtes parties : la suivante démarre toute seule. Choisissez une partie ou une vitesse ; elle s'applique à toutes les parties.</p><ol class="parts"><li><button type="button" class="part" data-src="parts/part-1.mp4" data-vtt="parts/part-1.vtt" data-poster="slides/poster-1.webp" aria-current="true"><span class="pn">Partie 1</span><span class="pt">Un arbre est une recette</span><span class="pl">1:35</span></button></li><li><button type="button" class="part" data-src="parts/part-2.mp4" data-vtt="parts/part-2.vtt" data-poster="slides/poster-2.webp"><span class="pn">Partie 2</span><span class="pt">Parcourir l&#x27;arbre</span><span class="pl">1:04</span></button></li><li><button type="button" class="part" data-src="parts/part-3.mp4" data-vtt="parts/part-3.vtt" data-poster="slides/poster-3.webp"><span class="pn">Partie 3</span><span class="pt">La ligne d&#x27;horizon et le score</span><span class="pl">1:28</span></button></li><li><button type="button" class="part" data-src="parts/part-4.mp4" data-vtt="parts/part-4.vtt" data-poster="slides/poster-4.webp"><span class="pn">Partie 4</span><span class="pt">Trop large : tourner un bloc</span><span class="pl">1:15</span></button></li><li><button type="button" class="part" data-src="parts/part-5.mp4" data-vtt="parts/part-5.vtt" data-poster="slides/poster-5.webp"><span class="pn">Partie 5</span><span class="pt">Le plan de masse le plus serré, à vous</span><span class="pl">2:09</span></button></li></ol></div>
+        <p class="meta"><strong>7:32</strong> · 5 parties · 32 diapositives · narration en français et sous-titres</p>
+        <div class="btns"><a class="btn" href="video.mp4" download>Télécharger la vidéo complète (MP4)</a><a class="btn" href="subs.srt" download>Sous-titres (SRT)</a></div>
+      </div>
+    </section>
+
+    <section id="slides">
+      <h2>Diapositives</h2>
+      <p>Les 32 diapositives de la vidéo. Cliquez sur l'une d'elles pour l'afficher en grand, ou téléchargez la présentation complète.</p>
+      <div class="btns" style="margin-bottom:1rem">
+        <a class="btn" href="slides.pdf">Diapositives (PDF)</a>
+        <a class="btn" href="slides.pptx" download>Diapositives (PowerPoint)</a>
+      </div>
+      <div class="slides">
+        <figure><a href="slides/01.png"><img src="slides/thumb/01.webp" loading="lazy" width="480" height="270" alt="Diapositive 1: Plan de masse par arbre B*"></a><figcaption><b>01</b>Plan de masse par arbre B*</figcaption></figure>
+<figure><a href="slides/02.png"><img src="slides/thumb/02.webp" loading="lazy" width="480" height="270" alt="Diapositive 2: Cinq blocs"></a><figcaption><b>02</b>Cinq blocs</figcaption></figure>
+<figure><a href="slides/03.png"><img src="slides/thumb/03.webp" loading="lazy" width="480" height="270" alt="Diapositive 3: Le contour"></a><figcaption><b>03</b>Le contour</figcaption></figure>
+<figure><a href="slides/04.png"><img src="slides/thumb/04.webp" loading="lazy" width="480" height="270" alt="Diapositive 4: Un arbre comme recette"></a><figcaption><b>04</b>Un arbre comme recette</figcaption></figure>
+<figure><a href="slides/05.png"><img src="slides/thumb/05.webp" loading="lazy" width="480" height="270" alt="Diapositive 5: La racine va dans le coin"></a><figcaption><b>05</b>La racine va dans le coin</figcaption></figure>
+<figure><a href="slides/06.png"><img src="slides/thumb/06.webp" loading="lazy" width="480" height="270" alt="Diapositive 6: À gauche, à côté ; à droite, à l&#x27;étage"></a><figcaption><b>06</b>À gauche, à côté ; à droite, à l&#x27;étage</figcaption></figure>
+<figure><a href="slides/07.png"><img src="slides/thumb/07.webp" loading="lazy" width="480" height="270" alt="Diapositive 7: Où va B ?"></a><figcaption><b>07</b>Où va B ?</figcaption></figure>
+<figure><a href="slides/08.png"><img src="slides/thumb/08.webp" loading="lazy" width="480" height="270" alt="Diapositive 8: B va à côté, en x = 3"></a><figcaption><b>08</b>B va à côté, en x = 3</figcaption></figure>
+<figure><a href="slides/09.png"><img src="slides/thumb/09.webp" loading="lazy" width="480" height="270" alt="Diapositive 9: Le parcours : A, B, C, E, puis D"></a><figcaption><b>09</b>Le parcours : A, B, C, E, puis D</figcaption></figure>
+<figure><a href="slides/10.png"><img src="slides/thumb/10.webp" loading="lazy" width="480" height="270" alt="Diapositive 10: C et E vont à côté"></a><figcaption><b>10</b>C et E vont à côté</figcaption></figure>
+<figure><a href="slides/11.png"><img src="slides/thumb/11.webp" loading="lazy" width="480" height="270" alt="Diapositive 11: D monte à l&#x27;étage, sur A"></a><figcaption><b>11</b>D monte à l&#x27;étage, sur A</figcaption></figure>
+<figure><a href="slides/12.png"><img src="slides/thumb/12.webp" loading="lazy" width="480" height="270" alt="Diapositive 12: Cinq blocs placés"></a><figcaption><b>12</b>Cinq blocs placés</figcaption></figure>
+<figure><a href="slides/13.png"><img src="slides/thumb/13.webp" loading="lazy" width="480" height="270" alt="Diapositive 13: Échanger A et C"></a><figcaption><b>13</b>Échanger A et C</figcaption></figure>
+<figure><a href="slides/14.png"><img src="slides/thumb/14.webp" loading="lazy" width="480" height="270" alt="Diapositive 14: La ligne d&#x27;horizon"></a><figcaption><b>14</b>La ligne d&#x27;horizon</figcaption></figure>
+<figure><a href="slides/15.png"><img src="slides/thumb/15.webp" loading="lazy" width="480" height="270" alt="Diapositive 15: D se pose sur B"></a><figcaption><b>15</b>D se pose sur B</figcaption></figure>
+<figure><a href="slides/16.png"><img src="slides/thumb/16.webp" loading="lazy" width="480" height="270" alt="Diapositive 16: La boîte englobante"></a><figcaption><b>16</b>La boîte englobante</figcaption></figure>
+<figure><a href="slides/17.png"><img src="slides/thumb/17.webp" loading="lazy" width="480" height="270" alt="Diapositive 17: Les cases perdues"></a><figcaption><b>17</b>Les cases perdues</figcaption></figure>
+<figure><a href="slides/18.png"><img src="slides/thumb/18.webp" loading="lazy" width="480" height="270" alt="Diapositive 18: Un échange, un score moins bon"></a><figcaption><b>18</b>Un échange, un score moins bon</figcaption></figure>
+<figure><a href="slides/19.png"><img src="slides/thumb/19.webp" loading="lazy" width="480" height="270" alt="Diapositive 19: Une longue rangée"></a><figcaption><b>19</b>Une longue rangée</figcaption></figure>
+<figure><a href="slides/20.png"><img src="slides/thumb/20.webp" loading="lazy" width="480" height="270" alt="Diapositive 20: Chaque bloc à côté"></a><figcaption><b>20</b>Chaque bloc à côté</figcaption></figure>
+<figure><a href="slides/21.png"><img src="slides/thumb/21.webp" loading="lazy" width="480" height="270" alt="Diapositive 21: Un bloc qui dépasse"></a><figcaption><b>21</b>Un bloc qui dépasse</figcaption></figure>
+<figure><a href="slides/22.png"><img src="slides/thumb/22.webp" loading="lazy" width="480" height="270" alt="Diapositive 22: Jamais de chevauchement"></a><figcaption><b>22</b>Jamais de chevauchement</figcaption></figure>
+<figure><a href="slides/23.png"><img src="slides/thumb/23.webp" loading="lazy" width="480" height="270" alt="Diapositive 23: Tourner un bloc"></a><figcaption><b>23</b>Tourner un bloc</figcaption></figure>
+<figure><a href="slides/24.png"><img src="slides/thumb/24.webp" loading="lazy" width="480" height="270" alt="Diapositive 24: Trois petits changements"></a><figcaption><b>24</b>Trois petits changements</figcaption></figure>
+<figure><a href="slides/25.png"><img src="slides/thumb/25.webp" loading="lazy" width="480" height="270" alt="Diapositive 25: Le plan de masse le plus serré"></a><figcaption><b>25</b>Le plan de masse le plus serré</figcaption></figure>
+<figure><a href="slides/26.png"><img src="slides/thumb/26.webp" loading="lazy" width="480" height="270" alt="Diapositive 26: B est soulevé par la ligne d&#x27;horizon"></a><figcaption><b>26</b>B est soulevé par la ligne d&#x27;horizon</figcaption></figure>
+<figure><a href="slides/27.png"><img src="slides/thumb/27.webp" loading="lazy" width="480" height="270" alt="Diapositive 27: Pourquoi pas vingt-trois ?"></a><figcaption><b>27</b>Pourquoi pas vingt-trois ?</figcaption></figure>
+<figure><a href="slides/28.png"><img src="slides/thumb/28.webp" loading="lazy" width="480" height="270" alt="Diapositive 28: Parcours lab dans le navigateur"></a><figcaption><b>28</b>Parcours lab dans le navigateur</figcaption></figure>
+<figure><a href="slides/29.png"><img src="slides/thumb/29.webp" loading="lazy" width="480" height="270" alt="Diapositive 29: Parcours implémentation"></a><figcaption><b>29</b>Parcours implémentation</figcaption></figure>
+<figure><a href="slides/30.png"><img src="slides/thumb/30.webp" loading="lazy" width="480" height="270" alt="Diapositive 30: Parcours implémentation — à essayer"></a><figcaption><b>30</b>Parcours implémentation — à essayer</figcaption></figure>
+<figure><a href="slides/31.png"><img src="slides/thumb/31.webp" loading="lazy" width="480" height="270" alt="Diapositive 31: À retenir"></a><figcaption><b>31</b>À retenir</figcaption></figure>
+<figure><a href="slides/32.png"><img src="slides/thumb/32.webp" loading="lazy" width="480" height="270" alt="Diapositive 32: À vous de jouer"></a><figcaption><b>32</b>À vous de jouer</figcaption></figure>
+      </div>
+    </section>
+
+    <section id="walkthrough">
+      <h2>Pas à pas</h2>
+      <p>Les cinq images de la vidéo qui placent l'arbre de référence bloc par bloc, avec la légende de chaque étape.</p>
+      <div class="walk">
+        <figure class="walk-step"><a href="img/steps/01-root.png"><img src="img/steps/01-root.webp" loading="lazy" width="940" height="468" alt="Étape 1 / 5: B va à côté, en x = 3"></a><figcaption><b>Étape 1 / 5 · B va à côté, en x = 3</b><span>B va à côté, en x égal trois : A commence à zéro, et A fait trois de large. Rien n&#x27;est sous B, donc il repose sur le sol, en y égal zéro.</span><ul><li>À côté de A</li><li>x = 0 + 3 = 3</li><li>Sur le sol : y = 0</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/02-left-chain.png"><img src="img/steps/02-left-chain.webp" loading="lazy" width="940" height="468" alt="Étape 2 / 5: Le parcours : A, B, C, E, puis D"></a><figcaption><b>Étape 2 / 5 · Le parcours : A, B, C, E, puis D</b><span>On place les blocs un par un, dans un ordre de parcours fixe. On place un nœud, puis tout son côté gauche, et seulement ensuite son enfant droit. Le parcours donne donc A, B, C et E, et D vient en dernier.</span><ul><li>On place un nœud</li><li>puis tout son côté gauche</li><li>seulement ensuite son enfant droit</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/03-right-d.png"><img src="img/steps/03-right-d.webp" loading="lazy" width="940" height="468" alt="Étape 3 / 5: C et E vont à côté"></a><figcaption><b>Étape 3 / 5 · C et E vont à côté</b><span>C est l&#x27;enfant gauche de B, donc il va à côté de B, en x égal cinq. E est l&#x27;enfant gauche de C, donc il arrive à côté de C, en x égal sept. Les largeurs s&#x27;additionnent : trois, plus deux, plus deux, font sept.</span><ul><li>C en x = 5</li><li>E en x = 7</li><li>3 + 2 + 2 = 7</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/04-legal.png"><img src="img/steps/04-legal.webp" loading="lazy" width="940" height="468" alt="Étape 4 / 5: D monte à l&#x27;étage, sur A"></a><figcaption><b>Étape 4 / 5 · D monte à l&#x27;étage, sur A</b><span>Le côté gauche est fini, donc le parcours revient à D, l&#x27;enfant droit de A. D monte à l&#x27;étage, donc il commence en x égal zéro, comme A. Il se pose sur A, en y égal deux.</span><ul><li>D : enfant droit de A</li><li>À l&#x27;étage : x = 0</li><li>Sur A : y = 2</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/05-takeaway.png"><img src="img/steps/05-takeaway.webp" loading="lazy" width="940" height="468" alt="Étape 5 / 5: Cinq blocs placés"></a><figcaption><b>Étape 5 / 5 · Cinq blocs placés</b><span>Les cinq blocs sont placés, et chacun est dans le contour. Faites une pause et devinez : si on échange A et C dans l&#x27;arbre, D arrive-t-il encore en y égal deux ?</span><ul><li>Les cinq dans le contour</li><li>On échange A et C :</li><li>D est-il encore en y = 2 ?</li></ul></figcaption></figure>
+      </div>
+    </section>
+
+    <section id="lab">
+      <h2>Lab interactif</h2>
+      <div class="card lab-grid">
+        <a href="tools/bstar-tree/index.html"><img src="img/lab-starter.webp" loading="lazy" alt="Le lab arbre B* : l'arbre à gauche et le plan de masse à droite, avec la ligne d'horizon, la boîte englobante et les cases perdues"></a>
+        <div>
+          <p>Construisez vous-même les plans de masse, directement dans le navigateur :</p>
+          <ul>
+            <li>Choisissez le parent et le côté de chaque bloc (à côté ou à l&#x27;étage), puis appuyez sur Placer et regardez les blocs tomber sur la ligne d&#x27;horizon.</li>
+<li>Échangez deux noms, tournez un bloc, déplacez une feuille, et observez la boîte englobante, les cases perdues et si le plan de masse est valide.</li>
+<li>Chargez cinq arbres prêts à l&#x27;emploi (l&#x27;arbre de référence, A et C échangés, l&#x27;arbre d&#x27;ordre de parcours, la longue rangée, un mauvais arbre de 40).</li>
+<li>Devinez où D va arriver avant de placer, puis comparez.</li>
+          </ul>
+          <p>Neuf défis, de l'initiation à l'approfondissement, vérifient l'arbre que vous avez construit, pas le bouton sur lequel vous avez cliqué. Un changement après Placer demande un nouveau Placer, et la révélation de révision ne compte jamais.</p>
+          <div class="btns"><a class="btn primary" href="tools/bstar-tree/index.html">Ouvrir le lab</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="implement">
+      <h2>Implémentation (parcours A)</h2>
+      <p>Écrivez vous-même la fonction de placement et ses aides (placer, boîte englobante, valide, échanger, tourner, déplacer une feuille) et vérifiez-les avec les résultats de référence. Les commandes ci-dessous se lancent dans le <a href="https://github.com/yongfu-li/eda-learning">dépôt du cours</a>, depuis <code>courses/learn_floorplanning/module02-03-bstar-tree/</code>.</p>
+      <div class="files">
+        <a href="../examples/tiny_modules.json" download><code>tiny_modules.json</code><small>Les cinq blocs et le contour 10 × 8</small></a>
+<a href="../examples/golden.json" download><code>golden.json</code><small>Arbre de référence : D repose exactement sur A</small></a>
+<a href="../examples/lift.json" download><code>lift.json</code><small>A et C échangés : B soulève D et laisse un trou</small></a>
+<a href="../examples/order.json" download><code>order.json</code><small>Ordre de parcours : E est placé avant D</small></a>
+<a href="../examples/floor.json" download><code>floor.json</code><small>Un enfant gauche tombe sur le sol</small></a>
+<a href="../examples/swap.json" download><code>swap.json</code><small>Mauvais arbre (40) : un échange donne 27</small></a>
+<a href="../examples/rotate.json" download><code>rotate.json</code><small>Longue rangée : une rotation la fait tenir</small></a>
+<a href="../examples/move.json" download><code>move.json</code><small>Déplacement de feuille : 40 devient 28</small></a>
+<a href="../examples/best.json" download><code>best.json</code><small>Les plans de masse les plus serrés : 6 × 4 = 24</small></a>
+<a href="../examples/bstar_check.py" download><code>bstar_check.py</code><small>Vérificateur ; --impl contrôle votre code</small></a>
+      </div>
+      <div class="card md">
+        <h1>Exemples — arbre B*</h1>
+<p>Parcours A (implémentation). Les cinq blocs sont dans <code>examples/tiny_modules.json</code>, les arbres d'exemple dans <code>examples/*.json</code>,
+et le corrigé est <code>examples/bstar_check.py</code>.
+Chaque nombre ci-dessous a été affiché par ce vérificateur (<code>python3 examples/bstar_check.py --show</code>, <code>--json</code>).
+Lancez-le depuis le dossier du module ; il n'a besoin que de la bibliothèque standard de Python.</p>
+<h2>Objectif</h2>
+<p>Un plan de masse à cinq blocs peut s'écrire comme un <strong>arbre binaire</strong>. On construit l'image à partir de l'arbre (<strong>placer</strong>, en anglais <em>pack</em>), on la note
+(<strong>boîte englobante</strong>, <strong>valide</strong>), et on change l'image en changeant l'arbre (<strong>échanger</strong>, <strong>tourner</strong>, <strong>déplacer</strong>).
+Le recuit simulé (un lab plus tard) fait exactement ces trois changements des milliers de fois.</p>
+<h2>Définitions</h2>
+<ul>
+<li><strong>Bloc</strong> : un rectangle avec un nom, une largeur <code>w</code> et une hauteur <code>h</code>. Les tailles s'écrivent <code>w x h</code> : « 3 x 2 » fait 3 de large et 2 de haut.
+  Les cinq blocs : A 3x2, B 2x3, C 2x2, D 3x1, E 2x2. Leurs aires font <strong>23</strong> au total.</li>
+<li><strong>Contour</strong> : la boîte fixe dans laquelle les blocs doivent rester. Ici <strong>10 x 8</strong> (aire 80). L'origine est le coin inférieur gauche et
+  y croît vers le haut.</li>
+<li><strong>Arbre</strong> : chaque bloc apparaît exactement une fois. Un nœud a un <strong>enfant gauche</strong> et un <strong>enfant droit</strong>, tous deux facultatifs.
+  Forme texte : <code>id(gauche,droit)</code>, <code>-</code> pour un enfant vide, un simple id pour une feuille. <code>A(B(C(E,-),-),D)</code> est l'arbre de référence :
+  l'enfant gauche de A est B, celui de B est C, celui de C est E, et l'enfant droit de A est D.</li>
+<li><strong>Enfant gauche = à côté</strong> : il commence au bord droit de son parent. <strong>Enfant droit = à l'étage</strong> : il commence au
+  même bord gauche que son parent. Les noms sont à l'inverse de ce qu'on devine, alors dites « à côté » et « à l'étage ».</li>
+<li><strong>Ligne d'horizon</strong> (le « contour » des articles scientifiques, à ne pas confondre avec le contour de la puce) : pour chaque x, le bord supérieur de ce qui est déjà placé (0 là où il n'y a rien).
+  Placer un bloc relève la ligne d'horizon à <code>y + h</code> sur l'emprise du bloc <code>[x, x + w)</code>.</li>
+<li><strong>Valide</strong> : chaque bloc est dans le contour et deux blocs ne se chevauchent pas (se toucher par un bord est permis).</li>
+<li><strong>Boîte englobante</strong> : le plus petit rectangle autour de tous les blocs : largeur = plus grand <code>x + w</code>, hauteur = plus grand <code>y + h</code>.
+  <strong>Score = aire de la boîte englobante. Cases perdues = aire de la boîte englobante − 23.</strong></li>
+<li><strong>Deux espaces perdus différents</strong> : l'espace perdu du <em>contour</em> vaut <code>80 − 23 = 57</code> et ne change jamais avec l'arbre. L'espace perdu de la
+  <em>boîte englobante</em> (les cases perdues) est ce qu'un arbre change : 4 pour l'arbre de référence.</li>
+</ul>
+<h2>API (ce que cherche <code>--impl</code>)</h2>
+<p>Un arbre est un dictionnaire imbriqué : <code>{"id": "A", "left": {...}, "right": {...}}</code>, un enfant absent est une clé absente.
+<code>modules</code> est une liste de <code>{"id", "w", "h"}</code>, <code>outline</code> vaut <code>{"w", "h"}</code>. Un placement (pack) est <code>{id: {"x", "y", "w", "h"}}</code>.</p>
+<pre><code class="language-python">pack_bstar(tree, modules)            # le placement, selon la règle ci-dessous
+bounding_box(pack)                   # (largeur, hauteur)
+is_legal(pack, outline)              # dans le contour et sans chevauchement
+swap(tree, a, b)                     # NOUVEL arbre, noms a et b échangés, forme inchangée
+rotate(modules, id)                  # NOUVELLE liste de blocs, w et h de ce bloc échangés
+move_leaf(tree, leaf, parent, side)  # NOUVEL arbre, feuille coupée et accrochée à la place libre &quot;left&quot; ou &quot;right&quot; de parent
+</code></pre>
+<p>Ne modifiez jamais l'arbre ni la liste reçus : renvoyez-en un nouveau. <code>move_leaf</code> lève une erreur si le nœud n'est pas une
+feuille, s'il est la racine, ou si la place est prise. Les fonctions pas encore écrites sont signalées SKIP.</p>
+<h2>La règle (exacte)</h2>
+<pre><code class="language-text">walk(node, x):                        # PARCOURS EN PRÉORDRE
+  y = highest skyline value over [x, x + node.w)
+  place node at (x, y)
+  raise the skyline to y + node.h over [x, x + node.w)
+  walk(node.left,  x + node.w)        # TOUT le sous-arbre gauche d'abord (à côté)
+  walk(node.right, x)                 # puis l'enfant droit (à l'étage)
+walk(root, 0)
+</code></pre>
+<ul>
+<li>Un bloc tombe jusqu'à toucher le point le plus haut sous son emprise, donc <code>y</code> ne se tape jamais à la main.</li>
+<li>Pour un enfant droit, <code>y &gt;= parent.y + parent.h</code> (il est <em>au moins</em> sur son parent). C'est strictement plus quand un voisin plus
+  haut dépasse sous lui : voir <strong>lift</strong>.</li>
+<li>Le <code>y</code> d'un enfant gauche n'est pas celui de son parent : il tombe sur ce qu'il y a dessous, jusqu'à 0 : voir <strong>floor</strong>.</li>
+<li>L'ordre compte. Placer l'enfant droit d'abord change le placement de 1764 arbres sur 5040 : voir <strong>order</strong>.</li>
+</ul>
+<h3>Opérations</h3>
+<pre><code class="language-text">swap(tree, a, b)                  échange les deux noms ; qui est enfant gauche ou droit de qui ne change pas
+rotate(modules, id)               w, h = h, w pour ce bloc ; l'arbre ne change pas
+move_leaf(tree, leaf, p, side)    coupe la feuille de son parent, l'accroche à p.side (cette place doit être libre)
+</code></pre>
+<h2>Tableaux de référence</h2>
+<h3>Les arbres d'exemple (<code>examples/*.json</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Exemple</th>
+<th>Arbre</th>
+<th>Positions (x,y)</th>
+<th>Boîte</th>
+<th>Aire</th>
+<th>Perdues</th>
+<th>Valide</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>golden</td>
+<td><code>A(B(C(E,-),-),D)</code></td>
+<td>A(0,0) B(3,0) C(5,0) D(0,2) E(7,0)</td>
+<td>9x3</td>
+<td>27</td>
+<td>4</td>
+<td>oui</td>
+<td>D repose exactement sur A : <code>D.y = A.y + A.h = 2</code></td>
+</tr>
+<tr>
+<td>lift</td>
+<td><code>C(B(A(E,-),-),D)</code></td>
+<td>A(4,0) B(2,0) C(0,0) D(0,3) E(7,0)</td>
+<td>9x4</td>
+<td>36</td>
+<td>13</td>
+<td>oui</td>
+<td>l'arbre de référence avec A et C échangés : B fait 3 de haut et dépasse sous D, donc D arrive en 3, pas en 2, et laisse un trou de 2 cases</td>
+</tr>
+<tr>
+<td>order</td>
+<td><code>A(B(C(-,E),D),-)</code></td>
+<td>A(0,0) B(3,0) C(5,0) D(3,4) E(5,2)</td>
+<td>7x5</td>
+<td>35</td>
+<td>12</td>
+<td>oui</td>
+<td>E est placé avant D et le soulève à 4. Enfant droit d'abord : boîte 7x8</td>
+</tr>
+<tr>
+<td>floor</td>
+<td><code>A(B(C(-,D(E,-)),-),-)</code>, A tourné</td>
+<td>A(0,0) B(2,0) C(4,0) D(4,2) E(7,0)</td>
+<td>9x3</td>
+<td>27</td>
+<td>4</td>
+<td>oui</td>
+<td>E est l'enfant gauche de D mais tombe en y = 0 : il n'y a rien dessous</td>
+</tr>
+<tr>
+<td>swap, départ</td>
+<td><code>A(B(C(D,-),-),E)</code></td>
+<td>A(0,0) B(3,0) C(5,0) D(7,0) E(0,2)</td>
+<td>10x4</td>
+<td>40</td>
+<td>17</td>
+<td>oui</td>
+<td>un mauvais arbre pour les mêmes cinq blocs</td>
+</tr>
+<tr>
+<td>swap, après <code>swap(D,E)</code></td>
+<td><code>A(B(C(E,-),-),D)</code></td>
+<td>l'arbre de référence</td>
+<td>9x3</td>
+<td>27</td>
+<td>4</td>
+<td>oui</td>
+<td>un échange enlève 13 cases perdues</td>
+</tr>
+<tr>
+<td>rotate, départ</td>
+<td><code>A(B(C(D(E,-),-),-),-)</code></td>
+<td>A(0,0) B(3,0) C(5,0) D(7,0) E(10,0)</td>
+<td>12x3</td>
+<td>36</td>
+<td>13</td>
+<td><strong>non</strong></td>
+<td>chaque bloc est un enfant gauche : 3+2+2+3+2 = 12 &gt; 10, E dépasse</td>
+</tr>
+<tr>
+<td>rotate, après <code>rotate(D)</code></td>
+<td>même arbre, D vaut 1x3</td>
+<td>D(7,0) E(8,0)</td>
+<td>10x3</td>
+<td>30</td>
+<td>7</td>
+<td>oui</td>
+<td>3+2+2+1+2 = 10 : la rangée tient</td>
+</tr>
+<tr>
+<td>move, départ</td>
+<td><code>A(B(C(D,-),-),E)</code></td>
+<td>comme « swap, départ »</td>
+<td>10x4</td>
+<td>40</td>
+<td>17</td>
+<td>oui</td>
+<td></td>
+</tr>
+<tr>
+<td>move, après <code>move_leaf(D,B,right)</code></td>
+<td><code>A(B(C,D),E)</code></td>
+<td>A(0,0) B(3,0) C(5,0) D(3,3) E(0,2)</td>
+<td>7x4</td>
+<td>28</td>
+<td>5</td>
+<td>oui</td>
+<td>D est maintenant à l'étage de B</td>
+</tr>
+<tr>
+<td>best</td>
+<td><code>A(D,C(E(B,-),-))</code></td>
+<td>A(0,0) B(4,1) C(0,2) D(3,0) E(2,2)</td>
+<td>6x4</td>
+<td>24</td>
+<td>1</td>
+<td>oui</td>
+<td>B est soulevé sur D : seule la ligne d'horizon peut donner y = 1 à B</td>
+</tr>
+</tbody>
+</table>
+<p>L'exemple <code>lift</code> est l'arbre de référence avec A et C échangés (<code>derived_from</code> dans <code>lift.json</code>).</p>
+<h3>Pas à pas : l'arbre de référence</h3>
+<table>
+<thead>
+<tr>
+<th>Étape</th>
+<th>Bloc</th>
+<th>Depuis</th>
+<th>En (x,y)</th>
+<th>Retenu par</th>
+<th>Ligne d'horizon après</th>
+<th>Boîte après</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>A</td>
+<td>racine</td>
+<td>(0,0)</td>
+<td>sol</td>
+<td><code>[0,3)=2</code></td>
+<td>3x2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>B</td>
+<td>gauche de A</td>
+<td>(3,0)</td>
+<td>sol</td>
+<td><code>[0,3)=2 [3,5)=3</code></td>
+<td>5x3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>C</td>
+<td>gauche de B</td>
+<td>(5,0)</td>
+<td>sol</td>
+<td><code>[0,3)=2 [3,5)=3 [5,7)=2</code></td>
+<td>7x3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>E</td>
+<td>gauche de C</td>
+<td>(7,0)</td>
+<td>sol</td>
+<td><code>[0,3)=2 [3,5)=3 [5,9)=2</code></td>
+<td>9x3</td>
+</tr>
+<tr>
+<td>5</td>
+<td>D</td>
+<td>droit de A</td>
+<td>(0,2)</td>
+<td>A</td>
+<td><code>[0,5)=3 [5,9)=2</code></td>
+<td>9x3</td>
+</tr>
+</tbody>
+</table>
+<p><code>python3 examples/bstar_check.py --show</code> affiche ce parcours pour chaque exemple, et <code>--json</code> l'affiche en données
+(arbres, placements, boîtes englobantes et ligne d'horizon après chaque placement).</p>
+<h3>Les 5040 arbres sur A à E</h3>
+<table>
+<thead>
+<tr>
+<th>Grandeur</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>arbres étiquetés (Catalan(5) x 5!)</td>
+<td>5040</td>
+</tr>
+<tr>
+<td>valides dans le contour 10x8</td>
+<td>4680</td>
+</tr>
+<tr>
+<td>avec chevauchement</td>
+<td><strong>0</strong> (un arbre B* ne peut pas se chevaucher, par construction)</td>
+</tr>
+<tr>
+<td>non valides car trop larges / trop hauts</td>
+<td>120 / 240 (chaque arbre non valide dépasse, rien d'autre)</td>
+</tr>
+<tr>
+<td>plus petite aire de boîte englobante</td>
+<td><strong>24</strong> (6x4), atteinte par 8 arbres ; 23 est impossible (23 est premier et B fait 3 de haut)</td>
+</tr>
+<tr>
+<td>arbres valides avec une boîte plus petite que 27</td>
+<td>216</td>
+</tr>
+<tr>
+<td>le placement change si l'enfant droit est placé d'abord</td>
+<td><strong>1764</strong></td>
+</tr>
+<tr>
+<td>le placement change si y est lu chez le parent au lieu de la ligne d'horizon</td>
+<td>2714</td>
+</tr>
+<tr>
+<td>un enfant droit soulevé au-dessus du bord supérieur de son parent</td>
+<td>360</td>
+</tr>
+<tr>
+<td>un enfant gauche soulevé au-dessus du y de son parent</td>
+<td>254</td>
+</tr>
+</tbody>
+</table>
+<p>Les 8 arbres d'aire 24 (<code>examples/best.json</code>) :
+<code>A(D,C(E(B,-),-))</code>, <code>A(D,E(C(B,-),-))</code>, <code>B(C(E,-),D(A,-))</code>, <code>B(E(C,-),D(A,-))</code>, <code>C(E(B,-),A(D,-))</code>,
+<code>D(A,B(C(E,-),-))</code>, <code>D(A,B(E(C,-),-))</code>, <code>E(C(B,-),A(D,-))</code>. Chacun perd 1 case.</p>
+<h3>Une opération à la fois</h3>
+<table>
+<thead>
+<tr>
+<th>Arbre</th>
+<th>Meilleure aire après un échange (sur 10)</th>
+<th>Meilleure après une rotation (sur 5)</th>
+<th>Meilleure après un déplacement de feuille (sur 8)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>référence (27)</td>
+<td>27 (4 échanges gardent 27)</td>
+<td>27 (2 gardent 27)</td>
+<td>27 (1 garde 27)</td>
+</tr>
+<tr>
+<td>départ swap (40)</td>
+<td><strong>27</strong>, seulement <code>swap(D,E)</code></td>
+<td>32</td>
+<td>28 (deux déplacements : D vers B.right, D vers E.left)</td>
+</tr>
+</tbody>
+</table>
+<p>Aucune opération seule n'améliore donc l'arbre de référence, et depuis le départ swap, l'échange de D et E est le seul chemin vers 27.
+Pour la chaîne où tout est enfant gauche, 12 des 32 ensembles de blocs tournés sont valides ; <strong>D est le seul bloc</strong> dont la rotation seule la rend valide.</p>
+<h2>À essayer</h2>
+<pre><code class="language-bash">python3 examples/bstar_check.py                              # reference: all PASS
+python3 examples/bstar_check.py --show                       # every pack, step by step
+python3 examples/bstar_check.py --vs-node                    # same packs as the browser lab's JS, all 5040 trees
+python3 examples/bstar_check.py --impl my_bstar.py           # check YOUR functions
+python3 examples/bstar_check.py --impl examples/wrong/right_first.py   # a deliberately wrong one
+python3 examples/bstar_check.py --impl examples/wrong/no_contour.py    # another one
+python3 examples/bstar_check.py --json &gt; bstar.json          # trees, packs, skylines as data
+</code></pre>
+<p><code>examples/wrong/</code> contient deux programmes de placement avec exactement un bogue chacun : l'enfant droit placé <strong>avant</strong> le sous-arbre gauche, et
+<strong>pas de ligne d'horizon</strong> (y lu chez le parent). Les deux placent correctement l'arbre de référence, donc le seul test de l'arbre de référence ne peut pas les
+attraper. Lancez-les et lisez quelles lignes sont FAIL. La ligne « all 5040 trees » attrape les deux.</p>
+<h2>Questions de départ (demandez « pourquoi »)</h2>
+<ol>
+<li>Implémentez <code>pack_bstar</code> et affichez le tableau pas à pas de l'arbre de référence. Quel bloc retient D, et pourquoi <code>D.y</code> vaut-il 2 ?</li>
+<li>Dans <code>lift</code>, D arrive en y = 3, pas en 2. Quel bloc le soulève ? Combien de cases contient le trou au-dessus de C ?</li>
+<li>Dans <code>order</code>, pourquoi D finit-il en y = 4 ? Placez D avant le sous-arbre gauche à la main et dites quelle boîte vous obtenez.</li>
+<li>Dans <code>floor</code>, E est l'enfant gauche de D mais se trouve en y = 0. Expliquez en une phrase pourquoi « enfant gauche » ne veut pas dire « même rangée ».</li>
+<li>Depuis le départ swap, essayez les dix échanges et notez chaque aire. Pourquoi un seul atteint-il 27 ?</li>
+<li>Dans la chaîne, tournez chacun des cinq blocs à tour de rôle. Quelle rotation seule la rend valide, et pourquoi les quatre autres n'aident-elles pas ?</li>
+<li>Lancez <code>--impl examples/wrong/no_contour.py</code>. Quels exemples réussit-il, et qu'ont-ils en commun ?</li>
+</ol>
+<h2>Livrables attendus</h2>
+<ul>
+<li>Un <code>my_bstar.py</code> qui n'affiche aucun FAIL face à <code>bstar_check.py</code>.</li>
+<li>Le tableau pas à pas d'un exemple, avec la ligne d'horizon après chaque placement.</li>
+<li>Deux phrases : l'une sur la raison pour laquelle l'ordre de parcours compte, l'autre sur la raison pour laquelle la ligne d'horizon compte (utilisez <code>order</code> et <code>lift</code>).</li>
+</ul>
+<h2>Pour aller plus loin</h2>
+<ul>
+<li>Battez l'arbre de référence : trouvez un arbre valide avec une boîte plus petite que 27 (il en existe 216) sans regarder <code>best.json</code>.</li>
+<li>Atteignez 24 sans tourner aucun bloc. Combien des 5040 arbres y arrivent ? Quel bloc doit être soulevé sur un autre ?</li>
+<li>Écrivez <code>move_leaf</code> pour qu'il accepte aussi de déplacer une feuille de l'autre côté de son propre parent, et listez les 8 déplacements de feuille du départ swap avec leurs aires.</li>
+</ul>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <h2>Quiz</h2>
+      <p>8 questions rapides sur ce lab. Choisissez une réponse pour chacune, puis vérifiez.</p>
+      <div class="card quiz" id="quiz-root"
+           data-check="Vérifier mes réponses" data-reset="Recommencer" data-pass="réussi"
+           data-fail="réessayez" data-true="Vrai" data-false="Faux"></div>
+      <script type="application/json" id="quiz-data">{"module": "module02-03-bstar-tree", "title": "Quiz : plan de masse par arbre B*", "passing_score": 0.67, "items": [{"id": "q1", "type": "multiple_choice", "prompt": "Arbre de référence A(B(C(E,-),-),D) : D est l'enfant droit de A et arrive en y = 2. Échangez les noms A et C (arbre C(B(A(E,-),-),D)). Où arrive D maintenant ?", "choices": ["y = 2", "y = 3", "y = 0", "y = 5"], "answer": 1, "explain": "D est l'enfant droit de la racine : il commence au même x que C et tombe sur le point le plus haut sous son emprise de 3 de large. B fait 3 de haut et dépasse sous D, donc la ligne d'horizon y vaut 3, pas les 2 de C. D arrive en (0,3), la boîte passe à 9x4 = 36 et il reste un trou de 2 cases au-dessus de C."}, {"id": "q2", "type": "multiple_choice", "prompt": "Dans l'arbre C(B(A(E,-),-),D), A est en (4,0) et fait 3 de large. Où commence son enfant gauche E ?", "choices": ["x = 3", "x = 4", "x = 7", "x = 9"], "answer": 2, "explain": "Un enfant gauche est à côté : x = parent.x + parent.w = 4 + 3 = 7. E arrive en (7,0). Un enfant droit garderait x = 4."}, {"id": "q3", "type": "true_false", "prompt": "Un enfant gauche a toujours le même y que son parent.", "answer": false, "explain": "Seul x est repris du parent ; y vient de la ligne d'horizon. Dans A(B(C(-,D(E,-)),-),-) avec A tourné, D est en (4,2) et son enfant gauche E tombe en (7,0) : il n'y a rien dessous."}, {"id": "q4", "type": "true_false", "prompt": "Placer l'enfant droit avant le sous-arbre gauche donne le même placement pour tous les arbres sur A à E.", "answer": false, "explain": "Le cours parcourt le nœud, tout son sous-arbre gauche, puis l'enfant droit. Avec l'autre ordre, 1764 des 5040 arbres se placent autrement. Dans A(B(C(-,E),D),-) la boîte est 7x5 en commençant par la gauche, mais 7x8 en commençant par la droite."}, {"id": "q5", "type": "multiple_choice", "prompt": "A(B(C(D(E,-),-),-),-) met les cinq blocs sur une rangée : 3+2+2+3+2 = 12 de large, mais le contour fait 10 de large. Quel bloc, tourné de 90 degrés, fait tenir la rangée ?", "choices": ["A (3x2)", "C (2x2)", "D (3x1)", "E (2x2)"], "answer": 2, "explain": "Tourner D donne 1x3, donc la rangée fait 3+2+2+1+2 = 10 de large : la boîte est 10x3 = 30 et valide. Tourner C ou E ne change rien (ce sont des carrés), et tourner A ne gagne que 1 (11 de large)."}, {"id": "q6", "type": "multiple_choice", "prompt": "L'arbre de départ A(B(C(D,-),-),E) a une boîte 10x4 (aire 40). Quel échange de deux noms donne la boîte de référence 9x3 (aire 27) ?", "choices": ["A et B", "B et C", "D et E", "C et E"], "answer": 2, "explain": "swap(D, E) donne A(B(C(E,-),-),D), l'arbre de référence. Des dix échanges possibles, c'est le seul qui atteint 27 ; le suivant est l'échange de A et D avec 30, et les autres donnent de 40 à 50."}, {"id": "q7", "type": "true_false", "prompt": "Un échange, une rotation ou un déplacement de feuille de l'arbre de référence donne une boîte englobante plus petite que 27.", "answer": false, "explain": "Les 10 échanges, les 5 rotations et les 8 déplacements de feuille donnent 27 ou plus (4 échanges, 2 rotations et 1 déplacement gardent exactement 27). L'arbre de référence est net, mais un meilleur arbre est à plus d'un pas (216 arbres valides le battent)."}, {"id": "q8", "type": "multiple_choice", "prompt": "Les cinq blocs ont une aire totale de 23. Quelle est la plus petite aire de boîte englobante que peut atteindre l'un des 5040 arbres ?", "choices": ["23", "24", "25", "27"], "answer": 1, "explain": "23 est premier : un rectangle d'aire 23 serait 1x23 ou 23x1, mais le bloc B fait 3 de haut. Le meilleur est 6x4 = 24 (1 case perdue), atteint par 8 arbres, par exemple A(D,C(E(B,-),-)) où B est soulevé sur D."}]}</script>
+    </section>
+
+    <section id="transcript">
+      <details class="card transcript">
+        <summary>Transcription complète de la narration</summary>
+        <h3>Plan de masse par arbre B*</h3><p>Cinq blocs, un cadre, et un arbre qui dit où va chaque bloc. Pouvez-vous dessiner l&#x27;image à partir de l&#x27;arbre seul ? À la fin, oui, et vous trouverez même l&#x27;image la plus serrée de toutes.</p>
+<h3>Cinq blocs</h3><p>Une puce est faite de grandes pièces rectangulaires, appelées blocs. Le nôtre a cinq blocs, nommés de A à E. Ils sont sur du papier quadrillé : on peut compter chaque largeur et chaque hauteur.</p>
+<h3>Le contour</h3><p>Un plan de masse dit où se trouve chaque bloc sur la puce. Chaque bloc doit rester dans un cadre appelé le contour. Notre contour fait dix cases de large et huit cases de haut. Plus les blocs sont serrés, plus la puce peut être petite.</p>
+<h3>Un arbre comme recette</h3><p>Noter chaque position est long, alors nous utilisons une recette : un arbre B-étoile. Chaque bloc est un nœud de l&#x27;arbre. Le nœud du haut, A, s&#x27;appelle la racine. Chaque nœud peut avoir deux enfants : un enfant gauche et un enfant droit.</p>
+<h3>La racine va dans le coin</h3><p>La racine va dans le coin inférieur gauche du contour. À partir de ce coin, x compte les cases vers la droite, et y compte les cases vers le haut.</p>
+<h3>À gauche, à côté ; à droite, à l&#x27;étage</h3><p>Un enfant gauche va à côté : collé contre le côté droit de son parent. Un enfant droit va à l&#x27;étage : sur son parent, avec le même bord gauche. Les noms semblent inversés : gauche veut dire à côté, droite veut dire à l&#x27;étage. Dans l&#x27;arbre, un trait plein veut dire à côté, un pointillé veut dire à l&#x27;étage.</p>
+<h3>Où va B ?</h3><p>A fait trois cases de large et deux cases de haut. B est l&#x27;enfant gauche de A. Faites une pause et devinez : où va le bord gauche de B ?</p>
+<h3>B va à côté, en x = 3</h3><p>B va à côté, en x égal trois : A commence à zéro, et A fait trois de large. Rien n&#x27;est sous B, donc il repose sur le sol, en y égal zéro.</p>
+<h3>Le parcours : A, B, C, E, puis D</h3><p>On place les blocs un par un, dans un ordre de parcours fixe. On place un nœud, puis tout son côté gauche, et seulement ensuite son enfant droit. Le parcours donne donc A, B, C et E, et D vient en dernier.</p>
+<h3>C et E vont à côté</h3><p>C est l&#x27;enfant gauche de B, donc il va à côté de B, en x égal cinq. E est l&#x27;enfant gauche de C, donc il arrive à côté de C, en x égal sept. Les largeurs s&#x27;additionnent : trois, plus deux, plus deux, font sept.</p>
+<h3>D monte à l&#x27;étage, sur A</h3><p>Le côté gauche est fini, donc le parcours revient à D, l&#x27;enfant droit de A. D monte à l&#x27;étage, donc il commence en x égal zéro, comme A. Il se pose sur A, en y égal deux.</p>
+<h3>Cinq blocs placés</h3><p>Les cinq blocs sont placés, et chacun est dans le contour. Faites une pause et devinez : si on échange A et C dans l&#x27;arbre, D arrive-t-il encore en y égal deux ?</p>
+<h3>Échanger A et C</h3><p>Non : D arrive une case plus haut. Voici l&#x27;arbre où A et C sont échangés : C est la racine, et A prend l&#x27;ancienne place de C. C, B, A et E vont toujours à côté, l&#x27;un après l&#x27;autre.</p>
+<h3>La ligne d&#x27;horizon</h3><p>Imaginez maintenant les blocs comme une ville, vue de loin. Le bord supérieur de tout ce qui est déjà placé s&#x27;appelle la ligne d&#x27;horizon. Un nouveau bloc tombe du ciel, comme au Tetris, jusqu&#x27;à toucher la ligne d&#x27;horizon.</p>
+<h3>D se pose sur B</h3><p>D fait trois de large, donc il passe au-dessus de C et d&#x27;une partie de B. B fait trois de haut, donc il arrête D en y égal trois. Cela laisse un trou de deux cases vides au-dessus de C.</p>
+<h3>La boîte englobante</h3><p>Alors, quel plan de masse est le meilleur ? Pour comparer, on dessine la boîte englobante, le plus petit rectangle autour des blocs. Pour le premier arbre, elle fait neuf de large et trois de haut : vingt-sept cases.</p>
+<h3>Les cases perdues</h3><p>Les cinq blocs couvrent vingt-trois cases. Les quatre autres cases de la boîte sont vides : ce sont des cases perdues. Moins il y a de cases perdues, plus le plan de masse est serré.</p>
+<h3>Un échange, un score moins bon</h3><p>L&#x27;arbre échangé a une boîte de neuf sur quatre : trente-six cases, treize perdues. Un seul échange de deux noms a donc changé l&#x27;image et le score. Vingt-sept est devenu trente-six : le premier arbre est meilleur.</p>
+<h3>Une longue rangée</h3><p>Prenons maintenant un arbre où chaque enfant est un enfant gauche. Faites une pause et devinez : cette longue rangée tient-elle dans le contour ?</p>
+<h3>Chaque bloc à côté</h3><p>Non, elle ne tient pas. Chaque bloc va à côté : trois, deux, deux et trois font dix. Le contour est déjà plein, et E attend encore.</p>
+<h3>Un bloc qui dépasse</h3><p>E arrive en x égal dix, donc la rangée fait douze cases de large. E dépasse du contour de deux cases. Un plan de masse est valide seulement si chaque bloc est dans le contour. Cette rangée n&#x27;est donc pas valide.</p>
+<h3>Jamais de chevauchement</h3><p>Remarquez que les blocs ne se chevauchent jamais. Chaque bloc tombe sur la ligne d&#x27;horizon, donc il ne peut jamais atterrir dans un autre. Avec un arbre B-étoile, dépasser est la seule façon d&#x27;échouer.</p>
+<h3>Tourner un bloc</h3><p>On peut tourner un bloc sur le côté : sa largeur et sa hauteur s&#x27;échangent. Tournez D, et il fait une case de large et trois de haut. La rangée fait maintenant dix de large : elle tient pile, et elle est de nouveau valide.</p>
+<h3>Trois petits changements</h3><p>Tourner est l&#x27;un des trois petits changements. On peut aussi échanger deux noms dans l&#x27;arbre, comme avec A et C. Ou déplacer une feuille, un bloc sans enfant, vers une place libre de l&#x27;arbre. Chaque changement donne un nouveau plan de masse, avec un nouveau score. Faites une pause et devinez : un arbre peut-il battre vingt-sept ? Et quelle est la plus petite boîte ?</p>
+<h3>Le plan de masse le plus serré</h3><p>Oui : beaucoup d&#x27;arbres battent vingt-sept. Les meilleurs n&#x27;ont besoin que de vingt-quatre cases. Voici l&#x27;un des meilleurs arbres. Son parcours place A, D, C et E, et B vient en dernier.</p>
+<h3>B est soulevé par la ligne d&#x27;horizon</h3><p>Sous B, la ligne d&#x27;horizon est le haut de D, donc B arrive en y égal un. Il comble le trou, et la boîte fait six de large et quatre de haut : vingt-quatre cases. Une seule case est perdue.</p>
+<h3>Pourquoi pas vingt-trois ?</h3><p>Une boîte de vingt-trois cases, sans case perdue, pourrait-elle contenir les cinq blocs ? Vingt-trois cases ne forment qu&#x27;un rectangle épais d&#x27;une seule case. Le bloc B est trop épais pour cela : vingt-quatre est donc le mieux possible.</p>
+<h3>Parcours lab dans le navigateur</h3><p>Construisez maintenant des plans de masse vous-même. Dans le lab du navigateur, vous modifiez l&#x27;arbre et vous regardez chaque bloc tomber sur la ligne d&#x27;horizon. Les défis vérifient l&#x27;arbre que vous avez construit. Soulevez D plus haut, faites tenir la longue rangée, et atteignez vingt-quatre.</p>
+<h3>Parcours implémentation</h3><p>Si vous aimez programmer, écrivez la fonction de placement en Python. Le fichier d&#x27;exemples donne les règles exactes. Lancez une fois le vérificateur pour afficher toutes les bonnes réponses, puis lancez-le sur votre fichier. Il compare votre placement au bon sur les cinq mille quarante arbres.</p>
+<h3>À retenir</h3><p>Enfant gauche : à côté. Enfant droit : à l&#x27;étage, avec le même bord gauche. Parcourez l&#x27;arbre : le nœud, tout son côté gauche, puis son enfant droit. Chaque bloc tombe jusqu&#x27;à toucher la ligne d&#x27;horizon. On note un plan de masse avec sa boîte englobante, et on compte les cases perdues. Un arbre ne chevauche jamais, mais il peut dépasser : vérifiez le contour.</p>
+<h3>À vous de jouer</h3><p>Choisissez un parcours : le lab dans le navigateur, Python, ou les deux. Cochez chaque case de la liste de contrôle, puis faites le court quiz. La suite, c&#x27;est la paire de séquences : deux listes de noms au lieu d&#x27;un arbre. Faites une pause et devinez : deux listes décrivent-elles notre plan à vingt-quatre ? Oui : deux listes suffisent. C&#x27;est la paire de séquences, dans le prochain lab.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">Lab 05 du cours Plan de masse pour l'EDA, issu de l'<a href="https://github.com/yongfu-li/eda-learning">EDA Algorithms Platform</a> (CC BY 4.0). Version de relecture, pas encore intégrée au dépôt du cours.</div>
+  </footer>
+  <script>
+    // Keep the reader's place (#section) when switching language.
+    document.querySelectorAll("a.lang-switch").forEach((a) =>
+      a.addEventListener("click", () => { a.href = a.getAttribute("href").split("#")[0] + location.hash; })
+    );
+  </script>
+  <script src="../quiz.js"></script>
+  <script src="../player.js"></script>
+</body>
+</html>

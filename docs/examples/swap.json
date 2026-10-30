@@ -1,0 +1,78 @@
+{
+  "id": "swap",
+  "title": "One swap removes the waste",
+  "idea": "Same five blocks, a bad tree. Swapping the names D and E gives the golden tree.",
+  "tree": "A(B(C(D,-),-),E)",
+  "rotated": [],
+  "then": {
+    "op": "swap",
+    "args": [
+      "D",
+      "E"
+    ],
+    "tree": "A(B(C(E,-),-),D)",
+    "rotated": [],
+    "expect": {
+      "pos": {
+        "A": [
+          0,
+          0
+        ],
+        "B": [
+          3,
+          0
+        ],
+        "C": [
+          5,
+          0
+        ],
+        "D": [
+          0,
+          2
+        ],
+        "E": [
+          7,
+          0
+        ]
+      },
+      "bbox": [
+        9,
+        3
+      ],
+      "area": 27,
+      "wasted": 4,
+      "legal": true
+    }
+  },
+  "expect": {
+    "pos": {
+      "A": [
+        0,
+        0
+      ],
+      "B": [
+        3,
+        0
+      ],
+      "C": [
+        5,
+        0
+      ],
+      "D": [
+        7,
+        0
+      ],
+      "E": [
+        0,
+        2
+      ]
+    },
+    "bbox": [
+      10,
+      4
+    ],
+    "area": 40,
+    "wasted": 17,
+    "legal": true
+  }
+}

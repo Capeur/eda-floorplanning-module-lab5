@@ -1,0 +1,76 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.212
+Cinq blocs, un cadre, et un arbre qui dit où va chaque bloc.
+
+00:00:04.212 --> 00:00:08.072
+Pouvez-vous dessiner l'image à partir de l'arbre seul ?
+
+00:00:08.072 --> 00:00:13.056
+À la fin, oui, et vous trouverez même l'image la plus serrée de toutes.
+
+00:00:13.056 --> 00:00:17.465
+Une puce est faite de grandes pièces rectangulaires, appelées blocs.
+
+00:00:17.465 --> 00:00:19.994
+Le nôtre a cinq blocs, nommés de A à E.
+
+00:00:19.994 --> 00:00:25.440
+Ils sont sur du papier quadrillé : on peut compter chaque largeur et chaque hauteur.
+
+00:00:25.440 --> 00:00:29.238
+Un plan de masse dit où se trouve chaque bloc sur la puce.
+
+00:00:29.238 --> 00:00:32.905
+Chaque bloc doit rester dans un cadre appelé le contour.
+
+00:00:32.905 --> 00:00:36.834
+Notre contour fait dix cases de large et huit cases de haut.
+
+00:00:36.834 --> 00:00:40.632
+Plus les blocs sont serrés, plus la puce peut être petite.
+
+00:00:40.632 --> 00:00:45.870
+Noter chaque position est long, alors nous utilisons une recette : un arbre
+
+00:00:45.870 --> 00:00:46.498
+B-étoile.
+
+00:00:46.498 --> 00:00:48.943
+Chaque bloc est un nœud de l'arbre.
+
+00:00:48.943 --> 00:00:51.736
+Le nœud du haut, A, s'appelle la racine.
+
+00:00:51.736 --> 00:00:56.904
+Chaque nœud peut avoir deux enfants : un enfant gauche et un enfant droit.
+
+00:00:56.904 --> 00:01:00.477
+La racine va dans le coin inférieur gauche du contour.
+
+00:01:00.477 --> 00:01:05.903
+À partir de ce coin, x compte les cases vers la droite, et y compte les cases vers
+
+00:01:05.903 --> 00:01:06.432
+le haut.
+
+00:01:06.432 --> 00:01:11.095
+Un enfant gauche va à côté : collé contre le côté droit de son parent.
+
+00:01:11.095 --> 00:01:15.891
+Un enfant droit va à l'étage : sur son parent, avec le même bord gauche.
+
+00:01:15.891 --> 00:01:21.287
+Les noms semblent inversés : gauche veut dire à côté, droite veut dire à l'étage.
+
+00:01:21.287 --> 00:01:26.616
+Dans l'arbre, un trait plein veut dire à côté, un pointillé veut dire à l'étage.
+
+00:01:26.616 --> 00:01:29.876
+A fait trois cases de large et deux cases de haut.
+
+00:01:29.876 --> 00:01:31.636
+B est l'enfant gauche de A.
+
+00:01:31.636 --> 00:01:35.352
+Faites une pause et devinez : où va le bord gauche de B ?

@@ -1,0 +1,46 @@
+{
+  "id": "lift",
+  "title": "A taller neighbour lifts a block",
+  "idea": "The golden tree with A and C swapped. D is the root's right child, but B is three high and sticks out under D, so D lands at y = 3 instead of y = 2 and leaves a hole above C.",
+  "tree": "C(B(A(E,-),-),D)",
+  "rotated": [],
+  "derived_from": {
+    "example": "golden",
+    "op": "swap",
+    "args": [
+      "A",
+      "C"
+    ]
+  },
+  "expect": {
+    "pos": {
+      "A": [
+        4,
+        0
+      ],
+      "B": [
+        2,
+        0
+      ],
+      "C": [
+        0,
+        0
+      ],
+      "D": [
+        0,
+        3
+      ],
+      "E": [
+        7,
+        0
+      ]
+    },
+    "bbox": [
+      9,
+      4
+    ],
+    "area": 36,
+    "wasted": 13,
+    "legal": true
+  }
+}

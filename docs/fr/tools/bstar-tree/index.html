@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arbre B* — EDA Algorithms Platform</title>
+  <link rel="stylesheet" href="../../assets/site.css">
+  <link rel="stylesheet" href="../../assets/tools-shared.css">
+  <link rel="stylesheet" href="../../assets/clustering-lab.css">
+  <style>
+    /* Lab 05 workspace extras (kept local to this tool) */
+    /* one column: the tree and the floor side by side, then the editor and the numbers side by side */
+    #lab-root .tool-layout.split-wide { grid-template-columns: minmax(0, 1fr); }
+    .bt-panel { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 0 1.2rem; align-items: start; }
+    @media (max-width: 800px) { .bt-panel { grid-template-columns: minmax(0, 1fr); } }
+    .bt-views { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 0.8rem; align-items: start; }
+    @media (max-width: 640px) { .bt-views { grid-template-columns: 1fr; } }
+    .bt-view { margin: 0; }
+    .bt-view figcaption { font-size: 0.85rem; font-weight: 650; margin-bottom: 0.3rem; }
+    .bt-svg { display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid var(--line, #ddd); border-radius: 6px; }
+    .bt-svg text { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; dominant-baseline: middle; }
+    .bt-node-label { font-size: 17px; font-weight: 700; fill: #ffffff; }
+    .bt-badge { font-size: 10px; font-weight: 700; fill: #334155; }
+    .bt-turn { font-size: 15px; font-weight: 700; fill: #0f172a; }
+    .bt-root-tag { font-size: 12px; font-weight: 650; fill: #334155; }
+    .bt-empty, .bt-floor-note { font-size: 13px; fill: #64748b; }
+    .bt-loose-label { font-size: 12px; fill: #64748b; text-anchor: start !important; }
+    .bt-tick { font-size: 10px; fill: #64748b; }
+    .bt-block-label { font-size: 16px; font-weight: 700; fill: #ffffff; }
+    .bt-block-turn { font-size: 13px; font-weight: 700; fill: #ffffff; }
+    .bt-bbox-label { font-size: 15px; font-weight: 700; fill: #0f172a; text-anchor: end !important; paint-order: stroke; stroke: #ffffff; stroke-width: 4px; }
+    .bt-legend { margin: 0.35rem 0 0; font-size: 0.8rem; line-height: 1.5; color: var(--muted, #555); }
+    .bt-key { display: inline-block; width: 1.8rem; height: 0; margin-right: 0.4rem; vertical-align: middle; border-top: 2.5px solid #334155; }
+    .bt-key-dashed { border-top-style: dashed; }
+    .bt-key-sky { border-top: 4px solid #eab308; }
+    .bt-problems { margin: 0.35rem 0 0; padding-left: 1.1rem; color: #b91c1c; font-size: 0.85rem; }
+    .bt-problems:empty { display: none; }
+    .bt-table { border-collapse: collapse; width: 100%; font-size: 0.88rem; margin: 0.2rem 0 0.5rem; }
+    .bt-table th { text-align: left; font-weight: 650; padding: 0.2rem 0.3rem; border-bottom: 1px solid var(--line, #ddd); }
+    .bt-table td { padding: 0.2rem 0.3rem; white-space: nowrap; }
+    .bt-swatch { display: inline-block; width: 0.85rem; height: 0.85rem; border-radius: 3px; margin-right: 0.35rem; vertical-align: -0.1rem; }
+    .bt-select { padding: 0.25rem 0.35rem; font: inherit; font-size: 0.85rem; border: 1px solid var(--line, #ccc); border-radius: 6px; background: #fff; }
+    .bt-panel .bt-row { margin: 0.35rem 0; align-items: center; }
+    .bt-label { font-size: 0.85rem; font-weight: 600; }
+    .bt-panel .bt-label { min-width: 4.5rem; }
+    .bt-input { width: 4rem; padding: 0.35rem 0.5rem; font: inherit; border: 1px solid var(--line, #ccc); border-radius: 6px; }
+    .bt-muted { margin: 0 0 0.3rem; font-size: 0.85rem; color: var(--muted, #555); }
+    .bt-msg { margin: 0.4rem 0; padding: 0.4rem 0.6rem; border-radius: 6px; background: rgba(180, 83, 9, 0.1); font-size: 0.88rem; }
+    .bt-why { margin: 0.4rem 0; padding: 0.4rem 0.6rem; border-radius: 6px; font-size: 0.88rem; }
+    .bt-why.no { background: rgba(185, 28, 28, 0.08); }
+    .bt-why.ok { background: rgba(21, 128, 61, 0.12); }
+    .bt-panel .metrics-pre { margin-top: 0; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <p class="brand"><a href="../../index.html">Plan de masse pour l'EDA · Lab 05</a></p>
+      <nav class="site-nav" aria-label="Site">
+        <a href="../../index.html">Accueil du Lab 05</a>
+        <a href="../../index.html#slides">Diapositives et vidéo</a>
+        <a href="../../../tools/bstar-tree/index.html" hreflang="en" lang="en">English</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="eyebrow">Outil interactif</div>
+    <section class="hero">
+      <h1>Arbre B*</h1>
+      <p class="lead">Modifiez un arbre B*, placez-le, et regardez chaque bloc tomber sur la ligne d'horizon : l'enfant gauche va à côté, l'enfant droit va à l'étage.</p>
+    </section>
+    <div id="lab-root"></div>
+  </main>
+  <footer class="site-footer">Lab 05 · Plan de masse par arbre B* — fait partie du cours de plan de masse de l'<a href="https://github.com/yongfu-li/eda-learning">EDA Algorithms Platform</a> (CC BY 4.0).</footer>
+  <script type="module" src="bstar-tree.js"></script>
+</body>
+</html>

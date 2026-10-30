@@ -1,0 +1,43 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.982
+B va à côté, en x égal trois : A commence à zéro, et A fait trois de large.
+
+00:00:05.982 --> 00:00:10.848
+Rien n'est sous B, donc il repose sur le sol, en y égal zéro.
+
+00:00:10.848 --> 00:00:15.132
+On place les blocs un par un, dans un ordre de parcours fixe.
+
+00:00:15.132 --> 00:00:20.961
+On place un nœud, puis tout son côté gauche, et seulement ensuite son enfant droit.
+
+00:00:20.961 --> 00:00:25.104
+Le parcours donne donc A, B, C et E, et D vient en dernier.
+
+00:00:25.104 --> 00:00:30.200
+C est l'enfant gauche de B, donc il va à côté de B, en x égal cinq.
+
+00:00:30.200 --> 00:00:35.600
+E est l'enfant gauche de C, donc il arrive à côté de C, en x égal sept.
+
+00:00:35.600 --> 00:00:40.848
+Les largeurs s'additionnent : trois, plus deux, plus deux, font sept.
+
+00:00:40.848 --> 00:00:46.752
+Le côté gauche est fini, donc le parcours revient à D, l'enfant droit de A.
+
+00:00:46.752 --> 00:00:51.474
+D monte à l'étage, donc il commence en x égal zéro, comme A.
+
+00:00:51.474 --> 00:00:54.072
+Il se pose sur A, en y égal deux.
+
+00:00:54.072 --> 00:00:57.837
+Les cinq blocs sont placés, et chacun est dans le contour.
+
+00:00:57.837 --> 00:01:02.899
+Faites une pause et devinez : si on échange A et C dans l'arbre, D arrive-t-il
+
+00:01:02.899 --> 00:01:04.392
+encore en y égal deux ?

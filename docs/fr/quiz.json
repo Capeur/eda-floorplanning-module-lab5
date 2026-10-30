@@ -1,0 +1,93 @@
+{
+  "module": "module02-03-bstar-tree",
+  "title": "Quiz : plan de masse par arbre B*",
+  "passing_score": 0.67,
+  "items": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "prompt": "Arbre de référence A(B(C(E,-),-),D) : D est l'enfant droit de A et arrive en y = 2. Échangez les noms A et C (arbre C(B(A(E,-),-),D)). Où arrive D maintenant ?",
+      "choices": [
+        "y = 2",
+        "y = 3",
+        "y = 0",
+        "y = 5"
+      ],
+      "answer": 1,
+      "explain": "D est l'enfant droit de la racine : il commence au même x que C et tombe sur le point le plus haut sous son emprise de 3 de large. B fait 3 de haut et dépasse sous D, donc la ligne d'horizon y vaut 3, pas les 2 de C. D arrive en (0,3), la boîte passe à 9x4 = 36 et il reste un trou de 2 cases au-dessus de C."
+    },
+    {
+      "id": "q2",
+      "type": "multiple_choice",
+      "prompt": "Dans l'arbre C(B(A(E,-),-),D), A est en (4,0) et fait 3 de large. Où commence son enfant gauche E ?",
+      "choices": [
+        "x = 3",
+        "x = 4",
+        "x = 7",
+        "x = 9"
+      ],
+      "answer": 2,
+      "explain": "Un enfant gauche est à côté : x = parent.x + parent.w = 4 + 3 = 7. E arrive en (7,0). Un enfant droit garderait x = 4."
+    },
+    {
+      "id": "q3",
+      "type": "true_false",
+      "prompt": "Un enfant gauche a toujours le même y que son parent.",
+      "answer": false,
+      "explain": "Seul x est repris du parent ; y vient de la ligne d'horizon. Dans A(B(C(-,D(E,-)),-),-) avec A tourné, D est en (4,2) et son enfant gauche E tombe en (7,0) : il n'y a rien dessous."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "Placer l'enfant droit avant le sous-arbre gauche donne le même placement pour tous les arbres sur A à E.",
+      "answer": false,
+      "explain": "Le cours parcourt le nœud, tout son sous-arbre gauche, puis l'enfant droit. Avec l'autre ordre, 1764 des 5040 arbres se placent autrement. Dans A(B(C(-,E),D),-) la boîte est 7x5 en commençant par la gauche, mais 7x8 en commençant par la droite."
+    },
+    {
+      "id": "q5",
+      "type": "multiple_choice",
+      "prompt": "A(B(C(D(E,-),-),-),-) met les cinq blocs sur une rangée : 3+2+2+3+2 = 12 de large, mais le contour fait 10 de large. Quel bloc, tourné de 90 degrés, fait tenir la rangée ?",
+      "choices": [
+        "A (3x2)",
+        "C (2x2)",
+        "D (3x1)",
+        "E (2x2)"
+      ],
+      "answer": 2,
+      "explain": "Tourner D donne 1x3, donc la rangée fait 3+2+2+1+2 = 10 de large : la boîte est 10x3 = 30 et valide. Tourner C ou E ne change rien (ce sont des carrés), et tourner A ne gagne que 1 (11 de large)."
+    },
+    {
+      "id": "q6",
+      "type": "multiple_choice",
+      "prompt": "L'arbre de départ A(B(C(D,-),-),E) a une boîte 10x4 (aire 40). Quel échange de deux noms donne la boîte de référence 9x3 (aire 27) ?",
+      "choices": [
+        "A et B",
+        "B et C",
+        "D et E",
+        "C et E"
+      ],
+      "answer": 2,
+      "explain": "swap(D, E) donne A(B(C(E,-),-),D), l'arbre de référence. Des dix échanges possibles, c'est le seul qui atteint 27 ; le suivant est l'échange de A et D avec 30, et les autres donnent de 40 à 50."
+    },
+    {
+      "id": "q7",
+      "type": "true_false",
+      "prompt": "Un échange, une rotation ou un déplacement de feuille de l'arbre de référence donne une boîte englobante plus petite que 27.",
+      "answer": false,
+      "explain": "Les 10 échanges, les 5 rotations et les 8 déplacements de feuille donnent 27 ou plus (4 échanges, 2 rotations et 1 déplacement gardent exactement 27). L'arbre de référence est net, mais un meilleur arbre est à plus d'un pas (216 arbres valides le battent)."
+    },
+    {
+      "id": "q8",
+      "type": "multiple_choice",
+      "prompt": "Les cinq blocs ont une aire totale de 23. Quelle est la plus petite aire de boîte englobante que peut atteindre l'un des 5040 arbres ?",
+      "choices": [
+        "23",
+        "24",
+        "25",
+        "27"
+      ],
+      "answer": 1,
+      "explain": "23 est premier : un rectangle d'aire 23 serait 1x23 ou 23x1, mais le bloc B fait 3 de haut. Le meilleur est 6x4 = 24 (1 case perdue), atteint par 8 arbres, par exemple A(D,C(E(B,-),-)) où B est soulevé sur D."
+    }
+  ]
+}

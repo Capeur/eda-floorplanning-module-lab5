@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lab 05 — B*-tree floorplan · Floorplanning for EDA</title>
+  <meta name="description" content="Lab 05 of the Floorplanning for EDA course: turn a B*-tree into a floorplan, score it with its bounding box, and change it with swap, turn and move, with narrated video, slides, an interactive browser lab and a quiz.">
+  <link rel="alternate" hreflang="fr" href="fr/index.html">
+  <link rel="preload" href="fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="page.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <span class="crumb">Floorplanning for EDA · <strong>Lab 05</strong></span>
+      <nav class="toc" aria-label="On this page">
+        <a href="#video">Video</a>
+        <a href="#slides">Slides</a>
+        <a href="#walkthrough">Walkthrough</a>
+        <a href="#lab">Interactive lab</a>
+        <a href="#implement">Implement</a>
+        <a href="#quiz">Quiz</a>
+        <a href="#transcript">Transcript</a>
+        <a class="lang-switch" href="fr/index.html" hreflang="fr" lang="fr" title="Lire cette page en français">Français</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="hero">
+      <p class="eyebrow">Lab 05 · Representations</p>
+      <h1>B*-tree floorplan</h1>
+      <p class="lead">A floorplan with five blocks can be written as a tree. This lab builds the picture from the tree (left child next door, right child upstairs, each block dropping onto the skyline), scores it with its bounding box, and changes it by swapping two names, turning a block or moving a leaf. Simulated annealing, in a later lab, does exactly these changes thousands of times.</p>
+    </div>
+
+    <section id="video">
+      <div class="card video-card">
+        <div class="player" data-lang="en" data-subs-label="English"><video controls preload="metadata" poster="slides/poster-1.webp"><source src="parts/part-1.mp4" type="video/mp4"><track kind="subtitles" src="parts/part-1.vtt" srclang="en" label="English" default>Your browser does not support the video tag.</video><div class="speed" role="group" aria-label="Speed"><span>Speed</span><button type="button" class="chip" data-speed="1" aria-pressed="true">1×</button><button type="button" class="chip" data-speed="1.25" aria-pressed="false">1.25×</button><button type="button" class="chip" data-speed="1.5" aria-pressed="false">1.5×</button><button type="button" class="chip" data-speed="1.75" aria-pressed="false">1.75×</button><button type="button" class="chip" data-speed="2" aria-pressed="false">2×</button></div><p class="parts-note">Five short parts: the next one starts by itself. Pick a part below, or a speed; it applies to every part.</p><ol class="parts"><li><button type="button" class="part" data-src="parts/part-1.mp4" data-vtt="parts/part-1.vtt" data-poster="slides/poster-1.webp" aria-current="true"><span class="pn">Part 1</span><span class="pt">A tree is a recipe</span><span class="pl">1:35</span></button></li><li><button type="button" class="part" data-src="parts/part-2.mp4" data-vtt="parts/part-2.vtt" data-poster="slides/poster-2.webp"><span class="pn">Part 2</span><span class="pt">Walking the tree</span><span class="pl">1:05</span></button></li><li><button type="button" class="part" data-src="parts/part-3.mp4" data-vtt="parts/part-3.vtt" data-poster="slides/poster-3.webp"><span class="pn">Part 3</span><span class="pt">The skyline and the score</span><span class="pl">1:25</span></button></li><li><button type="button" class="part" data-src="parts/part-4.mp4" data-vtt="parts/part-4.vtt" data-poster="slides/poster-4.webp"><span class="pn">Part 4</span><span class="pt">Too wide: turn a block</span><span class="pl">1:13</span></button></li><li><button type="button" class="part" data-src="parts/part-5.mp4" data-vtt="parts/part-5.vtt" data-poster="slides/poster-5.webp"><span class="pn">Part 5</span><span class="pt">The tightest floorplan, your turn</span><span class="pl">2:02</span></button></li></ol></div>
+        <p class="meta"><strong>7:19</strong> · 5 parts · 32 slides · English narration and subtitles</p>
+        <div class="btns"><a class="btn" href="video.mp4" download>Download full video (MP4)</a><a class="btn" href="subs.srt" download>Subtitles (SRT)</a></div>
+      </div>
+    </section>
+
+    <section id="slides">
+      <h2>Slides</h2>
+      <p>All 32 slides of the video. Click one to open it full size, or download the whole deck.</p>
+      <div class="btns" style="margin-bottom:1rem">
+        <a class="btn" href="slides.pdf">Slides (PDF)</a>
+        <a class="btn" href="slides.pptx" download>Slides (PowerPoint)</a>
+      </div>
+      <div class="slides">
+        <figure><a href="slides/01.png"><img src="slides/thumb/01.webp" loading="lazy" width="480" height="270" alt="Slide 1: B*-tree floorplan representation"></a><figcaption><b>01</b>B*-tree floorplan representation</figcaption></figure>
+<figure><a href="slides/02.png"><img src="slides/thumb/02.webp" loading="lazy" width="480" height="270" alt="Slide 2: Five blocks"></a><figcaption><b>02</b>Five blocks</figcaption></figure>
+<figure><a href="slides/03.png"><img src="slides/thumb/03.webp" loading="lazy" width="480" height="270" alt="Slide 3: The outline"></a><figcaption><b>03</b>The outline</figcaption></figure>
+<figure><a href="slides/04.png"><img src="slides/thumb/04.webp" loading="lazy" width="480" height="270" alt="Slide 4: A tree as a recipe"></a><figcaption><b>04</b>A tree as a recipe</figcaption></figure>
+<figure><a href="slides/05.png"><img src="slides/thumb/05.webp" loading="lazy" width="480" height="270" alt="Slide 5: The root goes in the corner"></a><figcaption><b>05</b>The root goes in the corner</figcaption></figure>
+<figure><a href="slides/06.png"><img src="slides/thumb/06.webp" loading="lazy" width="480" height="270" alt="Slide 6: Left is next door, right is upstairs"></a><figcaption><b>06</b>Left is next door, right is upstairs</figcaption></figure>
+<figure><a href="slides/07.png"><img src="slides/thumb/07.webp" loading="lazy" width="480" height="270" alt="Slide 7: Where does B go?"></a><figcaption><b>07</b>Where does B go?</figcaption></figure>
+<figure><a href="slides/08.png"><img src="slides/thumb/08.webp" loading="lazy" width="480" height="270" alt="Slide 8: B goes next door, at x = 3"></a><figcaption><b>08</b>B goes next door, at x = 3</figcaption></figure>
+<figure><a href="slides/09.png"><img src="slides/thumb/09.webp" loading="lazy" width="480" height="270" alt="Slide 9: The walk: A, B, C, E, then D"></a><figcaption><b>09</b>The walk: A, B, C, E, then D</figcaption></figure>
+<figure><a href="slides/10.png"><img src="slides/thumb/10.webp" loading="lazy" width="480" height="270" alt="Slide 10: C and E go next door"></a><figcaption><b>10</b>C and E go next door</figcaption></figure>
+<figure><a href="slides/11.png"><img src="slides/thumb/11.webp" loading="lazy" width="480" height="270" alt="Slide 11: D goes upstairs, on A"></a><figcaption><b>11</b>D goes upstairs, on A</figcaption></figure>
+<figure><a href="slides/12.png"><img src="slides/thumb/12.webp" loading="lazy" width="480" height="270" alt="Slide 12: Five blocks placed"></a><figcaption><b>12</b>Five blocks placed</figcaption></figure>
+<figure><a href="slides/13.png"><img src="slides/thumb/13.webp" loading="lazy" width="480" height="270" alt="Slide 13: Swap A and C"></a><figcaption><b>13</b>Swap A and C</figcaption></figure>
+<figure><a href="slides/14.png"><img src="slides/thumb/14.webp" loading="lazy" width="480" height="270" alt="Slide 14: The skyline"></a><figcaption><b>14</b>The skyline</figcaption></figure>
+<figure><a href="slides/15.png"><img src="slides/thumb/15.webp" loading="lazy" width="480" height="270" alt="Slide 15: D lands on B"></a><figcaption><b>15</b>D lands on B</figcaption></figure>
+<figure><a href="slides/16.png"><img src="slides/thumb/16.webp" loading="lazy" width="480" height="270" alt="Slide 16: The bounding box"></a><figcaption><b>16</b>The bounding box</figcaption></figure>
+<figure><a href="slides/17.png"><img src="slides/thumb/17.webp" loading="lazy" width="480" height="270" alt="Slide 17: Wasted space"></a><figcaption><b>17</b>Wasted space</figcaption></figure>
+<figure><a href="slides/18.png"><img src="slides/thumb/18.webp" loading="lazy" width="480" height="270" alt="Slide 18: One swap, a worse score"></a><figcaption><b>18</b>One swap, a worse score</figcaption></figure>
+<figure><a href="slides/19.png"><img src="slides/thumb/19.webp" loading="lazy" width="480" height="270" alt="Slide 19: One long row"></a><figcaption><b>19</b>One long row</figcaption></figure>
+<figure><a href="slides/20.png"><img src="slides/thumb/20.webp" loading="lazy" width="480" height="270" alt="Slide 20: Every block next door"></a><figcaption><b>20</b>Every block next door</figcaption></figure>
+<figure><a href="slides/21.png"><img src="slides/thumb/21.webp" loading="lazy" width="480" height="270" alt="Slide 21: Sticking out"></a><figcaption><b>21</b>Sticking out</figcaption></figure>
+<figure><a href="slides/22.png"><img src="slides/thumb/22.webp" loading="lazy" width="480" height="270" alt="Slide 22: Never an overlap"></a><figcaption><b>22</b>Never an overlap</figcaption></figure>
+<figure><a href="slides/23.png"><img src="slides/thumb/23.webp" loading="lazy" width="480" height="270" alt="Slide 23: Turn one block"></a><figcaption><b>23</b>Turn one block</figcaption></figure>
+<figure><a href="slides/24.png"><img src="slides/thumb/24.webp" loading="lazy" width="480" height="270" alt="Slide 24: Three small changes"></a><figcaption><b>24</b>Three small changes</figcaption></figure>
+<figure><a href="slides/25.png"><img src="slides/thumb/25.webp" loading="lazy" width="480" height="270" alt="Slide 25: The tightest floorplan"></a><figcaption><b>25</b>The tightest floorplan</figcaption></figure>
+<figure><a href="slides/26.png"><img src="slides/thumb/26.webp" loading="lazy" width="480" height="270" alt="Slide 26: B is lifted by the skyline"></a><figcaption><b>26</b>B is lifted by the skyline</figcaption></figure>
+<figure><a href="slides/27.png"><img src="slides/thumb/27.webp" loading="lazy" width="480" height="270" alt="Slide 27: Why not twenty-three?"></a><figcaption><b>27</b>Why not twenty-three?</figcaption></figure>
+<figure><a href="slides/28.png"><img src="slides/thumb/28.webp" loading="lazy" width="480" height="270" alt="Slide 28: Browser lab track"></a><figcaption><b>28</b>Browser lab track</figcaption></figure>
+<figure><a href="slides/29.png"><img src="slides/thumb/29.webp" loading="lazy" width="480" height="270" alt="Slide 29: Implement track"></a><figcaption><b>29</b>Implement track</figcaption></figure>
+<figure><a href="slides/30.png"><img src="slides/thumb/30.webp" loading="lazy" width="480" height="270" alt="Slide 30: Implement track — try these"></a><figcaption><b>30</b>Implement track — try these</figcaption></figure>
+<figure><a href="slides/31.png"><img src="slides/thumb/31.webp" loading="lazy" width="480" height="270" alt="Slide 31: Remember"></a><figcaption><b>31</b>Remember</figcaption></figure>
+<figure><a href="slides/32.png"><img src="slides/thumb/32.webp" loading="lazy" width="480" height="270" alt="Slide 32: Your turn"></a><figcaption><b>32</b>Your turn</figcaption></figure>
+      </div>
+    </section>
+
+    <section id="walkthrough">
+      <h2>Walkthrough</h2>
+      <p>The five frames of the video that place the golden tree block by block, with the caption of each step.</p>
+      <div class="walk">
+        <figure class="walk-step"><a href="img/steps/01-root.png"><img src="img/steps/01-root.webp" loading="lazy" width="940" height="468" alt="Step 1 / 5: B goes next door, at x = 3"></a><figcaption><b>Step 1 / 5 · B goes next door, at x = 3</b><span>B goes next door, at x equals three: A starts at zero, and A is three wide. Nothing is under B, so it rests on the floor, at y equals zero.</span><ul><li>Next door to A</li><li>x = 0 + 3 = 3</li><li>On the floor: y = 0</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/02-left-chain.png"><img src="img/steps/02-left-chain.webp" loading="lazy" width="940" height="468" alt="Step 2 / 5: The walk: A, B, C, E, then D"></a><figcaption><b>Step 2 / 5 · The walk: A, B, C, E, then D</b><span>We place the blocks one at a time, in a fixed walk order. Place a node, then everything down its left side, and only then its right child. So the walk goes A, B, C and E, and D comes last.</span><ul><li>Place a node</li><li>then everything down its left side</li><li>only then its right child</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/03-right-d.png"><img src="img/steps/03-right-d.webp" loading="lazy" width="940" height="468" alt="Step 3 / 5: C and E go next door"></a><figcaption><b>Step 3 / 5 · C and E go next door</b><span>C is B&#x27;s left child, so it goes next door to B, at x equals five. E is C&#x27;s left child, so it lands next door to C, at x equals seven. The widths simply add up: three, plus two, plus two, makes seven.</span><ul><li>C at x = 5</li><li>E at x = 7</li><li>3 + 2 + 2 = 7</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/04-legal.png"><img src="img/steps/04-legal.webp" loading="lazy" width="940" height="468" alt="Step 4 / 5: D goes upstairs, on A"></a><figcaption><b>Step 4 / 5 · D goes upstairs, on A</b><span>The left side is done, so the walk comes back to D, A&#x27;s right child. D goes upstairs, so it starts at x equals zero, like A. It sits on top of A, at y equals two.</span><ul><li>D: A&#x27;s right child</li><li>Upstairs: x = 0</li><li>On top of A: y = 2</li></ul></figcaption></figure>
+<figure class="walk-step"><a href="img/steps/05-takeaway.png"><img src="img/steps/05-takeaway.webp" loading="lazy" width="940" height="468" alt="Step 5 / 5: Five blocks placed"></a><figcaption><b>Step 5 / 5 · Five blocks placed</b><span>All five blocks are placed, and every one is inside the outline. Pause and guess: if we swap A and C in the tree, does D still land at y equals two?</span><ul><li>All five inside the outline</li><li>Swap A and C:</li><li>is D still at y = 2?</li></ul></figcaption></figure>
+      </div>
+    </section>
+
+    <section id="lab">
+      <h2>Interactive lab</h2>
+      <div class="card lab-grid">
+        <a href="tools/bstar-tree/index.html"><img src="img/lab-starter.webp" loading="lazy" alt="The B*-tree browser lab: the tree on the left and the floorplan on the right, with the skyline, the bounding box and the wasted squares"></a>
+        <div>
+          <p>Build the floorplans yourself, right in the browser:</p>
+          <ul>
+            <li>Choose each block&#x27;s parent and side (next door or upstairs), then press Pack and watch the blocks drop onto the skyline.</li>
+<li>Swap two names, turn a block, move a leaf, and see the bounding box, the wasted squares and whether the floorplan is legal.</li>
+<li>Load five ready-made trees (the golden tree, A and C swapped, the walk-order tree, the long row, a bad tree of 40).</li>
+<li>Guess where D will land before you pack, and compare.</li>
+          </ul>
+          <p>Nine challenges, from Intro to Stretch, check the tree you built, not the button you pressed. A change after Pack needs a new Pack, and the study reveal never counts.</p>
+          <div class="btns"><a class="btn primary" href="tools/bstar-tree/index.html">Open the lab</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="implement">
+      <h2>Implement (Track A)</h2>
+      <p>Write the packer and its helpers yourself (pack, bounding box, legal, swap, rotate, move a leaf) and check them against the goldens. The commands below run inside the <a href="https://github.com/yongfu-li/eda-learning">course repository</a>, from <code>courses/learn_floorplanning/module02-03-bstar-tree/</code>.</p>
+      <div class="files">
+        <a href="examples/tiny_modules.json" download><code>tiny_modules.json</code><small>The five blocks and the 10 × 8 outline</small></a>
+<a href="examples/golden.json" download><code>golden.json</code><small>Golden tree: D sits exactly on A</small></a>
+<a href="examples/lift.json" download><code>lift.json</code><small>A and C swapped: B lifts D and leaves a hole</small></a>
+<a href="examples/order.json" download><code>order.json</code><small>Walk order: E is placed before D</small></a>
+<a href="examples/floor.json" download><code>floor.json</code><small>A left child falls to the floor</small></a>
+<a href="examples/swap.json" download><code>swap.json</code><small>Bad tree (40): one swap gives 27</small></a>
+<a href="examples/rotate.json" download><code>rotate.json</code><small>Long row: one turn makes it fit</small></a>
+<a href="examples/move.json" download><code>move.json</code><small>Leaf move: 40 becomes 28</small></a>
+<a href="examples/best.json" download><code>best.json</code><small>The tightest floorplans: 6 × 4 = 24</small></a>
+<a href="examples/bstar_check.py" download><code>bstar_check.py</code><small>Golden self-check; --impl checks your code</small></a>
+      </div>
+      <div class="card md">
+        <h1>Examples — B*-tree</h1>
+<p>Track A (implement). The five blocks are in <code>examples/tiny_modules.json</code>, the example trees are in <code>examples/*.json</code>,
+and the answer key is <code>examples/bstar_check.py</code>.
+Every number below was printed by that checker (<code>python3 examples/bstar_check.py --show</code>, <code>--json</code>).
+Run it from this module folder; it needs only the Python standard library.</p>
+<h2>Goal</h2>
+<p>A floorplan with five blocks can be written as a <strong>binary tree</strong>. Build the picture from the tree (<strong>pack</strong>), score it
+(<strong>bounding box</strong>, <strong>legal</strong>), and change the picture by changing the tree (<strong>swap</strong>, <strong>rotate</strong>, <strong>move</strong>).
+Simulated annealing (a later lab) does exactly these three changes thousands of times.</p>
+<h2>Definitions</h2>
+<ul>
+<li><strong>Block</strong>: a rectangle with a name, a width <code>w</code> and a height <code>h</code>. Sizes are written <code>w x h</code>: "3 x 2" is 3 wide, 2 high.
+  The five blocks: A 3x2, B 2x3, C 2x2, D 3x1, E 2x2. Their areas add up to <strong>23</strong>.</li>
+<li><strong>Outline</strong>: the fixed box the blocks must stay in. Here <strong>10 x 8</strong> (area 80). The origin is the lower-left corner and
+  y grows upward.</li>
+<li><strong>Tree</strong>: every block appears exactly once. A node has an optional <strong>left child</strong> and an optional <strong>right child</strong>.
+  Text form: <code>id(left,right)</code>, <code>-</code> for an empty child, a bare id for a leaf. <code>A(B(C(E,-),-),D)</code> is the golden tree:
+  A's left child is B, B's left child is C, C's left child is E, and A's right child is D.</li>
+<li><strong>Left child = next door</strong>: it starts at the right edge of its parent. <strong>Right child = upstairs</strong>: it starts at the
+  same left edge as its parent. The names are the opposite of what you might guess, so say "next door" and "upstairs".</li>
+<li><strong>Skyline</strong> (also called the contour): for every x, the top edge of what is already placed (0 where nothing is).
+  Placing a block raises the skyline to <code>y + h</code> over the block's footprint <code>[x, x + w)</code>.</li>
+<li><strong>Legal</strong>: every block is inside the outline and no two blocks overlap (touching edges is allowed).</li>
+<li><strong>Bounding box</strong>: the smallest rectangle around all blocks: width = largest <code>x + w</code>, height = largest <code>y + h</code>.
+  <strong>Score = bounding-box area. Wasted squares = bounding-box area − 23.</strong></li>
+<li><strong>Two different deadspaces</strong>: the <em>outline</em> deadspace is <code>80 − 23 = 57</code> and never changes with the tree. The
+  <em>bounding-box</em> deadspace (wasted squares) is what a tree changes: 4 for the golden tree.</li>
+</ul>
+<h2>API (what <code>--impl</code> looks for)</h2>
+<p>A tree is a nested dict: <code>{"id": "A", "left": {...}, "right": {...}}</code>, a missing child is a missing key.
+<code>modules</code> is a list of <code>{"id", "w", "h"}</code>, <code>outline</code> is <code>{"w", "h"}</code>. A pack is <code>{id: {"x", "y", "w", "h"}}</code>.</p>
+<pre><code class="language-python">pack_bstar(tree, modules)            # the pack, by the rule below
+bounding_box(pack)                   # (width, height)
+is_legal(pack, outline)              # inside the outline and no overlap
+swap(tree, a, b)                     # NEW tree, names a and b exchanged, shape unchanged
+rotate(modules, id)                  # NEW module list, that block's w and h exchanged
+move_leaf(tree, leaf, parent, side)  # NEW tree, leaf cut and hung on parent's free &quot;left&quot; or &quot;right&quot; slot
+</code></pre>
+<p>Never change the tree or the list you receive: return a new one. <code>move_leaf</code> raises an error if the node is not a
+leaf, is the root, or the slot is taken. Functions you have not written yet are reported as SKIP.</p>
+<h2>The rule (exact)</h2>
+<pre><code class="language-text">walk(node, x):                        # PREORDER
+  y = highest skyline value over [x, x + node.w)
+  place node at (x, y)
+  raise the skyline to y + node.h over [x, x + node.w)
+  walk(node.left,  x + node.w)        # the WHOLE left subtree first (next door)
+  walk(node.right, x)                 # then the right child (upstairs)
+walk(root, 0)
+</code></pre>
+<ul>
+<li>A block falls until it touches the highest thing under its footprint, so <code>y</code> is never typed by hand.</li>
+<li>For a right child <code>y &gt;= parent.y + parent.h</code> (it is <em>at least</em> on top of its parent). It is strictly more when a taller
+  neighbour sticks out under it: see <strong>lift</strong>.</li>
+<li>A left child's <code>y</code> is not its parent's <code>y</code>: it falls to whatever is under it, down to 0: see <strong>floor</strong>.</li>
+<li>The order matters. Placing the right child first changes the pack of 1764 of the 5040 trees: see <strong>order</strong>.</li>
+</ul>
+<h3>Operations</h3>
+<pre><code class="language-text">swap(tree, a, b)                  exchange the two names; who is whose left or right child does not change
+rotate(modules, id)               w, h = h, w for that block; the tree does not change
+move_leaf(tree, leaf, p, side)    cut the leaf off its parent, hang it on p.side (that slot must be free)
+</code></pre>
+<h2>Golden tables</h2>
+<h3>The example trees (<code>examples/*.json</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Example</th>
+<th>Tree</th>
+<th>Positions (x,y)</th>
+<th>Box</th>
+<th>Area</th>
+<th>Wasted</th>
+<th>Legal</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>golden</td>
+<td><code>A(B(C(E,-),-),D)</code></td>
+<td>A(0,0) B(3,0) C(5,0) D(0,2) E(7,0)</td>
+<td>9x3</td>
+<td>27</td>
+<td>4</td>
+<td>yes</td>
+<td>D sits exactly on A: <code>D.y = A.y + A.h = 2</code></td>
+</tr>
+<tr>
+<td>lift</td>
+<td><code>C(B(A(E,-),-),D)</code></td>
+<td>A(4,0) B(2,0) C(0,0) D(0,3) E(7,0)</td>
+<td>9x4</td>
+<td>36</td>
+<td>13</td>
+<td>yes</td>
+<td>the golden with A and C swapped: B is 3 high and sticks out under D, so D lands at 3, not 2, and leaves a hole of 2 squares</td>
+</tr>
+<tr>
+<td>order</td>
+<td><code>A(B(C(-,E),D),-)</code></td>
+<td>A(0,0) B(3,0) C(5,0) D(3,4) E(5,2)</td>
+<td>7x5</td>
+<td>35</td>
+<td>12</td>
+<td>yes</td>
+<td>E is placed before D and lifts it to 4. Right child first gives a 7x8 box</td>
+</tr>
+<tr>
+<td>floor</td>
+<td><code>A(B(C(-,D(E,-)),-),-)</code>, A turned</td>
+<td>A(0,0) B(2,0) C(4,0) D(4,2) E(7,0)</td>
+<td>9x3</td>
+<td>27</td>
+<td>4</td>
+<td>yes</td>
+<td>E is D's left child but falls to y = 0: nothing is under it</td>
+</tr>
+<tr>
+<td>swap, start</td>
+<td><code>A(B(C(D,-),-),E)</code></td>
+<td>A(0,0) B(3,0) C(5,0) D(7,0) E(0,2)</td>
+<td>10x4</td>
+<td>40</td>
+<td>17</td>
+<td>yes</td>
+<td>a bad tree for the same five blocks</td>
+</tr>
+<tr>
+<td>swap, after <code>swap(D,E)</code></td>
+<td><code>A(B(C(E,-),-),D)</code></td>
+<td>the golden</td>
+<td>9x3</td>
+<td>27</td>
+<td>4</td>
+<td>yes</td>
+<td>one swap removes 13 wasted squares</td>
+</tr>
+<tr>
+<td>rotate, start</td>
+<td><code>A(B(C(D(E,-),-),-),-)</code></td>
+<td>A(0,0) B(3,0) C(5,0) D(7,0) E(10,0)</td>
+<td>12x3</td>
+<td>36</td>
+<td>13</td>
+<td><strong>no</strong></td>
+<td>every block is a left child: 3+2+2+3+2 = 12 &gt; 10, E sticks out</td>
+</tr>
+<tr>
+<td>rotate, after <code>rotate(D)</code></td>
+<td>same tree, D is 1x3</td>
+<td>D(7,0) E(8,0)</td>
+<td>10x3</td>
+<td>30</td>
+<td>7</td>
+<td>yes</td>
+<td>3+2+2+1+2 = 10: the row fits</td>
+</tr>
+<tr>
+<td>move, start</td>
+<td><code>A(B(C(D,-),-),E)</code></td>
+<td>as "swap, start"</td>
+<td>10x4</td>
+<td>40</td>
+<td>17</td>
+<td>yes</td>
+<td></td>
+</tr>
+<tr>
+<td>move, after <code>move_leaf(D,B,right)</code></td>
+<td><code>A(B(C,D),E)</code></td>
+<td>A(0,0) B(3,0) C(5,0) D(3,3) E(0,2)</td>
+<td>7x4</td>
+<td>28</td>
+<td>5</td>
+<td>yes</td>
+<td>D now sits upstairs of B</td>
+</tr>
+<tr>
+<td>best</td>
+<td><code>A(D,C(E(B,-),-))</code></td>
+<td>A(0,0) B(4,1) C(0,2) D(3,0) E(2,2)</td>
+<td>6x4</td>
+<td>24</td>
+<td>1</td>
+<td>yes</td>
+<td>B is lifted onto D: only the skyline can give B y = 1</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>lift</code> example is the golden tree with A and C swapped (<code>derived_from</code> in <code>lift.json</code>).</p>
+<h3>Step by step: the golden tree</h3>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Block</th>
+<th>From</th>
+<th>At (x,y)</th>
+<th>Held up by</th>
+<th>Skyline after</th>
+<th>Box after</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>A</td>
+<td>root</td>
+<td>(0,0)</td>
+<td>floor</td>
+<td><code>[0,3)=2</code></td>
+<td>3x2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>B</td>
+<td>left of A</td>
+<td>(3,0)</td>
+<td>floor</td>
+<td><code>[0,3)=2 [3,5)=3</code></td>
+<td>5x3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>C</td>
+<td>left of B</td>
+<td>(5,0)</td>
+<td>floor</td>
+<td><code>[0,3)=2 [3,5)=3 [5,7)=2</code></td>
+<td>7x3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>E</td>
+<td>left of C</td>
+<td>(7,0)</td>
+<td>floor</td>
+<td><code>[0,3)=2 [3,5)=3 [5,9)=2</code></td>
+<td>9x3</td>
+</tr>
+<tr>
+<td>5</td>
+<td>D</td>
+<td>right of A</td>
+<td>(0,2)</td>
+<td>A</td>
+<td><code>[0,5)=3 [5,9)=2</code></td>
+<td>9x3</td>
+</tr>
+</tbody>
+</table>
+<p><code>python3 examples/bstar_check.py --show</code> prints this walk for every example, and <code>--json</code> prints it as data
+(trees, packs, bounding boxes and the skyline after each placement).</p>
+<h3>All 5040 trees on A to E</h3>
+<table>
+<thead>
+<tr>
+<th>Quantity</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>labelled trees (Catalan(5) x 5!)</td>
+<td>5040</td>
+</tr>
+<tr>
+<td>legal in the 10x8 outline</td>
+<td>4680</td>
+</tr>
+<tr>
+<td>overlapping</td>
+<td><strong>0</strong> (a B*-tree cannot overlap by construction)</td>
+</tr>
+<tr>
+<td>illegal because too wide / too tall</td>
+<td>120 / 240 (each illegal tree sticks out, nothing else)</td>
+</tr>
+<tr>
+<td>smallest bounding-box area</td>
+<td><strong>24</strong> (6x4), reached by 8 trees; 23 is impossible (23 is prime and B is 3 high)</td>
+</tr>
+<tr>
+<td>legal trees with a box smaller than the golden 27</td>
+<td>216</td>
+</tr>
+<tr>
+<td>pack changes if the right child is placed first</td>
+<td><strong>1764</strong></td>
+</tr>
+<tr>
+<td>pack changes if y is read from the parent instead of the skyline</td>
+<td>2714</td>
+</tr>
+<tr>
+<td>a right child lifted above its parent's top edge</td>
+<td>360</td>
+</tr>
+<tr>
+<td>a left child lifted above its parent's y</td>
+<td>254</td>
+</tr>
+</tbody>
+</table>
+<p>The 8 trees with area 24 (<code>examples/best.json</code>):
+<code>A(D,C(E(B,-),-))</code>, <code>A(D,E(C(B,-),-))</code>, <code>B(C(E,-),D(A,-))</code>, <code>B(E(C,-),D(A,-))</code>, <code>C(E(B,-),A(D,-))</code>,
+<code>D(A,B(C(E,-),-))</code>, <code>D(A,B(E(C,-),-))</code>, <code>E(C(B,-),A(D,-))</code>. Each wastes 1 square.</p>
+<h3>One operation at a time</h3>
+<table>
+<thead>
+<tr>
+<th>Tree</th>
+<th>Best area after one swap (of 10)</th>
+<th>Best after one turn (of 5)</th>
+<th>Best after one leaf move (of 8)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>golden (27)</td>
+<td>27 (4 swaps keep 27)</td>
+<td>27 (2 keep 27)</td>
+<td>27 (1 keeps 27)</td>
+</tr>
+<tr>
+<td>swap start (40)</td>
+<td><strong>27</strong>, only <code>swap(D,E)</code></td>
+<td>32</td>
+<td>28 (two moves: D to B.right, D to E.left)</td>
+</tr>
+</tbody>
+</table>
+<p>So no single operation improves the golden tree, and from the swap start the swap of D and E is the only way to 27.
+For the all-left chain, 12 of the 32 sets of turned blocks are legal; <strong>D is the only single block</strong> whose turn makes it legal.</p>
+<h2>Try these</h2>
+<pre><code class="language-bash">python3 examples/bstar_check.py                              # reference: all PASS
+python3 examples/bstar_check.py --show                       # every pack, step by step
+python3 examples/bstar_check.py --vs-node                    # same packs as the browser lab's JS, all 5040 trees
+python3 examples/bstar_check.py --impl my_bstar.py           # check YOUR functions
+python3 examples/bstar_check.py --impl examples/wrong/right_first.py   # a deliberately wrong one
+python3 examples/bstar_check.py --impl examples/wrong/no_contour.py    # another one
+python3 examples/bstar_check.py --json &gt; bstar.json          # trees, packs, skylines as data
+</code></pre>
+<p><code>examples/wrong/</code> holds two packers with exactly one bug each: the right child placed <strong>before</strong> the left subtree, and
+<strong>no skyline</strong> (y read from the parent). Both pack the golden tree correctly, so the golden check alone cannot catch
+them. Run them and read which lines FAIL. The "all 5040 trees" line catches both.</p>
+<h2>Starter prompts (ask "why")</h2>
+<ol>
+<li>Implement <code>pack_bstar</code> and print the step table of the golden tree. Which block holds D up, and why is <code>D.y</code> equal to 2?</li>
+<li>In <code>lift</code>, D lands at y = 3, not 2. Which block lifts it? How many squares does the hole above C hold?</li>
+<li>In <code>order</code>, why does D end at y = 4? Place D before the left subtree by hand and say which box you get.</li>
+<li>In <code>floor</code>, E is a left child of D but sits at y = 0. Explain in one sentence why "left child" does not mean "same row".</li>
+<li>From the swap start, try all ten swaps and report each area. Why does only one reach 27?</li>
+<li>In the chain, turn each of the five blocks in turn. Which single turn makes it legal, and why do the other four not help?</li>
+<li>Run <code>--impl examples/wrong/no_contour.py</code>. Which examples does it get right, and what do they have in common?</li>
+</ol>
+<h2>Expected artifacts</h2>
+<ul>
+<li>A <code>my_bstar.py</code> that prints no FAIL against <code>bstar_check.py</code>.</li>
+<li>The step table of one example, with the skyline after each placement.</li>
+<li>Two sentences: one on why the walk order matters, one on why the skyline matters (use <code>order</code> and <code>lift</code>).</li>
+</ul>
+<h2>Stretch</h2>
+<ul>
+<li>Beat the golden: find a legal tree with a box smaller than 27 (216 exist) without looking at <code>best.json</code>.</li>
+<li>Reach 24 without turning any block. How many of the 5040 trees do it? Which one block must be lifted onto another?</li>
+<li>Write <code>move_leaf</code> so it also accepts moving a leaf to the other side of its own parent, and list all 8 leaf moves of the swap start with their areas.</li>
+</ul>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <h2>Quiz</h2>
+      <p>8 quick questions on this lab. Pick an answer for each, then check.</p>
+      <div class="card quiz" id="quiz-root"
+           data-check="Check my answers" data-reset="Reset" data-pass="passed"
+           data-fail="try again" data-true="True" data-false="False"></div>
+      <script type="application/json" id="quiz-data">{"module": "module02-03-bstar-tree", "title": "B*-tree floorplan representation check", "passing_score": 0.67, "items": [{"id": "q1", "type": "multiple_choice", "prompt": "Golden tree A(B(C(E,-),-),D): D is A's right child and lands at y = 2. Swap the names A and C (tree C(B(A(E,-),-),D)). Where does D land now?", "choices": ["y = 2", "y = 3", "y = 0", "y = 5"], "answer": 1, "explain": "D is the root's right child, so it starts at the same x as C and falls onto the highest thing under its 3-wide footprint. B is 3 high and sticks out under D, so the skyline there is 3, not C's 2. D lands at (0,3), the box grows to 9x4 = 36 and a hole of 2 squares is left above C."}, {"id": "q2", "type": "multiple_choice", "prompt": "In tree C(B(A(E,-),-),D), A is at (4,0) and is 3 wide. Where does its left child E start?", "choices": ["x = 3", "x = 4", "x = 7", "x = 9"], "answer": 2, "explain": "A left child is next door: x = parent.x + parent.w = 4 + 3 = 7. E lands at (7,0). A right child would keep x = 4."}, {"id": "q3", "type": "true_false", "prompt": "A left child always has the same y as its parent.", "answer": false, "explain": "Only x is copied from the parent; y comes from the skyline. In A(B(C(-,D(E,-)),-),-) with A turned, D is at (4,2) and its left child E falls to (7,0): nothing is under it."}, {"id": "q4", "type": "true_false", "prompt": "Placing the right child before the left subtree gives the same packing for every tree on A to E.", "answer": false, "explain": "The course walks node, whole left subtree, then right child. With the other order, 1764 of the 5040 trees pack differently. In A(B(C(-,E),D),-) the box is 7x5 left first but 7x8 right first."}, {"id": "q5", "type": "multiple_choice", "prompt": "A(B(C(D(E,-),-),-),-) puts all five blocks in one row: 3+2+2+3+2 = 12 wide, but the outline is 10 wide. Which single block, turned 90 degrees, makes the row fit?", "choices": ["A (3x2)", "C (2x2)", "D (3x1)", "E (2x2)"], "answer": 2, "explain": "Turning D makes it 1x3, so the row is 3+2+2+1+2 = 10 wide: the box is 10x3 = 30 and legal. Turning C or E changes nothing (they are squares), and turning A only saves 1 (11 wide)."}, {"id": "q6", "type": "multiple_choice", "prompt": "Start tree A(B(C(D,-),-),E) has a 10x4 box (area 40). Which swap of two names gives the golden 9x3 box (area 27)?", "choices": ["A and B", "B and C", "D and E", "C and E"], "answer": 2, "explain": "swap(D, E) gives A(B(C(E,-),-),D), the golden tree. Of the ten possible swaps it is the only one that reaches 27; the next best is swapping A and D with 30, and the rest give 40 to 50."}, {"id": "q7", "type": "true_false", "prompt": "Some single swap, turn or leaf move of the golden tree gives a bounding box smaller than 27.", "answer": false, "explain": "All 10 swaps, all 5 turns and all 8 leaf moves give 27 or more (4 swaps, 2 turns and 1 move keep exactly 27). The golden tree is tidy, but a better tree is more than one step away (216 legal trees beat it)."}, {"id": "q8", "type": "multiple_choice", "prompt": "The five blocks have a total area of 23. What is the smallest bounding-box area any of the 5040 trees can reach?", "choices": ["23", "24", "25", "27"], "answer": 1, "explain": "23 is prime, so a rectangle of area 23 would be 1x23 or 23x1, but block B is 3 high. The best is 6x4 = 24 (1 wasted square), reached by 8 trees, for example A(D,C(E(B,-),-)) where B is lifted onto D."}]}</script>
+    </section>
+
+    <section id="transcript">
+      <details class="card transcript">
+        <summary>Full narration transcript</summary>
+        <h3>B*-tree floorplan representation</h3><p>Five blocks, one frame, and a tree that says where each block goes. Can you build the picture from the tree alone? By the end, you will, and you will find the tightest picture of all.</p>
+<h3>Five blocks</h3><p>A chip is made of large rectangular parts, called blocks. Ours has five blocks, named A to E. They are drawn on squared paper, so you can count each width and height.</p>
+<h3>The outline</h3><p>A floorplan says where each block sits on the chip. Every block must stay inside a frame called the outline. Our outline is ten squares wide and eight squares tall. The tighter the blocks are packed, the smaller the chip can be.</p>
+<h3>A tree as a recipe</h3><p>Writing down every position is slow, so we use a recipe instead: a B-star tree. Each block is one node of the tree. The top node, A, is called the root. Each node can have two children: a left child and a right child.</p>
+<h3>The root goes in the corner</h3><p>The root goes in the lower-left corner of the outline. From that corner, x counts squares to the right, and y counts squares up.</p>
+<h3>Left is next door, right is upstairs</h3><p>A left child goes next door, right against its parent&#x27;s right side. A right child goes upstairs, on top of its parent, with the same left edge. The names sound backwards, so remember: left means next door, right means upstairs. In the tree, a solid line means next door, and a dashed line means upstairs.</p>
+<h3>Where does B go?</h3><p>A is three squares wide and two squares tall. B is A&#x27;s left child. Pause and guess: where does B&#x27;s left edge go?</p>
+<h3>B goes next door, at x = 3</h3><p>B goes next door, at x equals three: A starts at zero, and A is three wide. Nothing is under B, so it rests on the floor, at y equals zero.</p>
+<h3>The walk: A, B, C, E, then D</h3><p>We place the blocks one at a time, in a fixed walk order. Place a node, then everything down its left side, and only then its right child. So the walk goes A, B, C and E, and D comes last.</p>
+<h3>C and E go next door</h3><p>C is B&#x27;s left child, so it goes next door to B, at x equals five. E is C&#x27;s left child, so it lands next door to C, at x equals seven. The widths simply add up: three, plus two, plus two, makes seven.</p>
+<h3>D goes upstairs, on A</h3><p>The left side is done, so the walk comes back to D, A&#x27;s right child. D goes upstairs, so it starts at x equals zero, like A. It sits on top of A, at y equals two.</p>
+<h3>Five blocks placed</h3><p>All five blocks are placed, and every one is inside the outline. Pause and guess: if we swap A and C in the tree, does D still land at y equals two?</p>
+<h3>Swap A and C</h3><p>No: D lands one square higher. Here is the tree with A and C swapped: C is the root, and A takes C&#x27;s old place. C, B, A and E still go next door, one after the other.</p>
+<h3>The skyline</h3><p>Now picture the blocks as a city, seen from far away. The top edge of everything placed so far is the skyline. A new block drops from the sky, like a Tetris piece, until it touches the skyline.</p>
+<h3>D lands on B</h3><p>D is three wide, so it hangs over C and over part of B. B is three tall, so it stops D at y equals three. That leaves a hole of two empty squares above C.</p>
+<h3>The bounding box</h3><p>So which floorplan is better? To compare, we draw the bounding box: the smallest rectangle around all the blocks. For the first tree, it is nine wide and three tall: twenty-seven squares.</p>
+<h3>Wasted space</h3><p>The five blocks cover twenty-three squares. The other four squares in the box are empty: that is wasted space. Fewer wasted squares means a tighter floorplan.</p>
+<h3>One swap, a worse score</h3><p>The swapped tree needs a box nine by four: thirty-six squares, with thirteen wasted. So one swap of two names changed the picture and the score. Twenty-seven became thirty-six: the first tree is better.</p>
+<h3>One long row</h3><p>Now take a tree where every child is a left child. Pause and guess: will this long row fit inside the outline?</p>
+<h3>Every block next door</h3><p>No, it will not fit. Every block goes next door: three, two, two and three make ten. The outline is already full, and E is still waiting.</p>
+<h3>Sticking out</h3><p>E lands at x equals ten, so the row is twelve squares wide. E sticks out of the outline by two squares. A floorplan is legal only when every block is inside the outline. So this row is not legal.</p>
+<h3>Never an overlap</h3><p>Notice that the blocks never overlap. Each block drops onto the skyline, so it can never land inside another one. With a B-star tree, sticking out is the only way to fail.</p>
+<h3>Turn one block</h3><p>We can turn a block on its side, so its width and height swap. Turn D, and it becomes one wide and three tall. Now the row is ten wide, so it fits exactly, and it is legal again.</p>
+<h3>Three small changes</h3><p>Turning is one of three small changes. You can also swap two names in the tree, as we did with A and C. Or move a leaf, a block with no children, to a free spot in the tree. Each change gives a new floorplan, with a new score. Pause and guess: can any tree beat twenty-seven squares, and what is the smallest box?</p>
+<h3>The tightest floorplan</h3><p>Yes: many trees beat twenty-seven, and the best need only twenty-four squares. Here is one of the best trees. Its walk places A, D, C and E, and B comes last.</p>
+<h3>B is lifted by the skyline</h3><p>Under B, the skyline is the top of D, so B lands at y equals one. It fills the gap, and the box is six wide and four tall: twenty-four squares. Only one square is wasted.</p>
+<h3>Why not twenty-three?</h3><p>Could a box of twenty-three squares, with nothing wasted, hold all five blocks? Twenty-three squares only make a rectangle one square thick. Block B is too thick for that, so twenty-four is the best possible.</p>
+<h3>Browser lab track</h3><p>Now build floorplans yourself. In the browser lab, you edit the tree and watch each block drop onto the skyline. The challenges check the tree you built. Lift D higher, make the long row fit, and reach twenty-four.</p>
+<h3>Implement track</h3><p>If you like programming, write the packer in Python. The examples file gives the exact rules. Run the checker once to print every correct answer, then run it on your own file. It compares your packer with the right one on all five thousand and forty trees.</p>
+<h3>Remember</h3><p>Left child: next door. Right child: upstairs, with the same left edge. Walk the tree: the node, its whole left side, then its right child. Each block drops until it touches the skyline. Score a floorplan with its bounding box, and count the wasted squares. A tree never overlaps, but it can stick out, so check the outline.</p>
+<h3>Your turn</h3><p>Pick a track: the browser lab, Python, or both. Tick each box of the checklist, then take the short quiz. Next comes the sequence pair: two lists of names instead of a tree. Pause and guess: can two lists describe our best floorplan, with twenty-four squares? Yes: two lists are enough. That&#x27;s the sequence pair, in the next lab.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">Lab 05 of the Floorplanning for EDA course, from the <a href="https://github.com/yongfu-li/eda-learning">EDA Algorithms Platform</a> (CC BY 4.0). Review build, not yet merged into the course repository.</div>
+  </footer>
+  <script>
+    // Keep the reader's place (#section) when switching language.
+    document.querySelectorAll("a.lang-switch").forEach((a) =>
+      a.addEventListener("click", () => { a.href = a.getAttribute("href").split("#")[0] + location.hash; })
+    );
+  </script>
+  <script src="quiz.js"></script>
+  <script src="player.js"></script>
+</body>
+</html>

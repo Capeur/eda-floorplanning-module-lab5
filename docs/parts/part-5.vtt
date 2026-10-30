@@ -1,0 +1,91 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:06.540
+Yes: many trees beat twenty-seven, and the best need only twenty-four squares.
+
+00:00:06.540 --> 00:00:09.055
+Here is one of the best trees.
+
+00:00:09.055 --> 00:00:13.080
+Its walk places A, D, C and E, and B comes last.
+
+00:00:13.080 --> 00:00:18.271
+Under B, the skyline is the top of D, so B lands at y equals one.
+
+00:00:18.271 --> 00:00:24.420
+It fills the gap, and the box is six wide and four tall: twenty-four squares.
+
+00:00:24.420 --> 00:00:26.496
+Only one square is wasted.
+
+00:00:26.496 --> 00:00:31.871
+Could a box of twenty-three squares, with nothing wasted, hold all five blocks?
+
+00:00:31.871 --> 00:00:35.953
+Twenty-three squares only make a rectangle one square thick.
+
+00:00:35.953 --> 00:00:40.512
+Block B is too thick for that, so twenty-four is the best possible.
+
+00:00:40.512 --> 00:00:42.645
+Now build floorplans yourself.
+
+00:00:42.645 --> 00:00:48.403
+In the browser lab, you edit the tree and watch each block drop onto the skyline.
+
+00:00:48.403 --> 00:00:51.247
+The challenges check the tree you built.
+
+00:00:51.247 --> 00:00:55.512
+Lift D higher, make the long row fit, and reach twenty-four.
+
+00:00:55.512 --> 00:00:58.995
+If you like programming, write the packer in Python.
+
+00:00:58.995 --> 00:01:01.673
+The examples file gives the exact rules.
+
+00:01:01.673 --> 00:01:07.098
+Run the checker once to print every correct answer, then run it on your own file.
+
+00:01:07.098 --> 00:01:12.456
+It compares your packer with the right one on all five thousand and forty trees.
+
+00:01:12.456 --> 00:01:14.140
+Left child: next door.
+
+00:01:14.140 --> 00:01:17.736
+Right child: upstairs, with the same left edge.
+
+00:01:17.736 --> 00:01:22.864
+Walk the tree: the node, its whole left side, then its right child.
+
+00:01:22.864 --> 00:01:26.384
+Each block drops until it touches the skyline.
+
+00:01:26.384 --> 00:01:31.741
+Score a floorplan with its bounding box, and count the wasted squares.
+
+00:01:31.741 --> 00:01:36.792
+A tree never overlaps, but it can stick out, so check the outline.
+
+00:01:36.792 --> 00:01:40.396
+Pick a track: the browser lab, Python, or both.
+
+00:01:40.396 --> 00:01:44.767
+Tick each box of the checklist, then take the short quiz.
+
+00:01:44.767 --> 00:01:49.904
+Next comes the sequence pair: two lists of names instead of a tree.
+
+00:01:49.904 --> 00:01:55.732
+Pause and guess: can two lists describe our best floorplan, with twenty-four
+
+00:01:55.732 --> 00:01:56.346
+squares?
+
+00:01:56.346 --> 00:01:58.339
+Yes: two lists are enough.
+
+00:01:58.339 --> 00:02:01.560
+That's the sequence pair, in the next lab.

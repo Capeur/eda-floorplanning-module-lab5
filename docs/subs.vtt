@@ -1,0 +1,316 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.469
+Five blocks, one frame, and a tree that says where each block goes.
+
+00:00:04.469 --> 00:00:07.537
+Can you build the picture from the tree alone?
+
+00:00:07.537 --> 00:00:12.072
+By the end, you will, and you will find the tightest picture of all.
+
+00:00:12.072 --> 00:00:16.184
+A chip is made of large rectangular parts, called blocks.
+
+00:00:16.184 --> 00:00:18.709
+Ours has five blocks, named A to E.
+
+00:00:18.709 --> 00:00:23.904
+They are drawn on squared paper, so you can count each width and height.
+
+00:00:23.904 --> 00:00:27.396
+A floorplan says where each block sits on the chip.
+
+00:00:27.396 --> 00:00:31.231
+Every block must stay inside a frame called the outline.
+
+00:00:31.231 --> 00:00:34.998
+Our outline is ten squares wide and eight squares tall.
+
+00:00:34.998 --> 00:00:39.312
+The tighter the blocks are packed, the smaller the chip can be.
+
+00:00:39.312 --> 00:00:45.284
+Writing down every position is slow, so we use a recipe instead: a B-star tree.
+
+00:00:45.284 --> 00:00:47.929
+Each block is one node of the tree.
+
+00:00:47.929 --> 00:00:50.650
+The top node, A, is called the root.
+
+00:00:50.650 --> 00:00:55.488
+Each node can have two children: a left child and a right child.
+
+00:00:55.488 --> 00:00:59.100
+The root goes in the lower-left corner of the outline.
+
+00:00:59.100 --> 00:01:03.984
+From that corner, x counts squares to the right, and y counts squares up.
+
+00:01:03.984 --> 00:01:08.760
+A left child goes next door, right against its parent's right side.
+
+00:01:08.760 --> 00:01:14.106
+A right child goes upstairs, on top of its parent, with the same left edge.
+
+00:01:14.106 --> 00:01:20.023
+The names sound backwards, so remember: left means next door, right means upstairs.
+
+00:01:20.023 --> 00:01:25.440
+In the tree, a solid line means next door, and a dashed line means upstairs.
+
+00:01:25.440 --> 00:01:29.171
+A is three squares wide and two squares tall.
+
+00:01:29.171 --> 00:01:30.829
+B is A's left child.
+
+00:01:30.829 --> 00:01:34.560
+Pause and guess: where does B's left edge go?
+
+00:01:34.560 --> 00:01:40.443
+B goes next door, at x equals three: A starts at zero, and A is three wide.
+
+00:01:40.443 --> 00:01:45.384
+Nothing is under B, so it rests on the floor, at y equals zero.
+
+00:01:45.384 --> 00:01:49.731
+We place the blocks one at a time, in a fixed walk order.
+
+00:01:49.731 --> 00:01:55.831
+Place a node, then everything down its left side, and only then its right child.
+
+00:01:55.831 --> 00:01:59.568
+So the walk goes A, B, C and E, and D comes last.
+
+00:01:59.568 --> 00:02:04.874
+C is B's left child, so it goes next door to B, at x equals five.
+
+00:02:04.874 --> 00:02:10.342
+E is C's left child, so it lands next door to C, at x equals seven.
+
+00:02:10.342 --> 00:02:15.648
+The widths simply add up: three, plus two, plus two, makes seven.
+
+00:02:15.648 --> 00:02:21.258
+The left side is done, so the walk comes back to D, A's right child.
+
+00:02:21.258 --> 00:02:25.795
+D goes upstairs, so it starts at x equals zero, like A.
+
+00:02:25.795 --> 00:02:28.848
+It sits on top of A, at y equals two.
+
+00:02:28.848 --> 00:02:33.383
+All five blocks are placed, and every one is inside the outline.
+
+00:02:33.383 --> 00:02:39.264
+Pause and guess: if we swap A and C in the tree, does D still land at y equals two?
+
+00:02:39.264 --> 00:02:41.736
+No: D lands one square higher.
+
+00:02:41.736 --> 00:02:48.327
+Here is the tree with A and C swapped: C is the root, and A takes C's old place.
+
+00:02:48.327 --> 00:02:52.776
+C, B, A and E still go next door, one after the other.
+
+00:02:52.776 --> 00:02:56.479
+Now picture the blocks as a city, seen from far away.
+
+00:02:56.479 --> 00:03:00.391
+The top edge of everything placed so far is the skyline.
+
+00:03:00.391 --> 00:03:06.120
+A new block drops from the sky, like a Tetris piece, until it touches the skyline.
+
+00:03:06.120 --> 00:03:10.123
+D is three wide, so it hangs over C and over part of B.
+
+00:03:10.123 --> 00:03:13.690
+B is three tall, so it stops D at y equals three.
+
+00:03:13.690 --> 00:03:17.184
+That leaves a hole of two empty squares above C.
+
+00:03:17.184 --> 00:03:19.325
+So which floorplan is better?
+
+00:03:19.325 --> 00:03:25.451
+To compare, we draw the bounding box: the smallest rectangle around all the blocks.
+
+00:03:25.451 --> 00:03:30.840
+For the first tree, it is nine wide and three tall: twenty-seven squares.
+
+00:03:30.840 --> 00:03:33.982
+The five blocks cover twenty-three squares.
+
+00:03:33.982 --> 00:03:38.805
+The other four squares in the box are empty: that is wasted space.
+
+00:03:38.805 --> 00:03:42.240
+Fewer wasted squares means a tighter floorplan.
+
+00:03:42.240 --> 00:03:48.197
+The swapped tree needs a box nine by four: thirty-six squares, with thirteen wasted.
+
+00:03:48.197 --> 00:03:52.382
+So one swap of two names changed the picture and the score.
+
+00:03:52.382 --> 00:03:56.424
+Twenty-seven became thirty-six: the first tree is better.
+
+00:03:56.424 --> 00:03:59.969
+Now take a tree where every child is a left child.
+
+00:03:59.969 --> 00:04:04.152
+Pause and guess: will this long row fit inside the outline?
+
+00:04:04.152 --> 00:04:05.884
+No, it will not fit.
+
+00:04:05.884 --> 00:04:11.338
+Every block goes next door: three, two, two and three make ten.
+
+00:04:11.338 --> 00:04:15.840
+The outline is already full, and E is still waiting.
+
+00:04:15.840 --> 00:04:20.309
+E lands at x equals ten, so the row is twelve squares wide.
+
+00:04:20.309 --> 00:04:23.566
+E sticks out of the outline by two squares.
+
+00:04:23.566 --> 00:04:28.490
+A floorplan is legal only when every block is inside the outline.
+
+00:04:28.490 --> 00:04:30.384
+So this row is not legal.
+
+00:04:30.384 --> 00:04:33.032
+Notice that the blocks never overlap.
+
+00:04:33.032 --> 00:04:38.400
+Each block drops onto the skyline, so it can never land inside another one.
+
+00:04:38.400 --> 00:04:42.480
+With a B-star tree, sticking out is the only way to fail.
+
+00:04:42.480 --> 00:04:47.054
+We can turn a block on its side, so its width and height swap.
+
+00:04:47.054 --> 00:04:50.521
+Turn D, and it becomes one wide and three tall.
+
+00:04:50.521 --> 00:04:55.464
+Now the row is ten wide, so it fits exactly, and it is legal again.
+
+00:04:55.464 --> 00:04:58.188
+Turning is one of three small changes.
+
+00:04:58.188 --> 00:05:02.776
+You can also swap two names in the tree, as we did with A and C.
+
+00:05:02.776 --> 00:05:07.723
+Or move a leaf, a block with no children, to a free spot in the tree.
+
+00:05:07.723 --> 00:05:11.450
+Each change gives a new floorplan, with a new score.
+
+00:05:11.450 --> 00:05:17.257
+Pause and guess: can any tree beat twenty-seven squares, and what is the smallest
+
+00:05:17.257 --> 00:05:17.544
+box?
+
+00:05:17.544 --> 00:05:24.084
+Yes: many trees beat twenty-seven, and the best need only twenty-four squares.
+
+00:05:24.084 --> 00:05:26.599
+Here is one of the best trees.
+
+00:05:26.599 --> 00:05:30.624
+Its walk places A, D, C and E, and B comes last.
+
+00:05:30.624 --> 00:05:35.815
+Under B, the skyline is the top of D, so B lands at y equals one.
+
+00:05:35.815 --> 00:05:41.964
+It fills the gap, and the box is six wide and four tall: twenty-four squares.
+
+00:05:41.964 --> 00:05:44.040
+Only one square is wasted.
+
+00:05:44.040 --> 00:05:49.415
+Could a box of twenty-three squares, with nothing wasted, hold all five blocks?
+
+00:05:49.415 --> 00:05:53.497
+Twenty-three squares only make a rectangle one square thick.
+
+00:05:53.497 --> 00:05:58.056
+Block B is too thick for that, so twenty-four is the best possible.
+
+00:05:58.056 --> 00:06:00.189
+Now build floorplans yourself.
+
+00:06:00.189 --> 00:06:05.947
+In the browser lab, you edit the tree and watch each block drop onto the skyline.
+
+00:06:05.947 --> 00:06:08.791
+The challenges check the tree you built.
+
+00:06:08.791 --> 00:06:13.056
+Lift D higher, make the long row fit, and reach twenty-four.
+
+00:06:13.056 --> 00:06:16.539
+If you like programming, write the packer in Python.
+
+00:06:16.539 --> 00:06:19.217
+The examples file gives the exact rules.
+
+00:06:19.217 --> 00:06:24.642
+Run the checker once to print every correct answer, then run it on your own file.
+
+00:06:24.642 --> 00:06:30.000
+It compares your packer with the right one on all five thousand and forty trees.
+
+00:06:30.000 --> 00:06:31.684
+Left child: next door.
+
+00:06:31.684 --> 00:06:35.280
+Right child: upstairs, with the same left edge.
+
+00:06:35.280 --> 00:06:40.408
+Walk the tree: the node, its whole left side, then its right child.
+
+00:06:40.408 --> 00:06:43.928
+Each block drops until it touches the skyline.
+
+00:06:43.928 --> 00:06:49.285
+Score a floorplan with its bounding box, and count the wasted squares.
+
+00:06:49.285 --> 00:06:54.336
+A tree never overlaps, but it can stick out, so check the outline.
+
+00:06:54.336 --> 00:06:57.940
+Pick a track: the browser lab, Python, or both.
+
+00:06:57.940 --> 00:07:02.311
+Tick each box of the checklist, then take the short quiz.
+
+00:07:02.311 --> 00:07:07.448
+Next comes the sequence pair: two lists of names instead of a tree.
+
+00:07:07.448 --> 00:07:13.276
+Pause and guess: can two lists describe our best floorplan, with twenty-four
+
+00:07:13.276 --> 00:07:13.890
+squares?
+
+00:07:13.890 --> 00:07:15.883
+Yes: two lists are enough.
+
+00:07:15.883 --> 00:07:19.104
+That's the sequence pair, in the next lab.

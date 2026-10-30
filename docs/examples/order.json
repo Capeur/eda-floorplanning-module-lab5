@@ -1,0 +1,38 @@
+{
+  "id": "order",
+  "title": "Left subtree before right child",
+  "idea": "D is placed after the whole left subtree of B (C and E), so E's top edge lifts D. Placing D first would give a 7 by 8 box.",
+  "tree": "A(B(C(-,E),D),-)",
+  "rotated": [],
+  "expect": {
+    "pos": {
+      "A": [
+        0,
+        0
+      ],
+      "B": [
+        3,
+        0
+      ],
+      "C": [
+        5,
+        0
+      ],
+      "D": [
+        3,
+        4
+      ],
+      "E": [
+        5,
+        2
+      ]
+    },
+    "bbox": [
+      7,
+      5
+    ],
+    "area": 35,
+    "wasted": 12,
+    "legal": true
+  }
+}

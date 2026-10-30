@@ -1,0 +1,79 @@
+{
+  "id": "rotate",
+  "title": "One rotation makes the row fit",
+  "idea": "All five blocks as left children make a row 12 wide in a 10 wide outline. Turn D (3 by 1 becomes 1 by 3) and the row fits.",
+  "tree": "A(B(C(D(E,-),-),-),-)",
+  "rotated": [],
+  "then": {
+    "op": "rotate",
+    "args": [
+      "D"
+    ],
+    "tree": "A(B(C(D(E,-),-),-),-)",
+    "rotated": [
+      "D"
+    ],
+    "expect": {
+      "pos": {
+        "A": [
+          0,
+          0
+        ],
+        "B": [
+          3,
+          0
+        ],
+        "C": [
+          5,
+          0
+        ],
+        "D": [
+          7,
+          0
+        ],
+        "E": [
+          8,
+          0
+        ]
+      },
+      "bbox": [
+        10,
+        3
+      ],
+      "area": 30,
+      "wasted": 7,
+      "legal": true
+    }
+  },
+  "expect": {
+    "pos": {
+      "A": [
+        0,
+        0
+      ],
+      "B": [
+        3,
+        0
+      ],
+      "C": [
+        5,
+        0
+      ],
+      "D": [
+        7,
+        0
+      ],
+      "E": [
+        10,
+        0
+      ]
+    },
+    "bbox": [
+      12,
+      3
+    ],
+    "area": 36,
+    "wasted": 13,
+    "legal": false
+  }
+}

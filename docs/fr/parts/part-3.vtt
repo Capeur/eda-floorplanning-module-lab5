@@ -1,0 +1,67 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.572
+Non : D arrive une case plus haut.
+
+00:00:02.572 --> 00:00:08.928
+Voici l'arbre où A et C sont échangés : C est la racine, et A prend l'ancienne place
+
+00:00:08.928 --> 00:00:09.306
+de C.
+
+00:00:09.306 --> 00:00:13.392
+C, B, A et E vont toujours à côté, l'un après l'autre.
+
+00:00:13.392 --> 00:00:17.239
+Imaginez maintenant les blocs comme une ville, vue de loin.
+
+00:00:17.239 --> 00:00:22.260
+Le bord supérieur de tout ce qui est déjà placé s'appelle la ligne d'horizon.
+
+00:00:22.260 --> 00:00:27.672
+Un nouveau bloc tombe du ciel, comme au Tetris, jusqu'à toucher la ligne d'horizon.
+
+00:00:27.672 --> 00:00:32.555
+D fait trois de large, donc il passe au-dessus de C et d'une partie de B.
+
+00:00:32.555 --> 00:00:36.233
+B fait trois de haut, donc il arrête D en y égal trois.
+
+00:00:36.233 --> 00:00:39.912
+Cela laisse un trou de deux cases vides au-dessus de C.
+
+00:00:39.912 --> 00:00:42.708
+Alors, quel plan de masse est le meilleur ?
+
+00:00:42.708 --> 00:00:47.974
+Pour comparer, on dessine la boîte englobante, le plus petit rectangle autour des
+
+00:00:47.974 --> 00:00:48.364
+blocs.
+
+00:00:48.364 --> 00:00:53.760
+Pour le premier arbre, elle fait neuf de large et trois de haut : vingt-sept cases.
+
+00:00:53.760 --> 00:00:56.487
+Les cinq blocs couvrent vingt-trois cases.
+
+00:00:56.487 --> 00:01:01.357
+Les quatre autres cases de la boîte sont vides : ce sont des cases perdues.
+
+00:01:01.357 --> 00:01:05.448
+Moins il y a de cases perdues, plus le plan de masse est serré.
+
+00:01:05.448 --> 00:01:10.846
+L'arbre échangé a une boîte de neuf sur quatre : trente-six cases, treize perdues.
+
+00:01:10.846 --> 00:01:14.993
+Un seul échange de deux noms a donc changé l'image et le score.
+
+00:01:14.993 --> 00:01:19.272
+Vingt-sept est devenu trente-six : le premier arbre est meilleur.
+
+00:01:19.272 --> 00:01:23.265
+Prenons maintenant un arbre où chaque enfant est un enfant gauche.
+
+00:01:23.265 --> 00:01:27.984
+Faites une pause et devinez : cette longue rangée tient-elle dans le contour ?

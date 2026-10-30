@@ -1,0 +1,61 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.472
+No: D lands one square higher.
+
+00:00:02.472 --> 00:00:09.063
+Here is the tree with A and C swapped: C is the root, and A takes C's old place.
+
+00:00:09.063 --> 00:00:13.512
+C, B, A and E still go next door, one after the other.
+
+00:00:13.512 --> 00:00:17.215
+Now picture the blocks as a city, seen from far away.
+
+00:00:17.215 --> 00:00:21.127
+The top edge of everything placed so far is the skyline.
+
+00:00:21.127 --> 00:00:26.856
+A new block drops from the sky, like a Tetris piece, until it touches the skyline.
+
+00:00:26.856 --> 00:00:30.859
+D is three wide, so it hangs over C and over part of B.
+
+00:00:30.859 --> 00:00:34.426
+B is three tall, so it stops D at y equals three.
+
+00:00:34.426 --> 00:00:37.920
+That leaves a hole of two empty squares above C.
+
+00:00:37.920 --> 00:00:40.061
+So which floorplan is better?
+
+00:00:40.061 --> 00:00:46.187
+To compare, we draw the bounding box: the smallest rectangle around all the blocks.
+
+00:00:46.187 --> 00:00:51.576
+For the first tree, it is nine wide and three tall: twenty-seven squares.
+
+00:00:51.576 --> 00:00:54.718
+The five blocks cover twenty-three squares.
+
+00:00:54.718 --> 00:00:59.541
+The other four squares in the box are empty: that is wasted space.
+
+00:00:59.541 --> 00:01:02.976
+Fewer wasted squares means a tighter floorplan.
+
+00:01:02.976 --> 00:01:08.933
+The swapped tree needs a box nine by four: thirty-six squares, with thirteen wasted.
+
+00:01:08.933 --> 00:01:13.118
+So one swap of two names changed the picture and the score.
+
+00:01:13.118 --> 00:01:17.160
+Twenty-seven became thirty-six: the first tree is better.
+
+00:01:17.160 --> 00:01:20.705
+Now take a tree where every child is a left child.
+
+00:01:20.705 --> 00:01:24.888
+Pause and guess: will this long row fit inside the outline?

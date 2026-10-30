@@ -1,0 +1,322 @@
+title: Plan de masse par arbre B*
+footer: learn_floorplanning — 03 arbre B*
+slides:
+- type: title
+  title: Plan de masse par arbre B*
+  subtitle: Cinq blocs, un cadre, et un arbre qui dit où va chaque bloc
+  notes: Cinq blocs, un cadre, et un arbre qui dit où va chaque bloc. Pouvez-vous
+    dessiner l'image à partir de l'arbre seul ? À la fin, oui, et vous trouverez même
+    l'image la plus serrée de toutes.
+- type: two_column
+  title: Cinq blocs
+  left:
+  - Une puce est faite de grandes pièces rectangulaires, appelées blocs
+  - Le nôtre a cinq blocs, nommés de A à E
+  - 'Ils sont sur du papier quadrillé : on peut compter chaque largeur et chaque hauteur'
+  right: assets/blocks-1.png
+  notes: 'Une puce est faite de grandes pièces rectangulaires, appelées blocs. Le
+    nôtre a cinq blocs, nommés de A à E. Ils sont sur du papier quadrillé : on peut
+    compter chaque largeur et chaque hauteur.'
+- type: two_column
+  title: Le contour
+  left:
+  - Un plan de masse dit où se trouve chaque bloc sur la puce
+  - Chaque bloc doit rester dans un cadre appelé le contour
+  - Notre contour fait dix cases de large et huit cases de haut
+  - Plus les blocs sont serrés, plus la puce peut être petite
+  right: assets/blocks.png
+  notes: Un plan de masse dit où se trouve chaque bloc sur la puce. Chaque bloc doit
+    rester dans un cadre appelé le contour. Notre contour fait dix cases de large
+    et huit cases de haut. Plus les blocs sont serrés, plus la puce peut être petite.
+- type: two_column
+  title: Un arbre comme recette
+  left:
+  - 'Noter chaque position est long, alors nous utilisons une recette : un arbre B-étoile'
+  - Chaque bloc est un nœud de l'arbre
+  - Le nœud du haut, A, s'appelle la racine
+  - 'Chaque nœud peut avoir deux enfants : un enfant gauche et un enfant droit'
+  right: assets/tree-golden.png
+  notes: 'Noter chaque position est long, alors nous utilisons une recette : un arbre
+    B-étoile. Chaque bloc est un nœud de l''arbre. Le nœud du haut, A, s''appelle
+    la racine. Chaque nœud peut avoir deux enfants : un enfant gauche et un enfant
+    droit.'
+- type: two_column
+  title: La racine va dans le coin
+  left:
+  - La racine va dans le coin inférieur gauche du contour
+  - À partir de ce coin, x compte les cases vers la droite, et y compte les cases
+    vers le haut
+  right: assets/rule-1.png
+  notes: La racine va dans le coin inférieur gauche du contour. À partir de ce coin,
+    x compte les cases vers la droite, et y compte les cases vers le haut.
+- type: two_column
+  title: À gauche, à côté ; à droite, à l'étage
+  left:
+  - 'Un enfant gauche va à côté : collé contre le côté droit de son parent'
+  - 'Un enfant droit va à l''étage : sur son parent, avec le même bord gauche'
+  - 'Les noms semblent inversés : gauche veut dire à côté, droite veut dire à l''étage'
+  - Dans l'arbre, un trait plein veut dire à côté, un pointillé veut dire à l'étage
+  right: assets/rule.png
+  notes: 'Un enfant gauche va à côté : collé contre le côté droit de son parent. Un
+    enfant droit va à l''étage : sur son parent, avec le même bord gauche. Les noms
+    semblent inversés : gauche veut dire à côté, droite veut dire à l''étage. Dans
+    l''arbre, un trait plein veut dire à côté, un pointillé veut dire à l''étage.'
+- type: two_column
+  title: Où va B ?
+  left:
+  - A fait trois cases de large et deux cases de haut
+  - B est l'enfant gauche de A
+  - 'Faites une pause et devinez : où va le bord gauche de B ?'
+  right: assets/pause-b.png
+  notes: 'A fait trois cases de large et deux cases de haut. B est l''enfant gauche
+    de A. Faites une pause et devinez : où va le bord gauche de B ?'
+- type: image
+  title: B va à côté, en x = 3
+  image: assets/steps/01-root.png
+  caption: B va à côté, en x = 3
+  notes: 'B va à côté, en x égal trois : A commence à zéro, et A fait trois de large.
+    Rien n''est sous B, donc il repose sur le sol, en y égal zéro.'
+- type: image
+  title: 'Le parcours : A, B, C, E, puis D'
+  image: assets/steps/02-left-chain.png
+  caption: 'Le parcours : A, B, C, E, puis D'
+  notes: On place les blocs un par un, dans un ordre de parcours fixe. On place un
+    nœud, puis tout son côté gauche, et seulement ensuite son enfant droit. Le parcours
+    donne donc A, B, C et E, et D vient en dernier.
+- type: image
+  title: C et E vont à côté
+  image: assets/steps/03-right-d.png
+  caption: C et E vont à côté
+  notes: 'C est l''enfant gauche de B, donc il va à côté de B, en x égal cinq. E est
+    l''enfant gauche de C, donc il arrive à côté de C, en x égal sept. Les largeurs
+    s''additionnent : trois, plus deux, plus deux, font sept.'
+- type: image
+  title: D monte à l'étage, sur A
+  image: assets/steps/04-legal.png
+  caption: D monte à l'étage, sur A
+  notes: Le côté gauche est fini, donc le parcours revient à D, l'enfant droit de
+    A. D monte à l'étage, donc il commence en x égal zéro, comme A. Il se pose sur
+    A, en y égal deux.
+- type: image
+  title: Cinq blocs placés
+  image: assets/steps/05-takeaway.png
+  caption: Cinq blocs placés
+  notes: 'Les cinq blocs sont placés, et chacun est dans le contour. Faites une pause
+    et devinez : si on échange A et C dans l''arbre, D arrive-t-il encore en y égal
+    deux ?'
+- type: two_column
+  title: Échanger A et C
+  left:
+  - 'Non : D arrive une case plus haut'
+  - 'Voici l''arbre où A et C sont échangés : C est la racine, et A prend l''ancienne
+    place de C'
+  - C, B, A et E vont toujours à côté, l'un après l'autre
+  right: assets/lift-1.png
+  notes: 'Non : D arrive une case plus haut. Voici l''arbre où A et C sont échangés
+    : C est la racine, et A prend l''ancienne place de C. C, B, A et E vont toujours
+    à côté, l''un après l''autre.'
+- type: two_column
+  title: La ligne d'horizon
+  left:
+  - Imaginez maintenant les blocs comme une ville, vue de loin
+  - Le bord supérieur de tout ce qui est déjà placé s'appelle la ligne d'horizon
+  - Un nouveau bloc tombe du ciel, comme au Tetris, jusqu'à toucher la ligne d'horizon
+  right: assets/lift-2.png
+  notes: Imaginez maintenant les blocs comme une ville, vue de loin. Le bord supérieur
+    de tout ce qui est déjà placé s'appelle la ligne d'horizon. Un nouveau bloc tombe
+    du ciel, comme au Tetris, jusqu'à toucher la ligne d'horizon.
+- type: two_column
+  title: D se pose sur B
+  left:
+  - D fait trois de large, donc il passe au-dessus de C et d'une partie de B
+  - B fait trois de haut, donc il arrête D en y égal trois
+  - Cela laisse un trou de deux cases vides au-dessus de C
+  right: assets/lift.png
+  notes: D fait trois de large, donc il passe au-dessus de C et d'une partie de B.
+    B fait trois de haut, donc il arrête D en y égal trois. Cela laisse un trou de
+    deux cases vides au-dessus de C.
+- type: two_column
+  title: La boîte englobante
+  left:
+  - Alors, quel plan de masse est le meilleur ?
+  - Pour comparer, on dessine la boîte englobante, le plus petit rectangle autour
+    des blocs
+  - 'Pour le premier arbre, elle fait neuf de large et trois de haut : vingt-sept
+    cases'
+  right: assets/golden-box-1.png
+  notes: 'Alors, quel plan de masse est le meilleur ? Pour comparer, on dessine la
+    boîte englobante, le plus petit rectangle autour des blocs. Pour le premier arbre,
+    elle fait neuf de large et trois de haut : vingt-sept cases.'
+- type: two_column
+  title: Les cases perdues
+  left:
+  - Les cinq blocs couvrent vingt-trois cases
+  - 'Les quatre autres cases de la boîte sont vides : ce sont des cases perdues'
+  - Moins il y a de cases perdues, plus le plan de masse est serré
+  right: assets/golden-box.png
+  notes: 'Les cinq blocs couvrent vingt-trois cases. Les quatre autres cases de la
+    boîte sont vides : ce sont des cases perdues. Moins il y a de cases perdues, plus
+    le plan de masse est serré.'
+- type: two_column
+  title: Un échange, un score moins bon
+  left:
+  - 'L''arbre échangé a une boîte de neuf sur quatre : trente-six cases, treize perdues'
+  - Un seul échange de deux noms a donc changé l'image et le score
+  - 'Vingt-sept est devenu trente-six : le premier arbre est meilleur'
+  right: assets/lift-box.png
+  notes: 'L''arbre échangé a une boîte de neuf sur quatre : trente-six cases, treize
+    perdues. Un seul échange de deux noms a donc changé l''image et le score. Vingt-sept
+    est devenu trente-six : le premier arbre est meilleur.'
+- type: two_column
+  title: Une longue rangée
+  left:
+  - Prenons maintenant un arbre où chaque enfant est un enfant gauche
+  - 'Faites une pause et devinez : cette longue rangée tient-elle dans le contour
+    ?'
+  right: assets/chain-1.png
+  notes: 'Prenons maintenant un arbre où chaque enfant est un enfant gauche. Faites
+    une pause et devinez : cette longue rangée tient-elle dans le contour ?'
+- type: two_column
+  title: Chaque bloc à côté
+  left:
+  - Non, elle ne tient pas
+  - 'Chaque bloc va à côté : trois, deux, deux et trois font dix'
+  - Le contour est déjà plein, et E attend encore
+  right: assets/chain-2.png
+  notes: 'Non, elle ne tient pas. Chaque bloc va à côté : trois, deux, deux et trois
+    font dix. Le contour est déjà plein, et E attend encore.'
+- type: two_column
+  title: Un bloc qui dépasse
+  left:
+  - E arrive en x égal dix, donc la rangée fait douze cases de large
+  - E dépasse du contour de deux cases
+  - Un plan de masse est valide seulement si chaque bloc est dans le contour
+  - Cette rangée n'est donc pas valide
+  right: assets/chain.png
+  notes: E arrive en x égal dix, donc la rangée fait douze cases de large. E dépasse
+    du contour de deux cases. Un plan de masse est valide seulement si chaque bloc
+    est dans le contour. Cette rangée n'est donc pas valide.
+- type: two_column
+  title: Jamais de chevauchement
+  left:
+  - Remarquez que les blocs ne se chevauchent jamais
+  - Chaque bloc tombe sur la ligne d'horizon, donc il ne peut jamais atterrir dans
+    un autre
+  - Avec un arbre B-étoile, dépasser est la seule façon d'échouer
+  right: assets/chain-check.png
+  notes: Remarquez que les blocs ne se chevauchent jamais. Chaque bloc tombe sur la
+    ligne d'horizon, donc il ne peut jamais atterrir dans un autre. Avec un arbre
+    B-étoile, dépasser est la seule façon d'échouer.
+- type: two_column
+  title: Tourner un bloc
+  left:
+  - 'On peut tourner un bloc sur le côté : sa largeur et sa hauteur s''échangent'
+  - Tournez D, et il fait une case de large et trois de haut
+  - 'La rangée fait maintenant dix de large : elle tient pile, et elle est de nouveau
+    valide'
+  right: assets/turn.png
+  notes: 'On peut tourner un bloc sur le côté : sa largeur et sa hauteur s''échangent.
+    Tournez D, et il fait une case de large et trois de haut. La rangée fait maintenant
+    dix de large : elle tient pile, et elle est de nouveau valide.'
+- type: bullets
+  title: Trois petits changements
+  bullets:
+  - Tourner est l'un des trois petits changements
+  - On peut aussi échanger deux noms dans l'arbre, comme avec A et C
+  - Ou déplacer une feuille, un bloc sans enfant, vers une place libre de l'arbre
+  - Chaque changement donne un nouveau plan de masse, avec un nouveau score
+  - 'Faites une pause et devinez : un arbre peut-il battre vingt-sept ?'
+  - Et quelle est la plus petite boîte ?
+  notes: 'Tourner est l''un des trois petits changements. On peut aussi échanger deux
+    noms dans l''arbre, comme avec A et C. Ou déplacer une feuille, un bloc sans enfant,
+    vers une place libre de l''arbre. Chaque changement donne un nouveau plan de masse,
+    avec un nouveau score. Faites une pause et devinez : un arbre peut-il battre vingt-sept
+    ? Et quelle est la plus petite boîte ?'
+- type: two_column
+  title: Le plan de masse le plus serré
+  left:
+  - 'Oui : beaucoup d''arbres battent vingt-sept'
+  - Les meilleurs n'ont besoin que de vingt-quatre cases
+  - Voici l'un des meilleurs arbres
+  - Son parcours place A, D, C et E, et B vient en dernier
+  right: assets/best-1.png
+  notes: 'Oui : beaucoup d''arbres battent vingt-sept. Les meilleurs n''ont besoin
+    que de vingt-quatre cases. Voici l''un des meilleurs arbres. Son parcours place
+    A, D, C et E, et B vient en dernier.'
+- type: two_column
+  title: B est soulevé par la ligne d'horizon
+  left:
+  - Sous B, la ligne d'horizon est le haut de D, donc B arrive en y égal un
+  - 'Il comble le trou, et la boîte fait six de large et quatre de haut : vingt-quatre
+    cases'
+  - Une seule case est perdue
+  right: assets/best.png
+  notes: 'Sous B, la ligne d''horizon est le haut de D, donc B arrive en y égal un.
+    Il comble le trou, et la boîte fait six de large et quatre de haut : vingt-quatre
+    cases. Une seule case est perdue.'
+- type: bullets
+  title: Pourquoi pas vingt-trois ?
+  bullets:
+  - Une boîte de vingt-trois cases, sans case perdue, pourrait-elle contenir les cinq
+    blocs ?
+  - Vingt-trois cases ne forment qu'un rectangle épais d'une seule case
+  - 'Le bloc B est trop épais pour cela : vingt-quatre est donc le mieux possible'
+  notes: 'Une boîte de vingt-trois cases, sans case perdue, pourrait-elle contenir
+    les cinq blocs ? Vingt-trois cases ne forment qu''un rectangle épais d''une seule
+    case. Le bloc B est trop épais pour cela : vingt-quatre est donc le mieux possible.'
+- type: image
+  title: Parcours lab dans le navigateur
+  image: assets/lab-starter.png
+  caption: Départ du lab dans le navigateur
+  notes: Construisez maintenant des plans de masse vous-même. Dans le lab du navigateur,
+    vous modifiez l'arbre et vous regardez chaque bloc tomber sur la ligne d'horizon.
+    Les défis vérifient l'arbre que vous avez construit. Soulevez D plus haut, faites
+    tenir la longue rangée, et atteignez vingt-quatre.
+- type: image
+  title: Parcours implémentation
+  image: assets/real-shell.png
+  caption: Session de terminal réelle
+  notes: Si vous aimez programmer, écrivez la fonction de placement en Python. Le
+    fichier d'exemples donne les règles exactes. Lancez une fois le vérificateur pour
+    afficher toutes les bonnes réponses, puis lancez-le sur votre fichier. Il compare
+    votre placement au bon sur les cinq mille quarante arbres.
+- type: code
+  title: Parcours implémentation — à essayer
+  code: '# afficher toutes les bonnes réponses
+
+    python3 examples/bstar_check.py --show
+
+
+    # vérifier vos propres fonctions
+
+    python3 examples/bstar_check.py --impl my_bstar.py'
+  notes: ''
+- type: bullets
+  title: À retenir
+  bullets:
+  - 'Enfant gauche : à côté'
+  - 'Enfant droit : à l''étage, avec le même bord gauche'
+  - 'Parcourez l''arbre : le nœud, tout son côté gauche, puis son enfant droit'
+  - Chaque bloc tombe jusqu'à toucher la ligne d'horizon
+  - On note un plan de masse avec sa boîte englobante, et on compte les cases perdues
+  - 'Un arbre ne chevauche jamais, mais il peut dépasser : vérifiez le contour'
+  notes: 'Enfant gauche : à côté. Enfant droit : à l''étage, avec le même bord gauche.
+    Parcourez l''arbre : le nœud, tout son côté gauche, puis son enfant droit. Chaque
+    bloc tombe jusqu''à toucher la ligne d''horizon. On note un plan de masse avec
+    sa boîte englobante, et on compte les cases perdues. Un arbre ne chevauche jamais,
+    mais il peut dépasser : vérifiez le contour.'
+- type: bullets
+  title: À vous de jouer
+  bullets:
+  - 'Choisissez un parcours : le lab dans le navigateur, Python, ou les deux'
+  - Cochez chaque case de la liste de contrôle, puis faites le court quiz
+  - 'La suite, c''est la paire de séquences : deux listes de noms au lieu d''un arbre'
+  - 'Faites une pause et devinez : deux listes décrivent-elles notre plan à vingt-quatre
+    ?'
+  - 'Oui : deux listes suffisent'
+  - C'est la paire de séquences, dans le prochain lab
+  notes: 'Choisissez un parcours : le lab dans le navigateur, Python, ou les deux.
+    Cochez chaque case de la liste de contrôle, puis faites le court quiz. La suite,
+    c''est la paire de séquences : deux listes de noms au lieu d''un arbre. Faites
+    une pause et devinez : deux listes décrivent-elles notre plan à vingt-quatre ?
+    Oui : deux listes suffisent. C''est la paire de séquences, dans le prochain lab.'

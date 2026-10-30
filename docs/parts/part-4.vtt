@@ -1,0 +1,58 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.732
+No, it will not fit.
+
+00:00:01.732 --> 00:00:07.186
+Every block goes next door: three, two, two and three make ten.
+
+00:00:07.186 --> 00:00:11.688
+The outline is already full, and E is still waiting.
+
+00:00:11.688 --> 00:00:16.157
+E lands at x equals ten, so the row is twelve squares wide.
+
+00:00:16.157 --> 00:00:19.414
+E sticks out of the outline by two squares.
+
+00:00:19.414 --> 00:00:24.338
+A floorplan is legal only when every block is inside the outline.
+
+00:00:24.338 --> 00:00:26.232
+So this row is not legal.
+
+00:00:26.232 --> 00:00:28.880
+Notice that the blocks never overlap.
+
+00:00:28.880 --> 00:00:34.248
+Each block drops onto the skyline, so it can never land inside another one.
+
+00:00:34.248 --> 00:00:38.328
+With a B-star tree, sticking out is the only way to fail.
+
+00:00:38.328 --> 00:00:42.902
+We can turn a block on its side, so its width and height swap.
+
+00:00:42.902 --> 00:00:46.369
+Turn D, and it becomes one wide and three tall.
+
+00:00:46.369 --> 00:00:51.312
+Now the row is ten wide, so it fits exactly, and it is legal again.
+
+00:00:51.312 --> 00:00:54.036
+Turning is one of three small changes.
+
+00:00:54.036 --> 00:00:58.624
+You can also swap two names in the tree, as we did with A and C.
+
+00:00:58.624 --> 00:01:03.571
+Or move a leaf, a block with no children, to a free spot in the tree.
+
+00:01:03.571 --> 00:01:07.298
+Each change gives a new floorplan, with a new score.
+
+00:01:07.298 --> 00:01:13.105
+Pause and guess: can any tree beat twenty-seven squares, and what is the smallest
+
+00:01:13.105 --> 00:01:13.392
+box?

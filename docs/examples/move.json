@@ -1,0 +1,79 @@
+{
+  "id": "move",
+  "title": "Cut a leaf, hang it elsewhere",
+  "idea": "Move the leaf D from under C to B's right slot (upstairs of B). The same start tree as the swap example gets much smaller.",
+  "tree": "A(B(C(D,-),-),E)",
+  "rotated": [],
+  "then": {
+    "op": "move",
+    "args": [
+      "D",
+      "B",
+      "right"
+    ],
+    "tree": "A(B(C,D),E)",
+    "rotated": [],
+    "expect": {
+      "pos": {
+        "A": [
+          0,
+          0
+        ],
+        "B": [
+          3,
+          0
+        ],
+        "C": [
+          5,
+          0
+        ],
+        "D": [
+          3,
+          3
+        ],
+        "E": [
+          0,
+          2
+        ]
+      },
+      "bbox": [
+        7,
+        4
+      ],
+      "area": 28,
+      "wasted": 5,
+      "legal": true
+    }
+  },
+  "expect": {
+    "pos": {
+      "A": [
+        0,
+        0
+      ],
+      "B": [
+        3,
+        0
+      ],
+      "C": [
+        5,
+        0
+      ],
+      "D": [
+        7,
+        0
+      ],
+      "E": [
+        0,
+        2
+      ]
+    },
+    "bbox": [
+      10,
+      4
+    ],
+    "area": 40,
+    "wasted": 17,
+    "legal": true
+  }
+}

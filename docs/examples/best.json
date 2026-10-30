@@ -1,0 +1,48 @@
+{
+  "id": "best",
+  "title": "The best tree needs the skyline",
+  "idea": "A bounding box of 6 by 4 is the smallest possible: 23 is prime, so no rectangle of area 23 can hold the 3 high block B. B is lifted onto D.",
+  "tree": "A(D,C(E(B,-),-))",
+  "rotated": [],
+  "all_best": [
+    "A(D,C(E(B,-),-))",
+    "A(D,E(C(B,-),-))",
+    "B(C(E,-),D(A,-))",
+    "B(E(C,-),D(A,-))",
+    "C(E(B,-),A(D,-))",
+    "D(A,B(C(E,-),-))",
+    "D(A,B(E(C,-),-))",
+    "E(C(B,-),A(D,-))"
+  ],
+  "expect": {
+    "pos": {
+      "A": [
+        0,
+        0
+      ],
+      "B": [
+        4,
+        1
+      ],
+      "C": [
+        0,
+        2
+      ],
+      "D": [
+        3,
+        0
+      ],
+      "E": [
+        2,
+        2
+      ]
+    },
+    "bbox": [
+      6,
+      4
+    ],
+    "area": 24,
+    "wasted": 1,
+    "legal": true
+  }
+}

@@ -1,0 +1,463 @@
+1
+00:00:00,000 --> 00:00:04,212
+Cinq blocs, un cadre, et un arbre qui dit où va chaque bloc.
+
+2
+00:00:04,212 --> 00:00:08,072
+Pouvez-vous dessiner l'image à partir de l'arbre seul ?
+
+3
+00:00:08,072 --> 00:00:13,056
+À la fin, oui, et vous trouverez même l'image la plus serrée de toutes.
+
+4
+00:00:13,056 --> 00:00:17,465
+Une puce est faite de grandes pièces rectangulaires, appelées blocs.
+
+5
+00:00:17,465 --> 00:00:19,994
+Le nôtre a cinq blocs, nommés de A à E.
+
+6
+00:00:19,994 --> 00:00:25,440
+Ils sont sur du papier quadrillé : on peut compter chaque largeur et chaque hauteur.
+
+7
+00:00:25,440 --> 00:00:29,238
+Un plan de masse dit où se trouve chaque bloc sur la puce.
+
+8
+00:00:29,238 --> 00:00:32,905
+Chaque bloc doit rester dans un cadre appelé le contour.
+
+9
+00:00:32,905 --> 00:00:36,834
+Notre contour fait dix cases de large et huit cases de haut.
+
+10
+00:00:36,834 --> 00:00:40,632
+Plus les blocs sont serrés, plus la puce peut être petite.
+
+11
+00:00:40,632 --> 00:00:45,870
+Noter chaque position est long, alors nous utilisons une recette : un arbre
+
+12
+00:00:45,870 --> 00:00:46,498
+B-étoile.
+
+13
+00:00:46,498 --> 00:00:48,943
+Chaque bloc est un nœud de l'arbre.
+
+14
+00:00:48,943 --> 00:00:51,736
+Le nœud du haut, A, s'appelle la racine.
+
+15
+00:00:51,736 --> 00:00:56,904
+Chaque nœud peut avoir deux enfants : un enfant gauche et un enfant droit.
+
+16
+00:00:56,904 --> 00:01:00,477
+La racine va dans le coin inférieur gauche du contour.
+
+17
+00:01:00,477 --> 00:01:05,903
+À partir de ce coin, x compte les cases vers la droite, et y compte les cases vers
+
+18
+00:01:05,903 --> 00:01:06,432
+le haut.
+
+19
+00:01:06,432 --> 00:01:11,095
+Un enfant gauche va à côté : collé contre le côté droit de son parent.
+
+20
+00:01:11,095 --> 00:01:15,891
+Un enfant droit va à l'étage : sur son parent, avec le même bord gauche.
+
+21
+00:01:15,891 --> 00:01:21,287
+Les noms semblent inversés : gauche veut dire à côté, droite veut dire à l'étage.
+
+22
+00:01:21,287 --> 00:01:26,616
+Dans l'arbre, un trait plein veut dire à côté, un pointillé veut dire à l'étage.
+
+23
+00:01:26,616 --> 00:01:29,876
+A fait trois cases de large et deux cases de haut.
+
+24
+00:01:29,876 --> 00:01:31,636
+B est l'enfant gauche de A.
+
+25
+00:01:31,636 --> 00:01:35,352
+Faites une pause et devinez : où va le bord gauche de B ?
+
+26
+00:01:35,352 --> 00:01:41,334
+B va à côté, en x égal trois : A commence à zéro, et A fait trois de large.
+
+27
+00:01:41,334 --> 00:01:46,200
+Rien n'est sous B, donc il repose sur le sol, en y égal zéro.
+
+28
+00:01:46,200 --> 00:01:50,484
+On place les blocs un par un, dans un ordre de parcours fixe.
+
+29
+00:01:50,484 --> 00:01:56,313
+On place un nœud, puis tout son côté gauche, et seulement ensuite son enfant droit.
+
+30
+00:01:56,313 --> 00:02:00,456
+Le parcours donne donc A, B, C et E, et D vient en dernier.
+
+31
+00:02:00,456 --> 00:02:05,552
+C est l'enfant gauche de B, donc il va à côté de B, en x égal cinq.
+
+32
+00:02:05,552 --> 00:02:10,952
+E est l'enfant gauche de C, donc il arrive à côté de C, en x égal sept.
+
+33
+00:02:10,952 --> 00:02:16,200
+Les largeurs s'additionnent : trois, plus deux, plus deux, font sept.
+
+34
+00:02:16,200 --> 00:02:22,104
+Le côté gauche est fini, donc le parcours revient à D, l'enfant droit de A.
+
+35
+00:02:22,104 --> 00:02:26,826
+D monte à l'étage, donc il commence en x égal zéro, comme A.
+
+36
+00:02:26,826 --> 00:02:29,424
+Il se pose sur A, en y égal deux.
+
+37
+00:02:29,424 --> 00:02:33,189
+Les cinq blocs sont placés, et chacun est dans le contour.
+
+38
+00:02:33,189 --> 00:02:38,251
+Faites une pause et devinez : si on échange A et C dans l'arbre, D arrive-t-il
+
+39
+00:02:38,251 --> 00:02:39,744
+encore en y égal deux ?
+
+40
+00:02:39,744 --> 00:02:42,316
+Non : D arrive une case plus haut.
+
+41
+00:02:42,316 --> 00:02:48,672
+Voici l'arbre où A et C sont échangés : C est la racine, et A prend l'ancienne place
+
+42
+00:02:48,672 --> 00:02:49,050
+de C.
+
+43
+00:02:49,050 --> 00:02:53,136
+C, B, A et E vont toujours à côté, l'un après l'autre.
+
+44
+00:02:53,136 --> 00:02:56,983
+Imaginez maintenant les blocs comme une ville, vue de loin.
+
+45
+00:02:56,983 --> 00:03:02,004
+Le bord supérieur de tout ce qui est déjà placé s'appelle la ligne d'horizon.
+
+46
+00:03:02,004 --> 00:03:07,416
+Un nouveau bloc tombe du ciel, comme au Tetris, jusqu'à toucher la ligne d'horizon.
+
+47
+00:03:07,416 --> 00:03:12,299
+D fait trois de large, donc il passe au-dessus de C et d'une partie de B.
+
+48
+00:03:12,299 --> 00:03:15,977
+B fait trois de haut, donc il arrête D en y égal trois.
+
+49
+00:03:15,977 --> 00:03:19,656
+Cela laisse un trou de deux cases vides au-dessus de C.
+
+50
+00:03:19,656 --> 00:03:22,452
+Alors, quel plan de masse est le meilleur ?
+
+51
+00:03:22,452 --> 00:03:27,718
+Pour comparer, on dessine la boîte englobante, le plus petit rectangle autour des
+
+52
+00:03:27,718 --> 00:03:28,108
+blocs.
+
+53
+00:03:28,108 --> 00:03:33,504
+Pour le premier arbre, elle fait neuf de large et trois de haut : vingt-sept cases.
+
+54
+00:03:33,504 --> 00:03:36,231
+Les cinq blocs couvrent vingt-trois cases.
+
+55
+00:03:36,231 --> 00:03:41,101
+Les quatre autres cases de la boîte sont vides : ce sont des cases perdues.
+
+56
+00:03:41,101 --> 00:03:45,192
+Moins il y a de cases perdues, plus le plan de masse est serré.
+
+57
+00:03:45,192 --> 00:03:50,590
+L'arbre échangé a une boîte de neuf sur quatre : trente-six cases, treize perdues.
+
+58
+00:03:50,590 --> 00:03:54,737
+Un seul échange de deux noms a donc changé l'image et le score.
+
+59
+00:03:54,737 --> 00:03:59,016
+Vingt-sept est devenu trente-six : le premier arbre est meilleur.
+
+60
+00:03:59,016 --> 00:04:03,009
+Prenons maintenant un arbre où chaque enfant est un enfant gauche.
+
+61
+00:04:03,009 --> 00:04:07,728
+Faites une pause et devinez : cette longue rangée tient-elle dans le contour ?
+
+62
+00:04:07,728 --> 00:04:09,628
+Non, elle ne tient pas.
+
+63
+00:04:09,628 --> 00:04:14,584
+Chaque bloc va à côté : trois, deux, deux et trois font dix.
+
+64
+00:04:14,584 --> 00:04:18,384
+Le contour est déjà plein, et E attend encore.
+
+65
+00:04:18,384 --> 00:04:22,876
+E arrive en x égal dix, donc la rangée fait douze cases de large.
+
+66
+00:04:22,876 --> 00:04:25,296
+E dépasse du contour de deux cases.
+
+67
+00:04:25,296 --> 00:04:30,341
+Un plan de masse est valide seulement si chaque bloc est dans le contour.
+
+68
+00:04:30,341 --> 00:04:32,760
+Cette rangée n'est donc pas valide.
+
+69
+00:04:32,760 --> 00:04:36,015
+Remarquez que les blocs ne se chevauchent jamais.
+
+70
+00:04:36,015 --> 00:04:41,395
+Chaque bloc tombe sur la ligne d'horizon, donc il ne peut jamais atterrir dans un
+
+71
+00:04:41,395 --> 00:04:41,794
+autre.
+
+72
+00:04:41,794 --> 00:04:45,912
+Avec un arbre B-étoile, dépasser est la seule façon d'échouer.
+
+73
+00:04:45,912 --> 00:04:50,622
+On peut tourner un bloc sur le côté : sa largeur et sa hauteur s'échangent.
+
+74
+00:04:50,622 --> 00:04:54,201
+Tournez D, et il fait une case de large et trois de haut.
+
+75
+00:04:54,201 --> 00:04:59,224
+La rangée fait maintenant dix de large : elle tient pile, et elle est de nouveau
+
+76
+00:04:59,224 --> 00:04:59,664
+valide.
+
+77
+00:04:59,664 --> 00:05:02,620
+Tourner est l'un des trois petits changements.
+
+78
+00:05:02,620 --> 00:05:06,797
+On peut aussi échanger deux noms dans l'arbre, comme avec A et C.
+
+79
+00:05:06,797 --> 00:05:11,810
+Ou déplacer une feuille, un bloc sans enfant, vers une place libre de l'arbre.
+
+80
+00:05:11,810 --> 00:05:16,437
+Chaque changement donne un nouveau plan de masse, avec un nouveau score.
+
+81
+00:05:16,437 --> 00:05:20,678
+Faites une pause et devinez : un arbre peut-il battre vingt-sept ?
+
+82
+00:05:20,678 --> 00:05:22,992
+Et quelle est la plus petite boîte ?
+
+83
+00:05:22,992 --> 00:05:26,212
+Oui : beaucoup d'arbres battent vingt-sept.
+
+84
+00:05:26,212 --> 00:05:30,181
+Les meilleurs n'ont besoin que de vingt-quatre cases.
+
+85
+00:05:30,181 --> 00:05:32,577
+Voici l'un des meilleurs arbres.
+
+86
+00:05:32,577 --> 00:05:36,696
+Son parcours place A, D, C et E, et B vient en dernier.
+
+87
+00:05:36,696 --> 00:05:41,656
+Sous B, la ligne d'horizon est le haut de D, donc B arrive en y égal un.
+
+88
+00:05:41,656 --> 00:05:47,236
+Il comble le trou, et la boîte fait six de large et quatre de haut : vingt-quatre
+
+89
+00:05:47,236 --> 00:05:47,649
+cases.
+
+90
+00:05:47,649 --> 00:05:49,440
+Une seule case est perdue.
+
+91
+00:05:49,440 --> 00:05:54,504
+Une boîte de vingt-trois cases, sans case perdue, pourrait-elle contenir les cinq
+
+92
+00:05:54,504 --> 00:05:54,942
+blocs ?
+
+93
+00:05:54,942 --> 00:05:59,194
+Vingt-trois cases ne forment qu'un rectangle épais d'une seule case.
+
+94
+00:05:59,194 --> 00:06:04,008
+Le bloc B est trop épais pour cela : vingt-quatre est donc le mieux possible.
+
+95
+00:06:04,008 --> 00:06:07,283
+Construisez maintenant des plans de masse vous-même.
+
+96
+00:06:07,283 --> 00:06:12,573
+Dans le lab du navigateur, vous modifiez l'arbre et vous regardez chaque bloc tomber
+
+97
+00:06:12,573 --> 00:06:14,022
+sur la ligne d'horizon.
+
+98
+00:06:14,022 --> 00:06:17,297
+Les défis vérifient l'arbre que vous avez construit.
+
+99
+00:06:17,297 --> 00:06:22,272
+Soulevez D plus haut, faites tenir la longue rangée, et atteignez vingt-quatre.
+
+100
+00:06:22,272 --> 00:06:26,574
+Si vous aimez programmer, écrivez la fonction de placement en Python.
+
+101
+00:06:26,574 --> 00:06:29,505
+Le fichier d'exemples donne les règles exactes.
+
+102
+00:06:29,505 --> 00:06:34,368
+Lancez une fois le vérificateur pour afficher toutes les bonnes réponses, puis
+
+103
+00:06:34,368 --> 00:06:36,114
+lancez-le sur votre fichier.
+
+104
+00:06:36,114 --> 00:06:40,416
+Il compare votre placement au bon sur les cinq mille quarante arbres.
+
+105
+00:06:40,416 --> 00:06:42,063
+Enfant gauche : à côté.
+
+106
+00:06:42,063 --> 00:06:45,714
+Enfant droit : à l'étage, avec le même bord gauche.
+
+107
+00:06:45,714 --> 00:06:50,941
+Parcourez l'arbre : le nœud, tout son côté gauche, puis son enfant droit.
+
+108
+00:06:50,941 --> 00:06:54,735
+Chaque bloc tombe jusqu'à toucher la ligne d'horizon.
+
+109
+00:06:54,735 --> 00:07:00,606
+On note un plan de masse avec sa boîte englobante, et on compte les cases perdues.
+
+110
+00:07:00,606 --> 00:07:05,904
+Un arbre ne chevauche jamais, mais il peut dépasser : vérifiez le contour.
+
+111
+00:07:05,904 --> 00:07:10,755
+Choisissez un parcours : le lab dans le navigateur, Python, ou les deux.
+
+112
+00:07:10,755 --> 00:07:15,471
+Cochez chaque case de la liste de contrôle, puis faites le court quiz.
+
+113
+00:07:15,471 --> 00:07:20,794
+La suite, c'est la paire de séquences : deux listes de noms au lieu d'un arbre.
+
+114
+00:07:20,794 --> 00:07:26,521
+Faites une pause et devinez : deux listes décrivent-elles notre plan à vingt-quatre ?
+
+115
+00:07:26,521 --> 00:07:28,407
+Oui : deux listes suffisent.
+
+116
+00:07:28,407 --> 00:07:31,776
+C'est la paire de séquences, dans le prochain lab.

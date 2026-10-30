@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+# French media built by make_fr_media.py (the copies in docs/fr/ are committed)
+i18n/fr/module02-03-bstar-tree/audio/
+i18n/fr/module02-03-bstar-tree/frames/
+i18n/fr/module02-03-bstar-tree/video.mp4
+i18n/fr/module02-03-bstar-tree/build.log
+
+.cache/
+build/

@@ -1,0 +1,64 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.900
+Non, elle ne tient pas.
+
+00:00:01.900 --> 00:00:06.856
+Chaque bloc va à côté : trois, deux, deux et trois font dix.
+
+00:00:06.856 --> 00:00:10.656
+Le contour est déjà plein, et E attend encore.
+
+00:00:10.656 --> 00:00:15.148
+E arrive en x égal dix, donc la rangée fait douze cases de large.
+
+00:00:15.148 --> 00:00:17.568
+E dépasse du contour de deux cases.
+
+00:00:17.568 --> 00:00:22.613
+Un plan de masse est valide seulement si chaque bloc est dans le contour.
+
+00:00:22.613 --> 00:00:25.032
+Cette rangée n'est donc pas valide.
+
+00:00:25.032 --> 00:00:28.287
+Remarquez que les blocs ne se chevauchent jamais.
+
+00:00:28.287 --> 00:00:33.667
+Chaque bloc tombe sur la ligne d'horizon, donc il ne peut jamais atterrir dans un
+
+00:00:33.667 --> 00:00:34.066
+autre.
+
+00:00:34.066 --> 00:00:38.184
+Avec un arbre B-étoile, dépasser est la seule façon d'échouer.
+
+00:00:38.184 --> 00:00:42.894
+On peut tourner un bloc sur le côté : sa largeur et sa hauteur s'échangent.
+
+00:00:42.894 --> 00:00:46.473
+Tournez D, et il fait une case de large et trois de haut.
+
+00:00:46.473 --> 00:00:51.496
+La rangée fait maintenant dix de large : elle tient pile, et elle est de nouveau
+
+00:00:51.496 --> 00:00:51.936
+valide.
+
+00:00:51.936 --> 00:00:54.892
+Tourner est l'un des trois petits changements.
+
+00:00:54.892 --> 00:00:59.069
+On peut aussi échanger deux noms dans l'arbre, comme avec A et C.
+
+00:00:59.069 --> 00:01:04.082
+Ou déplacer une feuille, un bloc sans enfant, vers une place libre de l'arbre.
+
+00:01:04.082 --> 00:01:08.709
+Chaque changement donne un nouveau plan de masse, avec un nouveau score.
+
+00:01:08.709 --> 00:01:12.950
+Faites une pause et devinez : un arbre peut-il battre vingt-sept ?
+
+00:01:12.950 --> 00:01:15.264
+Et quelle est la plus petite boîte ?
