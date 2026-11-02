@@ -66,16 +66,18 @@ python3 tools/test_site.py          # page, walkthrough captions, five video par
 python3 tools/test_lab_site.py      # the 9 challenges + colours: positive and negative cases, EN and FR
 ```
 
-## Animated lessons (prepared, none built yet)
+## Animated lessons
 
-The `lesson-animator` skill builds one lesson page per video part into `docs/lessons/part-N/` (English) and
-`docs/fr/lessons/part-N/` (French). `build_site.py` does not build them, but it keeps them across a rebuild (they are moved
-aside and back) and adds an "Interactive lesson" / "Leçon interactive" link under a video part **only when that part's page
-exists**; the parts note then also says so. `tools/test_site.py` checks every lesson page that is present: its link and
-the note, no console error, no external request, audio answers 200, a link back to `#video`, `window.__lesson.errors` empty
-and `window.__lesson.floorplan.dataChecked` equal to the number of scenes in `bstar_check.py --json`. With no lessons,
-those checks only confirm that no link is shown. Commit `lessons/*/storyboard.json`, `docs/lessons` and `docs/fr/lessons`;
-`build/` and `.cache/` stay ignored.
+Five lessons, one per video part, in `docs/lessons/part-N/` (English) and `docs/fr/lessons/part-N/` (French), built with
+the `lesson-animator` skill from `lessons/part-N/storyboard.json` (voices `en-US-AndrewMultilingualNeural` and
+`fr-FR-RemyMultilingualNeural`; each `lessons/part-N/README.md` has the commands). `build_site.py` does not build them, but
+it keeps them across a rebuild (they are moved aside and back) and adds an "Interactive lesson" / "Leçon interactive" link
+under a video part **only when that part's page exists**. `tools/test_site.py` checks every lesson page: its link and the
+note, no console error, no external request, audio answers 200, a link back to `#video`, `window.__lesson.errors` empty,
+`window.__lesson.floorplan.dataChecked` equal to the number of scenes in `bstar_check.py --json` and `dataDiffer` equal to 0.
+Commit `lessons/*/storyboard.json`, `docs/lessons` and `docs/fr/lessons`; `build/` and `.cache/` stay ignored.
+
+See `WHAT_CHANGED.md` for the whole upgrade, the tests and the findings for the teacher.
 
 ## French images
 
