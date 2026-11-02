@@ -1,0 +1,193 @@
+{
+  "scene": "floorplan",
+  "pageTitle": { "en": "Lab 05 · Part 3: The skyline and the score", "fr": "Lab 05 · Partie 3 : La ligne d'horizon et le score" },
+  "eyebrow": { "en": "Lab 05 · B*-tree · animated lesson, part 3 of 5", "fr": "Lab 05 · Arbre B* · leçon animée, partie 3 sur 5" },
+  "title": { "en": "The skyline and the score", "fr": "La ligne d'horizon et le score" },
+  "lede": { "en": "Swap two names and D lands higher: the skyline explains why, and the bounding box gives each floorplan a score. Click any block to try a swap, a turn or a move. <a href=\"../../index.html#video\">Back to the video parts</a>.", "fr": "Échangez deux noms et D arrive plus haut : la ligne d'horizon explique pourquoi, et la boîte englobante donne un score à chaque plan de masse. Cliquez sur un bloc pour essayer un échange, une rotation ou un déplacement. <a href=\"../../index.html#video\">Retour aux parties vidéo</a>." },
+
+  "floorplan": {
+    "start": "golden",
+    "labels": {
+      "nextDoor": { "en": "next door", "fr": "à côté" },
+      "upstairs": { "en": "upstairs", "fr": "à l'étage" }
+    },
+    "claims": [
+      { "tree": "golden", "pos": { "D": [0, 2] }, "bbox": [9, 3], "area": 27, "wasted": 4, "legal": true },
+      { "tree": "lift", "walk": "CBAED",
+        "pos": { "C": [0, 0], "D": [0, 3] }, "wD": 3, "hB": 3, "hC": 2, "xB": 2,
+        "bbox": [9, 4], "area": 36, "wasted": 13, "legal": true },
+      { "tree": "rotate_start", "walk": "ABCDE", "pos": { "E": [10, 0] },
+        "wA": 3, "wB": 2, "wC": 2, "wD": 3, "wE": 2, "bbox": [12, 3], "legal": false }
+    ]
+  },
+
+  "anchors": {
+    "higher":    { "slide": 13, "en": "higher", "fr": "haut" },
+    "swapped":   { "slide": 13, "en": "swapped", "fr": "échangés" },
+    "root":      { "slide": 13, "en": "root", "fr": "racine" },
+    "takes":     { "slide": 13, "en": "takes", "fr": "prend" },
+    "cb":        { "slide": 13, "en": "C B", "fr": "C B" },
+    "still":     { "slide": 13, "en": "still", "fr": "toujours" },
+    "city":      { "slide": 14, "en": "city", "fr": "ville" },
+    "skyline":   { "slide": 14, "en": "skyline", "fr": "horizon" },
+    "drops":     { "slide": 14, "en": "drops", "fr": "tombe" },
+    "touches":   { "slide": 14, "en": "touches", "fr": "toucher" },
+    "wide15":    { "slide": 15, "en": "wide", "fr": "large" },
+    "hangs":     { "slide": 15, "en": "hangs", "fr": "passe" },
+    "tall":      { "slide": 15, "en": "tall", "fr": "haut" },
+    "stops":     { "slide": 15, "en": "stops", "fr": "arrête" },
+    "y3":        { "slide": 15, "en": "three#2", "fr": "trois#2" },
+    "hole":      { "slide": 15, "en": "hole", "fr": "trou" },
+    "two15":     { "slide": 15, "en": "two", "fr": "deux" },
+    "better":    { "slide": 16, "en": "better", "fr": "meilleur" },
+    "bbox":      { "slide": 16, "en": "bounding", "fr": "boîte" },
+    "nine16":    { "slide": 16, "en": "nine", "fr": "neuf" },
+    "three16":   { "slide": 16, "en": "three", "fr": "trois" },
+    "t27":       { "slide": 16, "en": "twenty", "fr": "vingt" },
+    "cover":     { "slide": 17, "en": "cover", "fr": "couvrent" },
+    "t23":       { "slide": 17, "en": "twenty", "fr": "vingt" },
+    "four":      { "slide": 17, "en": "four", "fr": "quatre" },
+    "empty":     { "slide": 17, "en": "empty", "fr": "vides" },
+    "wasted17":  { "slide": 17, "en": "wasted", "fr": "perdues" },
+    "fewer":     { "slide": 17, "en": "fewer", "fr": "moins" },
+    "tighter":   { "slide": 17, "en": "tighter", "fr": "serré" },
+    "nine18":    { "slide": 18, "en": "nine", "fr": "neuf" },
+    "t36":       { "slide": 18, "en": "thirty", "fr": "trente" },
+    "thirteen":  { "slide": 18, "en": "thirteen", "fr": "treize" },
+    "swap18":    { "slide": 18, "en": "swap#1", "fr": "échange#1" },
+    "picture":   { "slide": 18, "en": "picture", "fr": "image" },
+    "score":     { "slide": 18, "en": "score", "fr": "score" },
+    "t27b":      { "slide": 18, "en": "twenty", "fr": "vingt" },
+    "t36b":      { "slide": 18, "en": "thirty#1", "fr": "trente#1" },
+    "better18":  { "slide": 18, "en": "better", "fr": "meilleur" },
+    "left19":    { "slide": 19, "en": "left", "fr": "gauche" },
+    "row":       { "slide": 19, "en": "row", "fr": "rangée" },
+    "outline":   { "slide": 19, "en": "outline", "fr": "contour" },
+    "pause":     { "slide": 19, "en": "pause", "fr": "pause" }
+  },
+
+  "pausing": { "between": 0.55, "scene": 0.9, "question": 1.3, "tail": 2.0 },
+  "pauses": [
+    { "after": "@still", "sec": 1.2 },
+    { "after": "@touches", "sec": 1.1 },
+    { "after": "@y3", "sec": 1.2 },
+    { "after": "@t27", "sec": 1.2 },
+    { "after": "@thirteen", "sec": 1.3 }
+  ],
+
+  "cameras": { "floor": [675, 371, 600] },
+  "initial": { "tree": "golden", "placed": 5, "panel": "both" },
+  "timeline": [
+    { "at": "@swapped", "tree": "lift", "placed": 0 },
+    { "at": "@cb", "placed": 4 },
+    { "at": "slide:14", "panel": "grid" },
+    { "at": "@city", "camera": "floor" },
+    { "at": "@drops", "placed": 5 },
+    { "at": "slide:16", "camera": "full", "tree": "golden" },
+    { "at": "slide:18", "tree": "lift", "panel": "both" },
+    { "at": "@t27b", "panel": "grid" },
+    { "at": "slide:19", "tree": "rotate_start", "placed": 0, "panel": "tree" },
+    { "at": "@pause", "panel": "grid" }
+  ],
+
+  "show": [
+    { "show": "highlight", "from": "start", "to": "@swapped", "ids": ["D"] },
+    { "show": "coords", "from": "start", "to": "@swapped", "ids": ["D"] },
+    { "show": "highlight", "from": "@root", "to": "@takes", "ids": ["C"] },
+    { "show": "highlight", "from": "@takes", "to": "@cb", "ids": ["A"] },
+    { "show": "links", "from": "@cb", "to": "slide:14", "ids": ["B", "A", "E"] },
+
+    { "show": "skyline", "from": "@skyline", "to": "slide:16" },
+    { "show": "highlight", "from": "@drops", "to": "@hangs", "ids": ["D"] },
+
+    { "show": "dims", "from": "slide:15", "to": "slide:16" },
+    { "show": "highlight", "from": "@hangs", "to": "@tall", "ids": ["C", "B"] },
+    { "show": "highlight", "from": "@tall", "to": "@hole", "ids": ["B", "D"] },
+    { "show": "counter", "from": "@stops", "to": "slide:16", "metric": "y:D", "label": { "en": "y of D", "fr": "y de D" } },
+    { "show": "coords", "from": "@stops", "to": "slide:16", "ids": ["D"] },
+    { "show": "highlight", "from": "@hole", "to": "slide:16", "ids": ["C"] },
+
+    { "show": "bbox", "from": "@bbox", "to": "slide:19" },
+    { "show": "counter", "from": "@t27", "to": "@fewer", "metric": "area", "good": 27, "bad": 36,
+      "label": { "en": "box area", "fr": "aire de la boîte" } },
+    { "show": "highlight", "from": "@cover", "to": "@four", "ids": ["A", "B", "C", "D", "E"] },
+    { "show": "wasted", "from": "@empty", "to": "slide:19" },
+    { "show": "counter", "from": "@fewer", "to": "slide:19", "metric": "wasted", "good": 4, "bad": 13,
+      "label": { "en": "wasted squares", "fr": "cases perdues" } },
+    { "show": "highlight", "from": "@swap18", "to": "@t27b", "ids": ["A", "C"] },
+
+    { "show": "links", "from": "@left19", "to": "end" }
+  ],
+
+  "overlays": [
+    { "from": "start", "to": "slide:14", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "No: D lands **one square higher**", "fr": "Non : D arrive **une case plus haut**" },
+      "sub": { "en": "{y = 2 → y = 3@higher} {· C is the root, A takes its place@takes}", "fr": "{y = 2 → y = 3@higher} {· C est la racine, A prend sa place@takes}" }, "size": 3.6 },
+
+    { "from": "slide:14", "to": "slide:15", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "The **skyline**", "fr": "La **ligne d'horizon**" },
+      "sub": { "en": "{a new block falls until it touches it@touches}", "fr": "{un nouveau bloc tombe jusqu'à la toucher@touches}" } },
+    { "from": "@skyline", "to": "slide:15", "x": 60, "y": 19, "type": "term",
+      "text": { "en": "Skyline", "fr": "Ligne d'horizon" },
+      "sub": { "en": "the top edge of everything placed so far", "fr": "le bord supérieur de tout ce qui est déjà placé" } },
+
+    { "from": "slide:15", "to": "slide:16", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "Why D stops at **y = 3**", "fr": "Pourquoi D s'arrête en **y = 3**" },
+      "sub": { "en": "{D is 3 wide: over C and part of B@hangs} {· B is 3 tall@tall}", "fr": "{D fait 3 de large : au-dessus de C et d'une partie de B@hangs} {· B fait 3 de haut@tall}" } },
+    { "from": "@hole", "to": "slide:16", "x": 50, "y": 30, "type": "tag",
+      "text": { "en": "a **hole** of {2 empty squares above C@two15}", "fr": "un **trou** de {2 cases vides au-dessus de C@two15}" } },
+
+    { "from": "slide:16", "to": "slide:17", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "Which floorplan is **better**?", "fr": "Quel plan est le **meilleur** ?" },
+      "sub": { "en": "{first tree: 9 wide, 3 tall@three16}{ = 27 squares@t27}", "fr": "{premier arbre : 9 de large, 3 de haut@three16}{ = 27 cases@t27}" } },
+    { "from": "slide:16+0.2", "to": "@bbox", "x": 46, "y": 27, "type": "thumbs",
+      "items": [ { "tree": "golden", "label": { "en": "first tree", "fr": "premier arbre" } },
+                 { "tree": "lift", "label": { "en": "swapped tree", "fr": "arbre échangé" } } ] },
+    { "from": "@bbox", "to": "slide:17", "x": 2, "y": 30, "type": "term",
+      "text": { "en": "Bounding box", "fr": "Boîte englobante" },
+      "sub": { "en": "the smallest rectangle around all the blocks", "fr": "le plus petit rectangle autour de tous les blocs" } },
+
+    { "from": "slide:17", "to": "slide:18", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "Covered and **wasted**", "fr": "Couvertes et **perdues**" },
+      "sub": { "en": "{fewer wasted squares, tighter floorplan@tighter}", "fr": "{moins de cases perdues, plan plus serré@tighter}" } },
+    { "from": "@t23", "to": "slide:18", "x": 4, "y": 34, "type": "eq",
+      "text": { "en": "{**23** covered@t23} {+ **4** empty@four} {= 27@wasted17}", "fr": "{**23** couvertes@t23} {+ **4** vides@four} {= 27@wasted17}" } },
+
+    { "from": "slide:18", "to": "slide:19", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "The **swapped** tree", "fr": "L'arbre **échangé**" },
+      "sub": { "en": "{9 × 4 = 36@t36} {· 13 wasted@thirteen} {· one swap, a new score@score}", "fr": "{9 × 4 = 36@t36} {· 13 perdues@thirteen} {· un échange, un nouveau score@score}" } },
+    { "from": "@t27b", "to": "slide:19", "x": 2, "y": 30, "type": "thumbs",
+      "items": [ { "tree": "golden", "best": "@better18", "bestLabel": { "en": "better", "fr": "meilleur" } },
+                 { "tree": "lift" } ] },
+
+    { "from": "slide:19", "to": "end", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "Every child a **left** child", "fr": "Que des enfants **gauches**" },
+      "sub": { "en": "{one long row@row} {· does it fit the outline?@outline}", "fr": "{une longue rangée@row} {· tient-elle dans le contour ?@outline}" } },
+    { "from": "@pause", "to": "end", "x": 2, "y": 30, "type": "question" }
+  ],
+
+  "question": {
+    "at": "slide:19:end+0.4",
+    "text": { "en": "Every child is a left child: does this long row fit inside the outline?", "fr": "Chaque enfant est un enfant gauche : cette longue rangée tient-elle dans le contour ?" },
+    "hint": { "en": "Every left child goes next door. Add up the widths of the five blocks.", "fr": "Chaque enfant gauche va à côté. Additionnez les largeurs des cinq blocs." },
+    "options": [
+      { "label": { "en": "Yes, it fits", "fr": "Oui, elle tient" },
+        "reply": { "en": "Not quite. The widths add up: 3 + 2 + 2 + 3 + 2 = ##12##, and the outline is only 10 wide, so E sticks out. Part 4 shows it block by block.", "fr": "Pas tout à fait. Les largeurs s'additionnent : 3 + 2 + 2 + 3 + 2 = ##12##, et le contour ne fait que 10 de large : E dépasse. La partie 4 le montre bloc par bloc." } },
+      { "label": { "en": "No, it sticks out", "fr": "Non, elle dépasse" },
+        "reply": { "en": "Yes. The widths add up: 3 + 2 + 2 + 3 + 2 = ##12##, wider than the 10-wide outline, so E sticks out. Part 4 shows it block by block.", "fr": "Oui. Les largeurs s'additionnent : 3 + 2 + 2 + 3 + 2 = ##12##, plus que les 10 du contour : E dépasse. La partie 4 le montre bloc par bloc." } },
+      { "label": { "en": "It fits exactly", "fr": "Elle tient tout juste" },
+        "reply": { "en": "Close, but no: A, B, C and D already fill the 10 squares of the width, and E still needs 2 more. The row is ##12## wide. Part 4 shows it block by block.", "fr": "Presque, mais non : A, B, C et D remplissent déjà les 10 cases de large, et E en demande encore 2. La rangée fait ##12## de large. La partie 4 le montre bloc par bloc." } }
+    ]
+  },
+  "chapters": [
+    { "at": "start", "title": { "en": "One square higher", "fr": "Une case plus haut" } },
+    { "at": "slide:14", "title": { "en": "The skyline", "fr": "La ligne d'horizon" } },
+    { "at": "slide:15", "title": { "en": "Why D stops at 3", "fr": "Pourquoi D s'arrête à 3" } },
+    { "at": "slide:16", "title": { "en": "The bounding box", "fr": "La boîte englobante" } },
+    { "at": "slide:17", "title": { "en": "Wasted space", "fr": "Les cases perdues" } },
+    { "at": "slide:18", "title": { "en": "One swap, a new score", "fr": "Un échange, un nouveau score" } },
+    { "at": "slide:19", "title": { "en": "Pause and guess", "fr": "Pause et devinette" } }
+  ],
+  "bench": { "ops": ["swap", "turn", "move"] },
+  "note": { "en": "Numbers come from the lab's checker (bstar_check.py --json); the engine re-packs every tree and checks them.", "fr": "Les nombres viennent du vérificateur du lab (bstar_check.py --json) ; le moteur recalcule chaque arbre et les vérifie." }
+}
