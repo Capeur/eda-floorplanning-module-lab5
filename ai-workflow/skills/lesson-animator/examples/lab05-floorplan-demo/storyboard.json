@@ -1,0 +1,134 @@
+{
+  "scene": "floorplan",
+  "pageTitle": { "en": "B*-tree demo lesson", "fr": "Leçon de démonstration : arbre B*" },
+  "eyebrow": { "en": "Lab 05 · engine demo", "fr": "Lab 05 · démonstration du moteur" },
+  "title": { "en": "A tree is a recipe for stacking boxes", "fr": "Un arbre est une recette pour empiler des boîtes" },
+  "lede": { "en": "Demo of the floorplan scene, with short demo narration (not the lab's script). Click any block to try a swap, a turn or a move.", "fr": "Démonstration de la scène plan de masse, avec une courte narration de démonstration (pas le script du lab). Cliquez sur un bloc pour essayer un échange, une rotation ou un déplacement." },
+
+  "floorplan": {
+    "start": "golden",
+    "labels": {
+      "nextDoor": { "en": "next door", "fr": "à côté" },
+      "upstairs": { "en": "upstairs", "fr": "à l'étage" }
+    },
+    "claims": [
+      { "tree": "golden", "walk": "ABCED", "pos": { "A": [0, 0], "B": [3, 0], "D": [0, 2] }, "bbox": [9, 3], "area": 27, "legal": true },
+      { "tree": "lift", "pos": { "D": [0, 3] }, "bbox": [9, 4], "area": 36, "wasted": 13, "legal": true },
+      { "tree": "rotate_start", "bbox": [12, 3], "legal": false },
+      { "tree": "rotate_after", "bbox": [10, 3], "legal": true },
+      { "tree": "best", "bbox": [6, 4], "area": 24, "legal": true }
+    ]
+  },
+
+  "anchors": {
+    "tree":     { "slide": 1, "en": "tree", "fr": "arbre" },
+    "corner":   { "slide": 1, "en": "corner", "fr": "coin" },
+    "next":     { "slide": 1, "en": "next door", "fr": "côté" },
+    "follow":   { "slide": 1, "en": "follow", "fr": "suivent" },
+    "upstairs": { "slide": 1, "en": "upstairs", "fr": "étage" },
+    "orange":   { "slide": 2, "en": "orange", "fr": "orange" },
+    "skyline":  { "slide": 2, "en": "skyline", "fr": "horizon" },
+    "falls":    { "slide": 2, "en": "falls", "fr": "tombe" },
+    "lands":    { "slide": 2, "en": "lands", "fr": "pose" },
+    "two":      { "slide": 2, "en": "two", "fr": "deux" },
+    "frame":    { "slide": 3, "en": "dashed", "fr": "pointillés" },
+    "twentyseven": { "slide": 3, "en": "twenty", "fr": "vingt" },
+    "swap":     { "slide": 3, "en": "swap", "fr": "échangeons" },
+    "tall":     { "slide": 3, "en": "tall", "fr": "mesure" },
+    "stops":    { "slide": 3, "en": "three#1", "fr": "trois#1" },
+    "hole":     { "slide": 3, "en": "hole", "fr": "trou" },
+    "grows":    { "slide": 3, "en": "thirty", "fr": "trente" },
+    "every":    { "slide": 4, "en": "every", "fr": "chaque" },
+    "twelve":   { "slide": 4, "en": "twelve", "fr": "douze" },
+    "sticks":   { "slide": 4, "en": "sticks", "fr": "dépasse" },
+    "turn":     { "slide": 4, "en": "turn", "fr": "tournez" },
+    "ten":      { "slide": 4, "en": "ten", "fr": "dix" },
+    "fits":     { "slide": 4, "en": "fits", "fr": "tient" },
+    "best":     { "slide": 5, "en": "best", "fr": "meilleur" },
+    "beat":     { "slide": 5, "en": "beat", "fr": "battre" }
+  },
+
+  "pausing": { "between": 0.55, "scene": 0.9, "question": 1.3, "tail": 2.0 },
+  "pauses": [
+    { "after": "@upstairs", "sec": 1.6 },
+    { "after": "@lands", "sec": 1.5 },
+    { "after": "@grows", "sec": 1.6 },
+    { "after": "@ten", "sec": 1.2 }
+  ],
+
+  "cameras": { "floor": [702, 330, 556] },
+  "initial": { "tree": "golden", "placed": 0, "panel": "tree" },
+  "timeline": [
+    { "at": "@corner", "panel": "both", "placed": 1 },
+    { "at": "@next", "placed": 2 },
+    { "at": "@follow", "placed": 4 },
+    { "at": "@upstairs", "placed": 5 },
+    { "at": "slide:2", "placed": 4 },
+    { "at": "@orange", "camera": "floor" },
+    { "at": "@falls", "placed": 5 },
+    { "at": "slide:3", "camera": "full" },
+    { "at": "@swap", "tree": "lift" },
+    { "at": "@every", "tree": "rotate_start" },
+    { "at": "@turn", "tree": "rotate_after" },
+    { "at": "@best", "tree": "best", "panel": "grid" }
+  ],
+
+  "show": [
+    { "show": "links", "from": "@next", "to": "slide:2" },
+    { "show": "walk", "from": "@follow", "to": "slide:3", "stagger": 0.3 },
+    { "show": "coords", "from": "@corner+0.4", "to": "@follow", "ids": ["A", "B"] },
+    { "show": "coords", "from": "@lands", "to": "slide:3", "ids": ["D"] },
+    { "show": "skyline", "from": "@orange", "to": "end" },
+    { "show": "highlight", "from": "@falls", "to": "slide:3", "ids": ["D"] },
+    { "show": "bbox", "from": "slide:3", "to": "@every" },
+    { "show": "counter", "from": "slide:3", "to": "@every", "metric": "area", "good": 27, "bad": 36 },
+    { "show": "wasted", "from": "@hole", "to": "@every" },
+    { "show": "highlight", "from": "@tall", "to": "@hole", "ids": ["B", "D"] },
+    { "show": "dims", "from": "@every", "to": "@best" },
+    { "show": "counter", "from": "@every", "to": "@best", "metric": "width", "bad": 11 },
+    { "show": "legal", "from": "@sticks", "to": "@best" },
+    { "show": "highlight", "from": "@turn", "to": "@fits", "ids": ["D"] },
+    { "show": "bbox", "from": "@best", "to": "end" },
+    { "show": "counter", "from": "@best", "to": "end", "metric": "area", "good": 24 }
+  ],
+
+  "overlays": [
+    { "from": "start", "to": "slide:2", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "A tree is a **recipe**", "fr": "Un arbre est une **recette**" },
+      "sub": { "en": "{left child: next door@next} {· right child: upstairs@upstairs}", "fr": "{enfant gauche : à côté@next} {· enfant droit : à l'étage@upstairs}" } },
+    { "from": "slide:2", "to": "slide:3", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "The **skyline**", "fr": "La **ligne d'horizon**" },
+      "sub": { "en": "{the top of everything placed so far@skyline}", "fr": "{le haut de tout ce qui est déjà posé@skyline}" } },
+    { "from": "slide:3", "to": "slide:4", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "A taller **neighbour**", "fr": "Un voisin plus **grand**" },
+      "sub": { "en": "{D stops at 3, not 2@stops}", "fr": "{D s'arrête à 3, pas à 2@stops}" } },
+    { "from": "slide:4", "to": "slide:5", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "**Turn** a box", "fr": "**Tourner** une boîte" },
+      "sub": { "en": "{12 wide@twelve} {→ 10 wide@ten}", "fr": "{12 de large@twelve} {→ 10 de large@ten}" } },
+    { "from": "slide:5", "to": "end", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "Your **turn**", "fr": "À **vous**" },
+      "sub": { "en": "{the best tree: 24 squares@best}", "fr": "{le meilleur arbre : 24 cases@best}" } },
+    { "from": "@best", "to": "@beat", "x": 2, "y": 30, "type": "thumbs",
+      "items": [ { "tree": "golden" }, { "tree": "lift" } ] },
+    { "from": "@beat", "to": "end", "x": 2, "y": 30, "type": "question" }
+  ],
+
+  "question": {
+    "at": "slide:5:end+0.4",
+    "text": { "en": "Can a tree beat **27**?", "fr": "Un arbre peut-il battre **27** ?" },
+    "hint": { "en": "Same five boxes, 5,040 possible trees.", "fr": "Les mêmes cinq boîtes, 5 040 arbres possibles." },
+    "options": [
+      { "label": { "en": "Yes", "fr": "Oui" }, "reply": { "en": "Yes: 216 of the 5,040 trees do, and the best reaches ##24## (6 × 4).", "fr": "Oui : 216 des 5 040 arbres y arrivent, et le meilleur atteint ##24## (6 × 4)." } },
+      { "label": { "en": "No", "fr": "Non" }, "reply": { "en": "It can: 216 trees beat 27, and the best reaches ##24## (6 × 4).", "fr": "Si : 216 arbres battent 27, et le meilleur atteint ##24## (6 × 4)." } }
+    ]
+  },
+  "chapters": [
+    { "at": "start", "title": { "en": "A tree is a recipe", "fr": "Un arbre est une recette" } },
+    { "at": "slide:2", "title": { "en": "The skyline", "fr": "La ligne d'horizon" } },
+    { "at": "slide:3", "title": { "en": "A taller neighbour", "fr": "Un voisin plus grand" } },
+    { "at": "slide:4", "title": { "en": "Turn a box", "fr": "Tourner une boîte" } },
+    { "at": "slide:5", "title": { "en": "Your turn", "fr": "À vous" } }
+  ],
+  "bench": { "ops": ["swap", "turn", "move"] },
+  "note": { "en": "Numbers come from the lab's checker (bstar_check.py --json); the engine re-packs every tree and checks them.", "fr": "Les nombres viennent du vérificateur du lab (bstar_check.py --json) ; le moteur recalcule chaque arbre et les vérifie." }
+}
