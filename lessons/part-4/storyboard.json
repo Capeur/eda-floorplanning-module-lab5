@@ -1,0 +1,166 @@
+{
+  "scene": "floorplan",
+  "pageTitle": { "en": "Lab 05 · Part 4: Too wide: turn a block", "fr": "Lab 05 · Partie 4 : Trop large : tourner un bloc" },
+  "eyebrow": { "en": "Lab 05 · B*-tree · animated lesson, part 4 of 5", "fr": "Lab 05 · Arbre B* · leçon animée, partie 4 sur 5" },
+  "title": { "en": "Too wide: turn a block", "fr": "Trop large : tourner un bloc" },
+  "lede": { "en": "A row of five blocks sticks out of the outline; turning one block on its side makes it fit. Click any block to try a swap, a turn or a move. <a href=\"../../index.html#video\">Back to the video parts</a>.", "fr": "Une rangée de cinq blocs dépasse du contour ; tourner un bloc sur le côté la fait tenir. Cliquez sur un bloc pour essayer un échange, une rotation ou un déplacement. <a href=\"../../index.html#video\">Retour aux parties vidéo</a>." },
+
+  "floorplan": {
+    "start": "rotate_start",
+    "labels": {
+      "nextDoor": { "en": "next door", "fr": "à côté" },
+      "upstairs": { "en": "upstairs", "fr": "à l'étage" }
+    },
+    "claims": [
+      { "tree": "rotate_start", "walk": "ABCDE", "pos": { "D": [7, 0], "E": [10, 0] },
+        "wA": 3, "wB": 2, "wC": 2, "wD": 3, "hD": 1, "wE": 2, "bbox": [12, 3], "legal": false },
+      { "tree": "rotate_after", "pos": { "D": [7, 0], "E": [8, 0] }, "wD": 1, "hD": 3,
+        "bbox": [10, 3], "legal": true },
+      { "tree": "golden", "bbox": [9, 3], "area": 27, "wasted": 4, "legal": true },
+      { "tree": "best", "bbox": [6, 4], "area": 24, "wasted": 1, "legal": true }
+    ]
+  },
+
+  "anchors": {
+    "fit":       { "slide": 20, "en": "fit", "fr": "tient" },
+    "three20":   { "slide": 20, "en": "three", "fr": "trois" },
+    "two20":     { "slide": 20, "en": "two", "fr": "deux" },
+    "two20b":    { "slide": 20, "en": "two#1", "fr": "deux#1" },
+    "three20b":  { "slide": 20, "en": "three#1", "fr": "trois#1" },
+    "ten20":     { "slide": 20, "en": "ten", "fr": "dix" },
+    "full":      { "slide": 20, "en": "full", "fr": "plein" },
+    "waiting":   { "slide": 20, "en": "waiting", "fr": "attend" },
+    "lands":     { "slide": 21, "en": "lands", "fr": "arrive" },
+    "ten21":     { "slide": 21, "en": "ten", "fr": "dix" },
+    "twelve":    { "slide": 21, "en": "twelve", "fr": "douze" },
+    "sticks":    { "slide": 21, "en": "sticks", "fr": "dépasse" },
+    "two21":     { "slide": 21, "en": "two", "fr": "deux" },
+    "legal":     { "slide": 21, "en": "legal", "fr": "valide" },
+    "notlegal":  { "slide": 21, "en": "not legal", "fr": "pas valide" },
+    "overlap":   { "slide": 22, "en": "overlap", "fr": "chevauchent" },
+    "skyline":   { "slide": 22, "en": "skyline", "fr": "horizon" },
+    "sticking":  { "slide": 22, "en": "sticking", "fr": "dépasser" },
+    "turn23":    { "slide": 23, "en": "turn", "fr": "tourner" },
+    "side":      { "slide": 23, "en": "side", "fr": "côté" },
+    "turnD":     { "slide": 23, "en": "turn#1", "fr": "tournez" },
+    "tall":      { "slide": 23, "en": "tall", "fr": "haut#1" },
+    "ten23":     { "slide": 23, "en": "ten", "fr": "dix" },
+    "fits":      { "slide": 23, "en": "fits", "fr": "tient" },
+    "three24":   { "slide": 24, "en": "three", "fr": "trois" },
+    "swap24":    { "slide": 24, "en": "swap", "fr": "échanger" },
+    "leaf":      { "slide": 24, "en": "leaf", "fr": "feuille" },
+    "floorplan24": { "slide": 24, "en": "floorplan", "fr": "plan" },
+    "score24":   { "slide": 24, "en": "score", "fr": "score" },
+    "pause":     { "slide": 24, "en": "pause", "fr": "pause" },
+    "t27":       { "slide": 24, "en": "twenty", "fr": "vingt" },
+    "smallest":  { "slide": 24, "en": "smallest", "fr": "petite" }
+  },
+
+  "pausing": { "between": 0.55, "scene": 0.9, "question": 1.3, "tail": 2.0 },
+  "pauses": [
+    { "after": "@ten20", "sec": 1.1 },
+    { "after": "@twelve", "sec": 1.1 },
+    { "after": "@tall", "sec": 1.3 },
+    { "after": "@fits", "sec": 1.1 }
+  ],
+
+  "initial": { "tree": "rotate_start", "placed": 0, "panel": "both" },
+  "timeline": [
+    { "at": "@three20", "placed": 4 },
+    { "at": "@lands", "placed": 5 },
+    { "at": "slide:22", "panel": "grid" },
+    { "at": "slide:23", "panel": "both" },
+    { "at": "@turnD", "tree": "rotate_after" },
+    { "at": "slide:24", "tree": "golden" },
+    { "at": "@pause", "panel": "grid" }
+  ],
+
+  "show": [
+    { "show": "links", "from": "start", "to": "slide:21" },
+    { "show": "counter", "from": "@three20+1.0", "to": "slide:22", "metric": "width", "good": 10, "bad": 11,
+      "label": { "en": "row width", "fr": "largeur de la rangée" } },
+    { "show": "highlight", "from": "@waiting", "to": "slide:22", "ids": ["E"] },
+    { "show": "coords", "from": "@ten21", "to": "slide:22", "ids": ["E"] },
+    { "show": "legal", "from": "@sticks", "to": "slide:24" },
+
+    { "show": "skyline", "from": "@skyline", "to": "slide:23" },
+
+    { "show": "dims", "from": "slide:23", "to": "@turnD" },
+    { "show": "highlight", "from": "@side", "to": "slide:24", "ids": ["D"] },
+    { "show": "counter", "from": "slide:23", "to": "slide:24", "metric": "width", "good": 10, "bad": 11,
+      "label": { "en": "row width", "fr": "largeur de la rangée" } },
+
+    { "show": "highlight", "from": "@swap24", "to": "@leaf", "ids": ["A", "C"] },
+    { "show": "highlight", "from": "@leaf", "to": "@floorplan24", "ids": ["E"] },
+    { "show": "bbox", "from": "@floorplan24", "to": "end" },
+    { "show": "counter", "from": "@score24", "to": "end", "metric": "area",
+      "label": { "en": "box area", "fr": "aire de la boîte" } }
+  ],
+
+  "overlays": [
+    { "from": "start", "to": "slide:21", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "No: the row does **not fit**", "fr": "Non : la rangée **ne tient pas**" },
+      "sub": { "en": "{the outline is already full@full}{, and E still waits@waiting}", "fr": "{le contour est déjà plein@full}{, et E attend encore@waiting}" } },
+    { "from": "@three20", "to": "slide:21", "x": 50, "y": 26, "type": "eq",
+      "text": { "en": "{3@three20} {+ 2@two20} {+ 2@two20b} {+ 3@three20b} {= **10**@ten20}", "fr": "{3@three20} {+ 2@two20} {+ 2@two20b} {+ 3@three20b} {= **10**@ten20}" } },
+
+    { "from": "slide:21", "to": "slide:22", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "E **sticks out**", "fr": "E **dépasse**" },
+      "sub": { "en": "{E at x = 10@ten21}{, a row 12 wide@twelve} {· 2 squares too many@two21}", "fr": "{E en x = 10@ten21}{, une rangée de 12 de large@twelve} {· 2 cases de trop@two21}" } },
+    { "from": "@legal", "to": "@notlegal", "x": 52, "y": 34, "type": "term",
+      "text": { "en": "Legal", "fr": "Valide" },
+      "sub": { "en": "every block inside the outline", "fr": "chaque bloc dans le contour" } },
+    { "from": "@notlegal", "to": "slide:22", "x": 50, "y": 38, "type": "stamp",
+      "text": { "en": "not legal", "fr": "pas valide" } },
+
+    { "from": "slide:22", "to": "slide:23", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "The only way to **fail**", "fr": "La seule façon d'**échouer**" },
+      "sub": { "en": "{blocks drop onto the skyline@skyline}", "fr": "{les blocs tombent sur la ligne d'horizon@skyline}" } },
+    { "from": "@overlap", "to": "slide:23", "x": 52, "y": 34, "type": "tags",
+      "items": [ { "text": { "en": "✓ never overlap", "fr": "✓ jamais de chevauchement" }, "at": "@overlap" },
+                 { "text": { "en": "✗ sticking out", "fr": "✗ dépasser" }, "at": "@sticking" } ] },
+
+    { "from": "slide:23", "to": "slide:24", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "**Turn** a block", "fr": "**Tourner** un bloc" },
+      "sub": { "en": "{D: 3 × 1 → 1 × 3@tall} {· the row is 10 wide@ten23}", "fr": "{D : 3 × 1 → 1 × 3@tall} {· la rangée fait 10 de large@ten23}" } },
+    { "from": "@turn23", "to": "@turnD", "x": 52, "y": 34, "type": "term",
+      "text": { "en": "Turn", "fr": "Rotation" },
+      "sub": { "en": "the block's width and height swap", "fr": "la largeur et la hauteur du bloc s'échangent" } },
+
+    { "from": "slide:24", "to": "@pause", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "Three small **changes**", "fr": "Trois petits **changements**" },
+      "sub": { "en": "{each one: a new floorplan, a new score@score24}", "fr": "{chacun : un nouveau plan, un nouveau score@score24}" } },
+    { "from": "@three24", "to": "@pause", "x": 48, "y": 30, "type": "vocab",
+      "items": [ { "at": "@three24", "k": { "en": "Turn", "fr": "Tourner" }, "text": { "en": "a block on its side", "fr": "un bloc sur le côté" } },
+                 { "at": "@swap24", "k": { "en": "Swap", "fr": "Échanger" }, "text": { "en": "two names in the tree", "fr": "deux noms dans l'arbre" } },
+                 { "at": "@leaf", "k": { "en": "Move", "fr": "Déplacer" }, "text": { "en": "a leaf to a free spot", "fr": "une feuille vers une place libre" } } ] },
+
+    { "from": "@pause", "to": "end", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "Can a tree beat **27**?", "fr": "Un arbre peut-il battre **27** ?" },
+      "sub": { "en": "{and what is the smallest box?@smallest}", "fr": "{et quelle est la plus petite boîte ?@smallest}" } },
+    { "from": "@pause", "to": "end", "x": 2, "y": 30, "type": "question" }
+  ],
+
+  "question": {
+    "at": "slide:24:end+0.4",
+    "text": { "en": "Can any tree beat **27** squares? What is the smallest box?", "fr": "Un arbre peut-il battre **27** cases ? Quelle est la plus petite boîte ?" },
+    "hint": { "en": "The five blocks cover 23 squares, so no box can be smaller than that.", "fr": "Les cinq blocs couvrent 23 cases : aucune boîte ne peut être plus petite." },
+    "options": [
+      { "label": { "en": "No, 27 is the best", "fr": "Non, 27 est le mieux" },
+        "reply": { "en": "It can be beaten. The best trees need a box of 6 × 4 = ##24## squares, with only 1 wasted. Part 5 shows one of them.", "fr": "On peut faire mieux. Les meilleurs arbres ont une boîte de 6 × 4 = ##24## cases, avec 1 seule case perdue. La partie 5 en montre un." } },
+      { "label": { "en": "Yes, down to 23", "fr": "Oui, jusqu'à 23" },
+        "reply": { "en": "Close. Many trees beat 27, but no box of 23 can hold the five blocks: the best is 6 × 4 = ##24##, with 1 wasted square. Part 5 shows one of them.", "fr": "Presque. Beaucoup d'arbres battent 27, mais aucune boîte de 23 ne peut contenir les cinq blocs : le mieux est 6 × 4 = ##24##, avec 1 case perdue. La partie 5 en montre un." } },
+      { "label": { "en": "Yes, 24: a 6 × 4 box", "fr": "Oui, 24 : une boîte de 6 × 4" },
+        "reply": { "en": "Yes. Many trees beat 27, and the best need only 6 × 4 = ##24## squares, with 1 wasted. Part 5 shows one of them.", "fr": "Oui. Beaucoup d'arbres battent 27, et les meilleurs n'ont besoin que de 6 × 4 = ##24## cases, avec 1 perdue. La partie 5 en montre un." } }
+    ]
+  },
+  "chapters": [
+    { "at": "start", "title": { "en": "Every block next door", "fr": "Chaque bloc à côté" } },
+    { "at": "slide:21", "title": { "en": "Sticking out", "fr": "Un bloc qui dépasse" } },
+    { "at": "slide:22", "title": { "en": "The only way to fail", "fr": "La seule façon d'échouer" } },
+    { "at": "slide:23", "title": { "en": "Turn a block", "fr": "Tourner un bloc" } },
+    { "at": "slide:24", "title": { "en": "Pause and guess", "fr": "Pause et devinette" } }
+  ],
+  "bench": { "ops": ["swap", "turn", "move"] },
+  "note": { "en": "Numbers come from the lab's checker (bstar_check.py --json); the engine re-packs every tree and checks them.", "fr": "Les nombres viennent du vérificateur du lab (bstar_check.py --json) ; le moteur recalcule chaque arbre et les vérifie." }
+}

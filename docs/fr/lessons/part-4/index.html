@@ -1,0 +1,1763 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lab 05 · Partie 4 : Trop large : tourner un bloc</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>@font-face{font-family:'Fraunces';font-weight:500;font-style:normal;font-display:swap;src:url(fonts/fraunces-latin-500-normal.woff2) format('woff2')}@font-face{font-family:'Fraunces';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/fraunces-latin-700-normal.woff2) format('woff2')}@font-face{font-family:'IBM Plex Mono';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/ibm-plex-mono-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'IBM Plex Mono';font-weight:500;font-style:normal;font-display:swap;src:url(fonts/ibm-plex-mono-latin-500-normal.woff2) format('woff2')}@font-face{font-family:'Source Sans 3';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/source-sans-3-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'Source Sans 3';font-weight:600;font-style:normal;font-display:swap;src:url(fonts/source-sans-3-latin-600-normal.woff2) format('woff2')}@font-face{font-family:'Source Sans 3';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/source-sans-3-latin-700-normal.woff2) format('woff2')}</style>
+<style>
+/* lesson.css — styles for the animated lesson player (lesson-engine.js).
+   Layout: one reading column. A 16:9 stage carries the lesson; captions and transport sit under it,
+   then chapters and the "your turn" bench. Group colours follow the course labs: the group holding
+   the first node name is blue, the next green, then amber and rose; cut edges are red. */
+:root {
+  --bg: #f3f5f2;
+  --surface: #ffffff;
+  --ink: #17201c;
+  --muted: #56625c;
+  --line: #d6ddd8;
+  --stage: #fbfcfa;
+  --edge: #7a8780;
+  --g0: #1d4ed8;
+  --g1: #0f6b5c;
+  --g2: #b45309;
+  --g3: #9f1239;
+  --cut: #dc2626;
+  --heavy: #b45309;
+  --copper: #a8662a;
+  --unplaced: #94a3b8;
+  --tint0: rgba(29, 78, 216, 0.07);
+  --tint1: rgba(15, 107, 92, 0.08);
+  --said: #17201c;
+  --unsaid: #9aa49f;
+  --mark: #fde68a;
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1412; --surface: #151d1a; --ink: #e6ece9; --muted: #9ba7a1; --line: #2a3531;
+    --stage: #111916; --edge: #85938c; --g0: #6f8fff; --g1: #36b39b; --g2: #f59e0b; --g3: #fb7185;
+    --cut: #f87171; --heavy: #f59e0b; --copper: #d39a5c; --unplaced: #66758a;
+    --tint0: rgba(111, 143, 255, 0.10); --tint1: rgba(54, 179, 155, 0.10);
+    --said: #e6ece9; --unsaid: #5f6b66; --mark: #78350f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1412; --surface: #151d1a; --ink: #e6ece9; --muted: #9ba7a1; --line: #2a3531;
+  --stage: #111916; --edge: #85938c; --g0: #6f8fff; --g1: #36b39b; --g2: #f59e0b; --g3: #fb7185;
+  --cut: #f87171; --heavy: #f59e0b; --copper: #d39a5c; --unplaced: #66758a;
+  --tint0: rgba(111, 143, 255, 0.10); --tint1: rgba(54, 179, 155, 0.10);
+  --said: #e6ece9; --unsaid: #5f6b66; --mark: #78350f;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px 48px; margin: 0;
+}
+.wrap { max-width: 980px; margin: 0 auto; display: grid; gap: 22px; }
+header { display: grid; gap: 6px; }
+.eyebrow { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 5vw, 46px); line-height: 1.05; margin: 0; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); max-width: 62ch; }
+.lede a, .note a { color: inherit; }
+
+/* ---------- player ---------- */
+.player { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.stage { position: relative; aspect-ratio: 16 / 9; max-width: 100%; background: var(--stage); container-type: inline-size; overflow: hidden; }
+.stage svg.scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.layer { position: absolute; inset: 0; pointer-events: none; }
+.ov { position: absolute; opacity: 0; will-change: opacity, transform; }
+.ov [data-a] { display: inline-block; opacity: 0; }
+
+.hl { font-family: var(--display); font-weight: 700; font-size: 4.3cqw; line-height: 1.08; letter-spacing: -0.01em; max-width: 60cqw; }
+.hl b, .tag b, .sub b, .qcard b { color: var(--g0); font-weight: 700; }
+.red { color: var(--cut); }
+.sub { font-family: var(--body); font-size: 2.1cqw; color: var(--muted); font-weight: 600; margin-top: .6cqw; }
+.term { display: grid; gap: .4cqw; background: var(--surface); border: 1px solid var(--line); border-radius: 1.2cqw; padding: 1.4cqw 1.8cqw; box-shadow: 0 .6cqw 2cqw rgba(0,0,0,.06); }
+.term .t { font-family: var(--display); font-size: 3.4cqw; font-weight: 700; }
+.term .d { font-size: 1.9cqw; color: var(--muted); }
+.chip { display: inline-block; font-family: var(--mono); font-size: 2.2cqw; font-weight: 500; padding: .5cqw 1.3cqw; border-radius: 99px; border: 2px solid var(--ink); background: var(--surface); }
+.tag { font-family: var(--body); font-weight: 700; font-size: 2.2cqw; background: var(--surface); border: 1px solid var(--line); border-radius: .9cqw; padding: .6cqw 1.2cqw; }
+.tags { display: grid; gap: 1cqw; justify-items: start; }
+.tag .n, .num { font-family: var(--mono); color: var(--heavy); }
+.label { font-family: var(--display); font-weight: 700; font-size: 2.8cqw; }
+.label.c0 { color: var(--g0); } .label.c1 { color: var(--g1); } .label.c2 { color: var(--g2); } .label.c3 { color: var(--g3); }
+.vocab { display: grid; gap: .8cqw; font-size: 2cqw; }
+.vocab div { background: var(--surface); border: 1px solid var(--line); border-radius: .8cqw; padding: .5cqw 1.1cqw; }
+.vocab b { font-family: var(--display); font-size: 2.3cqw; margin-right: .6cqw; }
+.eq { font-family: var(--mono); font-size: 3.4cqw; font-weight: 500; background: var(--surface); border: 1px solid var(--line); border-radius: 1cqw; padding: 1cqw 1.6cqw; white-space: nowrap; }
+.eq .red { font-weight: 700; }
+.stamp { font-family: var(--display); font-weight: 700; font-size: 6cqw; color: var(--cut); border: .45cqw solid var(--cut); border-radius: 1cqw; padding: .2cqw 1.6cqw; rotate: -9deg; letter-spacing: .06em; text-transform: uppercase; background: color-mix(in srgb, var(--stage) 80%, transparent); }
+.bigq { width: 100cqw; }
+.bigq .q { font-family: var(--display); font-size: 16cqw; font-weight: 700; line-height: 1; color: var(--muted); text-align: center; }
+.bigq .hl { max-width: none; text-align: center; font-size: 3.6cqw; }
+.cmp { display: grid; gap: 1cqw; background: var(--surface); border: 1px solid var(--line); border-radius: 1.4cqw; padding: 2cqw 2.4cqw; width: 62cqw; box-shadow: 0 .8cqw 3cqw rgba(0,0,0,.08); }
+.cmp .row { display: grid; grid-template-columns: 1.4fr .7fr 1.3fr; align-items: baseline; gap: 1.4cqw; font-size: 2.3cqw; }
+.cmp .row .k { font-family: var(--mono); font-size: 3cqw; font-weight: 500; }
+.cmp .bad .k { color: var(--cut); }
+.cmp .good .k { color: var(--g1); }
+.qcard { background: var(--surface); border: 2px solid var(--ink); border-radius: 1.4cqw; padding: 1.6cqw 2.2cqw; width: 44cqw; display: grid; gap: .6cqw; }
+.qcard .e { font-family: var(--mono); font-size: 1.7cqw; letter-spacing: .1em; text-transform: uppercase; color: var(--heavy); }
+.qcard .q { font-family: var(--display); font-size: 3.1cqw; font-weight: 700; line-height: 1.15; }
+.qcard .h { font-size: 1.8cqw; color: var(--muted); }
+.qbtns { display: none; gap: 1cqw; pointer-events: auto; flex-wrap: wrap; }
+.stage.asking .qbtns { display: flex; }
+.qbtns .btn { font-size: 1.8cqw; padding: .6cqw 1.3cqw; }
+.qans { color: var(--ink); font-size: 1.9cqw; }
+.qans:empty { display: none; }
+.thumbs { display: flex; gap: 2cqw; }
+.thumb { background: var(--surface); border: 1px solid var(--line); border-radius: 1.2cqw; padding: 1cqw; display: grid; gap: .4cqw; justify-items: center; width: 22cqw; position: relative; }
+.thumb svg { width: 100%; height: auto; display: block; }
+.thumb .c { font-family: var(--mono); font-size: 1.75cqw; font-weight: 500; white-space: nowrap; }
+.thumb.best { border: 2px solid var(--g1); }
+.thumb .ok { position: absolute; top: -1.6cqw; right: -1.2cqw; background: var(--g1); color: #fff; font-weight: 700; font-size: 1.7cqw; border-radius: 99px; padding: .3cqw 1cqw; }
+
+.counter { display: grid; justify-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: 1.2cqw; padding: .9cqw 1.6cqw; min-width: 15cqw; }
+.counter .l, .balance .l { font-family: var(--mono); font-size: 1.6cqw; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.counter .v { font-family: var(--mono); font-size: 6.2cqw; font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; }
+.counter.bad .v { color: var(--cut); }
+.counter.good .v { color: var(--g1); }
+.balance { display: grid; gap: .8cqw; background: var(--surface); border: 1px solid var(--line); border-radius: 1.2cqw; padding: 1.2cqw 1.6cqw; width: 19cqw; }
+.bars { position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 1.6cqw; height: 15cqw; align-items: end; }
+.bar { background: var(--g0); border-radius: .5cqw .5cqw 0 0; height: 0; display: flex; justify-content: center; align-items: flex-start; color: #fff; font-family: var(--mono); font-size: 2cqw; padding-top: .3cqw; }
+.bar.c1 { background: var(--g1); } .bar.c2 { background: var(--g2); } .bar.c3 { background: var(--g3); }
+.cap { position: absolute; left: -.6cqw; right: -.6cqw; height: 0; border-top: .3cqw dashed var(--cut); opacity: 0; }
+.cap span { position: absolute; right: 0; top: -2.6cqw; font-family: var(--mono); font-size: 1.5cqw; color: var(--cut); }
+.verdict { font-weight: 700; font-size: 1.9cqw; min-height: 1.2em; }
+.verdict.no { color: var(--cut); }
+.verdict.yes { color: var(--g1); }
+.banner { position: absolute; left: 2cqw; top: 2cqw; display: none; gap: 1cqw; align-items: center; pointer-events: auto; font-size: 1.9cqw; }
+.stage.free .banner { display: flex; }
+.banner b { font-family: var(--display); font-size: 2.6cqw; }
+
+/* svg pieces */
+.node rect { transition: fill .45s, stroke .45s; }
+.g0 rect { fill: var(--g0); stroke: var(--g0); }
+.g1 rect { fill: var(--g1); stroke: var(--g1); }
+.g2 rect { fill: var(--g2); stroke: var(--g2); }
+.g3 rect { fill: var(--g3); stroke: var(--g3); }
+.nu rect { fill: var(--unplaced); stroke: var(--unplaced); }
+.ncell rect { fill: var(--surface); stroke: var(--copper); stroke-width: 3; }
+.node text { fill: #fff; font-family: var(--body); font-weight: 700; font-size: 21px; text-anchor: middle; dominant-baseline: central; }
+.ncell text { fill: var(--ink); }
+.node { cursor: pointer; }
+.node:focus-visible rect { stroke: var(--ink); stroke-width: 4; }
+.main { stroke: var(--edge); stroke-linecap: round; transition: stroke .35s; }
+.wire { stroke: var(--copper); stroke-width: 2.2; stroke-linecap: round; }
+.edge.cut .main { stroke: var(--cut); stroke-dasharray: 10 7; }
+.edge.heavy .main { stroke: var(--heavy); }
+.edge.pulse .main { animation: lesson-pulse 1s ease-in-out 2; }
+@keyframes lesson-pulse { 50% { stroke-width: 12; } }
+.wl rect { fill: var(--stage); stroke: var(--line); transition: fill .3s, stroke .3s; }
+.wl text { fill: var(--ink); font-family: var(--mono); font-size: 16px; font-weight: 500; text-anchor: middle; dominant-baseline: central; }
+.edge.cut .wl rect { stroke: var(--cut); }
+.edge.flash .wl rect { fill: var(--mark); stroke: var(--heavy); }
+.chipbody { fill: none; stroke: var(--copper); stroke-width: 3; }
+.pin { fill: var(--copper); }
+.divider { stroke: var(--ink); stroke-width: 2.5; stroke-dasharray: 8 8; }
+.tint0 { fill: var(--tint0); }
+.tint1 { fill: var(--tint1); }
+
+/* captions */
+.captions { padding: 14px 18px; border-top: 1px solid var(--line); min-height: 3.6em; font-size: 19px; line-height: 1.45; }
+.captions span { color: var(--unsaid); transition: color .15s; }
+.captions span.said { color: var(--said); }
+.player.nocc .captions { display: none; }
+
+/* transport */
+.transport { display: grid; grid-template-columns: auto 1fr auto; gap: 10px 14px; align-items: center; padding: 12px 16px 14px; border-top: 1px solid var(--line); }
+.play { width: 46px; height: 46px; border-radius: 50%; border: 0; background: var(--ink); color: var(--bg); font-size: 18px; cursor: pointer; display: grid; place-items: center; }
+.scrub { display: grid; gap: 4px; min-width: 0; }
+.scrub input { width: 100%; accent-color: var(--g0); }
+.time { font-family: var(--mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.opts { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button, .tbtn { font-family: var(--mono); font-size: 13px; padding: 6px 9px; border: 0; background: var(--surface); color: var(--ink); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.tbtn { border: 1px solid var(--line); border-radius: 8px; }
+.tbtn[aria-pressed="false"] { color: var(--muted); text-decoration: line-through; }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--g0); outline-offset: 2px; }
+@media (max-width: 620px) {
+  .transport { grid-template-columns: auto 1fr; }
+  .opts { grid-column: 1 / -1; justify-content: flex-start; }
+  .captions { font-size: 16px; }
+}
+
+/* chapters + bench */
+.chapters { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.chapters button { width: 100%; display: grid; grid-template-columns: 4.5em 1fr; gap: 10px; text-align: left; background: none; border: 0; border-left: 3px solid var(--line); padding: 6px 12px; font: inherit; color: var(--muted); cursor: pointer; }
+.chapters button .ts { font-family: var(--mono); font-size: 14px; font-variant-numeric: tabular-nums; }
+.chapters button[aria-current="true"] { border-left-color: var(--g0); color: var(--ink); font-weight: 600; }
+.cols { display: grid; grid-template-columns: 1fr 1.25fr; gap: 22px; align-items: start; }
+@media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
+h2 { font-family: var(--display); font-size: 24px; margin: 0 0 8px; }
+.bench { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; display: grid; gap: 14px; min-width: 0; }
+.bench.pulse { animation: lesson-benchin 1.2s ease 2; }
+@keyframes lesson-benchin { 50% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--g0) 35%, transparent); } }
+.bench p { margin: 0; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn { font: 600 15px var(--body); padding: 8px 14px; border-radius: 9px; border: 1px solid var(--ink); background: var(--surface); color: var(--ink); cursor: pointer; }
+.btn.primary { background: var(--ink); color: var(--bg); }
+.seedbox { width: 5.5em; font: 500 15px var(--mono); padding: 7px 9px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.feedback { border-left: 3px solid var(--g1); padding: 4px 0 4px 12px; }
+.feedback:empty { display: none; }
+.readout { font-family: var(--mono); font-size: 14.5px; background: var(--bg); border-radius: 8px; padding: 10px 12px; font-variant-numeric: tabular-nums; }
+.note { font-size: 14px; color: var(--muted); max-width: 70ch; }
+.ok { color: var(--g1); font-weight: 700; } .no { color: var(--cut); font-weight: 700; }
+.norec .node rect, .norec .main, .norec .wl rect { transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .node rect, .main, .wl rect, .captions span { transition: none !important; }
+  .edge.pulse .main, .bench.pulse { animation: none; }
+}
+
+/* ---------- floorplan scene (B*-tree + floor of blocks) ----------
+   Block colours come from the lab (one fixed colour per block id, the course's paper palette) and are set inline.
+   Tree links: left child = solid ("next door"), right child = dashed ("upstairs"). The skyline is amber. */
+:root { --sky: #d97706; --waste: rgba(220, 38, 38, 0.10); --over: rgba(220, 38, 38, 0.13); --gridline: #e3e8e4; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --sky: #fbbf24; --waste: rgba(248, 113, 113, 0.14); --over: rgba(248, 113, 113, 0.16); --gridline: #1f2a26; } }
+:root[data-theme="dark"] { --sky: #fbbf24; --waste: rgba(248, 113, 113, 0.14); --over: rgba(248, 113, 113, 0.16); --gridline: #1f2a26; }
+.fp-gridlines line { stroke: var(--gridline); stroke-width: 1; }
+.fp-outline { fill: none; stroke: var(--ink); stroke-width: 2; stroke-dasharray: 9 6; opacity: .55; }
+.fp-outline-lab { font-family: var(--mono); font-size: 14px; fill: var(--muted); text-anchor: end; }
+.fp-floorline { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; }
+.fp-axis text { font-family: var(--mono); font-size: 12.5px; fill: var(--muted); text-anchor: middle; dominant-baseline: central; }
+.fp-axis .fp-axis-y { text-anchor: end; }
+.fp-overzone { fill: url(#fp-over); stroke: none; transition: opacity .3s; }
+.fp-over-line { stroke: var(--cut); stroke-width: 2.4; opacity: .55; }
+.fp-hatch-bg { fill: var(--waste); }
+.fp-hatch-line { stroke: var(--cut); stroke-width: 2; opacity: .35; }
+.fp-waste { fill: url(#fp-hatch); }
+.fpb rect { stroke-width: 2; fill-opacity: .92; }
+.fpb .fp-bid { fill: #fff; font-family: var(--body); font-weight: 700; font-size: 21px; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.fpb .fp-dim { fill: #fff; font-family: var(--mono); font-size: 12.5px; text-anchor: middle; dominant-baseline: central; opacity: .9; pointer-events: none; }
+.fpb.out rect { stroke: var(--cut); stroke-width: 4; stroke-dasharray: 7 4; }
+.fpb.hl rect, .fpn.hl circle:not(.fp-ring) { stroke: var(--ink); stroke-width: 4; }
+.fp-sky { fill: none; stroke: var(--sky); stroke-width: 5; stroke-linejoin: round; stroke-linecap: round; }
+.fp-bbox { fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-dasharray: 10 6; }
+.fp-bboxlab rect { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; }
+.fp-bboxlab text { font-family: var(--mono); font-size: 15px; font-weight: 500; fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+.fp-coords circle { fill: var(--ink); }
+.fp-coords text { font-family: var(--mono); font-size: 13px; font-weight: 500; fill: var(--ink); paint-order: stroke; stroke: var(--stage); stroke-width: 4px; }
+.fp-edge { stroke: var(--edge); stroke-width: 3; stroke-linecap: round; }
+.fp-edge.right { stroke-dasharray: 8 6; }
+.fpn circle { stroke-width: 3; }
+.fpn .fp-ring { fill: none; stroke: var(--ink); stroke-width: 3; opacity: 0; }
+.fpn.hl .fp-ring { opacity: 1; }
+.fpn text { font-family: var(--body); font-weight: 700; font-size: 20px; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.fpk { cursor: pointer; }
+.fpk:focus-visible { outline: none; }
+.fpk:focus-visible rect, .fpk:focus-visible circle:not(.fp-ring) { stroke: var(--ink); stroke-width: 4; }
+.fp-badges circle { fill: var(--ink); }
+.fp-badges text { fill: var(--bg); font-family: var(--mono); font-size: 12.5px; font-weight: 500; text-anchor: middle; dominant-baseline: central; }
+.fp-link rect { fill: var(--surface); stroke: var(--line); }
+.fp-link text { font-family: var(--body); font-size: 13px; font-weight: 600; fill: var(--muted); text-anchor: middle; dominant-baseline: central; }
+.fp-legal { font-family: var(--body); font-weight: 700; font-size: 1.9cqw; background: var(--surface); border: 2px solid var(--line); border-radius: .9cqw; padding: .4cqw 1.1cqw; white-space: nowrap; }
+.fp-legal.yes { color: var(--g1); border-color: var(--g1); }
+.fp-legal.no { color: var(--cut); border-color: var(--cut); }
+.fp-counter { min-width: 17cqw; }
+.fp-thumb svg { max-height: 16cqw; }
+.fp-ops .btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.norec .fp-overzone { transition: none !important; }
+
+</style>
+</head>
+<body>
+<div id="lesson-root"></div>
+<audio id="lesson-audio" preload="auto" src="lesson-fr.m4a"></audio>
+<script>
+/* lesson-engine.js (v4) — animated, narrated lesson player for eda-learning labs.
+ *
+ * LessonEngine.mount({ sb, timing, lang, audioId?, rootId?, ui?, storageKey? })
+ *   sb      storyboard (see reference/storyboard.md). sb.scene picks what is drawn on the stage:
+ *             "graph"     (default) nodes, weighted edges, splits, cut counter, balance bars   (partitioning labs)
+ *             "floorplan" a B*-tree next to a floor of rectangles: blocks drop in walk order onto the skyline,
+ *                         swap / turn / move, bounding box, wasted squares, fits-the-outline     (floorplanning labs)
+ *   timing  { lang, duration, sentences: [{ slide, text, start, end, words: [{ w, t }] }] }
+ *           made by scripts/voice_build.py (edge-tts word timings) or scripts/timing_from_vtt.py
+ *   lang    "en" | "fr": picks the anchor word and the text of every overlay
+ *
+ * Everything on screen is a pure function of the audio time t, so seeking, speed changes and frame-by-frame
+ * recording all show the same picture. A new key in a track starts from wherever the previous move had got to
+ * (no jumps). window.__lesson exposes the internals the checker uses.
+ *
+ * Layout of this file: helpers · mount() = the core (timing, anchors, tracks, show windows, overlays, captions,
+ * transport, question, diagnostics) · SCENES.graph · SCENES.floorplan. A scene gets a context object `cx` from the
+ * core and returns hooks (see "scene contract" in mount).
+ */
+(function () {
+  "use strict";
+
+  const I18N = {
+    en: {
+      play: "Play", pause: "Pause", position: "Position in the lesson", speed: "Playback speed", captions: "CC",
+      chapters: "Chapters", yourSplit: "Your split", back: "Back to the lesson",
+      paused: "Paused. You are building your own split.", turn: "Pause and guess",
+      deal: "Deal a random split with seed", dealBtn: "Deal",
+      clickHint: "Or click the nodes on the stage to move them from one side to the other.",
+      noSplit: "No split yet. Deal a seed or click a node.", noSplitNoDeal: "No split yet. Click a node to start.",
+      backMsg: "Back in the lesson. Click a node to try again.",
+      cut: "cut", sides: "sides", legal: "legal", notLegal: "not legal: at most {cap} per side",
+      toPlace: "still to place: {list}", cutsize: "cutsize", perSide: "cells per side", max: "max {cap}",
+      think: "Take a moment to think, then pick one.", seed: "Seed {s}: ", yours: "Your split: ",
+      cell: "Cell {n}: click to move it to the other side", lesson: "Animated lesson", graph: "Graph",
+      verdictYes: "legal", verdictNo: "not legal",
+      // floorplan scene
+      fpStage: "B*-tree and floorplan", yourTree: "Your tree", fpPaused: "Paused. You are changing the tree.",
+      fpHint: "Pick a move, then click the blocks (on the floor or in the tree).",
+      fpStart: "Click a block to start. The lesson pauses while you try.",
+      fpBack: "Back in the lesson. Click a block to try again.",
+      opSwap: "Swap two", opTurn: "Turn one", opMove: "Move a leaf", opReset: "Start again",
+      pickSecond: "{a} picked. Click the block to swap it with.", swapped: "Swapped {a} and {b}. ",
+      turned: "Turned {a}. ", pickLeaf: "{a} has children: pick a leaf (a block with no child).",
+      pickTarget: "{a} picked. Click the block it should hang from.", moved: "Moved {a} under {b} ({side}). ",
+      noSlot: "{b} has no free slot. Pick another block.", sameBlock: "That is the same block.",
+      tree: "tree", box: "bounding box", wasted: "wasted", fits: "fits the {w} × {h} outline",
+      sticks: "sticks out of the {w} × {h} outline", sideLeft: "next door", sideRight: "upstairs",
+      nextDoor: "next door", upstairs: "upstairs", blockAria: "Block {n}: click to use it in your move",
+      mArea: "bounding box", mWidth: "width", mHeight: "height", mWasted: "wasted squares", mX: "{n}.x", mY: "{n}.y",
+    },
+    fr: {
+      play: "Lecture", pause: "Pause", position: "Position dans la leçon", speed: "Vitesse de lecture", captions: "ST",
+      chapters: "Chapitres", yourSplit: "Votre partition", back: "Revenir à la leçon",
+      paused: "En pause. Vous construisez votre propre partition.", turn: "Faites une pause et devinez",
+      deal: "Distribuer une partition au hasard avec la graine", dealBtn: "Distribuer",
+      clickHint: "Ou cliquez sur les nœuds de la scène pour les changer de côté.",
+      noSplit: "Pas encore de partition. Distribuez une graine ou cliquez sur un nœud.",
+      noSplitNoDeal: "Pas encore de partition. Cliquez sur un nœud pour commencer.",
+      backMsg: "De retour dans la leçon. Cliquez sur un nœud pour réessayer.",
+      cut: "coupe", sides: "côtés", legal: "valide", notLegal: "non valide : {cap} au plus par côté",
+      toPlace: "reste à placer : {list}", cutsize: "taille de coupe", perSide: "cellules par côté", max: "max {cap}",
+      think: "Prenez un moment pour réfléchir, puis choisissez.", seed: "Graine {s} : ", yours: "Votre partition : ",
+      cell: "Cellule {n} : cliquez pour la changer de côté", lesson: "Leçon animée", graph: "Graphe",
+      verdictYes: "valide", verdictNo: "non valide",
+      fpStage: "Arbre B* et plan de masse", yourTree: "Votre arbre", fpPaused: "En pause. Vous modifiez l'arbre.",
+      fpHint: "Choisissez un geste, puis cliquez sur les blocs (au sol ou dans l'arbre).",
+      fpStart: "Cliquez sur un bloc pour commencer. La leçon se met en pause pendant l'essai.",
+      fpBack: "De retour dans la leçon. Cliquez sur un bloc pour réessayer.",
+      opSwap: "Échanger deux", opTurn: "Tourner un bloc", opMove: "Déplacer une feuille", opReset: "Recommencer",
+      pickSecond: "{a} choisi. Cliquez sur le bloc à échanger avec lui.", swapped: "{a} et {b} échangés. ",
+      turned: "{a} tourné. ", pickLeaf: "{a} a des enfants : choisissez une feuille (un bloc sans enfant).",
+      pickTarget: "{a} choisi. Cliquez sur le bloc auquel l'accrocher.", moved: "{a} accroché sous {b} ({side}). ",
+      noSlot: "{b} n'a plus de place libre. Choisissez un autre bloc.", sameBlock: "C'est le même bloc.",
+      tree: "arbre", box: "boîte englobante", wasted: "perdu", fits: "tient dans le contour {w} × {h}",
+      sticks: "dépasse du contour {w} × {h}", sideLeft: "à côté", sideRight: "à l'étage",
+      nextDoor: "à côté", upstairs: "à l'étage", blockAria: "Bloc {n} : cliquez pour l'utiliser dans votre geste",
+      mArea: "boîte englobante", mWidth: "largeur", mHeight: "hauteur", mWasted: "cases perdues", mX: "{n}.x", mY: "{n}.y",
+    },
+  };
+
+  const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+  const lerp = (a, b, p) => a + (b - a) * p;
+  const ease = (p) => { p = clamp(p); return p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; };
+  const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const norm = (w) => w.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  /** Keys a spoken word can be matched by: the whole word, and the part after an apostrophe (l'arête → arete). */
+  const wordKeys = (w) => { const k = [norm(w)]; const m = w.split(/['’]/); if (m.length > 1) k.push(norm(m[m.length - 1])); return k; };
+  const fill = (s, o) => s.replace(/\{(\w+)\}/g, (m, k) => (o[k] !== undefined ? o[k] : m));
+
+  const FULL = [0, 0, 960, 540];
+  const DUR_CAM = 1.3, DUR_DIM = 0.6;
+  const SCENES = {};
+
+  function mount(cfg) {
+    const sb = cfg.sb, TM = cfg.timing, lang = cfg.lang || "en";
+    const T = Object.assign({}, I18N[lang] || I18N.en, cfg.ui || {});
+    const L = (v) => (v == null ? "" : typeof v === "string" ? v : v[lang] != null ? v[lang] : v.en != null ? v.en : "");
+    const errors = [];
+    const err = (m) => { errors.push(m); console.error("[lesson] " + m); };
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const D = reduce ? 0.001 : 1;
+    const sceneName = sb.scene || "graph";
+
+    /* ---------------- timing ---------------- */
+    const SENT = TM.sentences.map((s) => {
+      const words = s.words.map((w) => ({ w: w.w, t: w.t, keys: wordKeys(w.w) }));
+      words.forEach((w, i) => { w.e = i + 1 < words.length ? words[i + 1].t : s.end; });
+      return Object.assign({}, s, { words });
+    });
+    const DUR = TM.duration;
+    const slideSents = (n) => SENT.filter((s) => s.slide === n);
+
+    function findWords(obj, label) {
+      const needle = obj[lang] != null ? obj[lang] : null;
+      if (needle == null) { err(`anchor ${label}: no "${lang}" word given`); return null; }
+      const [phrase, nthTxt] = String(needle).split("#");
+      const nth = nthTxt != null ? parseInt(nthTxt, 10) : obj.nth || 0;
+      const toks = phrase.split(/\s+/).map(norm).filter(Boolean);
+      const pool = obj.slide != null ? slideSents(obj.slide) : SENT;
+      if (!pool.length) { err(`anchor ${label}: slide ${obj.slide} has no narration in this part`); return null; }
+      const ws = pool.flatMap((s) => s.words);
+      let hit = 0;
+      for (let i = 0; i + toks.length <= ws.length; i++) {
+        if (toks.every((tk, j) => ws[i + j].keys.some((k) => k.startsWith(tk)))) {
+          if (hit++ === nth) return { first: ws[i], last: ws[i + toks.length - 1] };
+        }
+      }
+      err(`anchor ${label}: "${needle}" not found in slide ${obj.slide} (${lang}). Words: ${ws.map((w) => w.w).join(" ")}`);
+      return null;
+    }
+    const anchorCache = new Map();
+    function resolve(ref, label = "") {
+      if (ref == null) return 0;
+      if (typeof ref === "number") return ref;
+      const key = typeof ref === "string" ? ref : JSON.stringify(ref);
+      if (anchorCache.has(key)) return anchorCache.get(key);
+      let t = 0;
+      if (typeof ref === "string") {
+        const m = ref.trim().match(/^(@[\w-]+|slide:\d+(?::end)?|end|start)\s*(?:([+-])\s*([\d.]+))?$/);
+        if (!m) { err(`bad time reference "${ref}" ${label}`); return 0; }
+        const shift = m[2] ? (m[2] === "-" ? -1 : 1) * parseFloat(m[3]) : 0;
+        const base = m[1];
+        if (base[0] === "@") {
+          const a = sb.anchors && sb.anchors[base.slice(1)];
+          if (!a) { err(`unknown anchor ${base} ${label}`); t = 0; } else t = resolveObj(a, base);
+        } else if (base === "end") t = DUR;
+        else if (base === "start") t = 0;
+        else {
+          const [, n, e] = base.split(":");
+          const ss = slideSents(+n);
+          if (!ss.length) err(`slide ${n} has no narration in this part ${label}`);
+          else t = e ? ss[ss.length - 1].end : ss[0].start;
+        }
+        t += shift;
+      } else t = resolveObj(ref, label);
+      anchorCache.set(key, t);
+      return t;
+    }
+    function resolveObj(o, label) {
+      const hit = findWords(o, label);
+      if (!hit) { const ss = o.slide != null ? slideSents(o.slide) : []; return (ss[0] ? ss[0].start : 0) + (o.shift || 0); }
+      return (o.edge === "end" ? hit.last.e : hit.first.t) + (o.shift || 0);
+    }
+
+    /* ---------------- text markup: {piece@ref} appears at its own time, **x** accent, !!x!! red, ##x## number --- */
+    function md(s) {
+      let h = esc(s);
+      h = h.replace(/\{([^{}@]+)@([^{}]+)\}/g, (m, piece, ref) => {
+        ref = ref.trim();
+        if (!/^(slide:|start|end|@)/.test(ref)) ref = "@" + ref; // {piece@name} means the anchor @name
+        return `<span data-a="${resolve(ref, `(text "${piece}")`).toFixed(3)}">${piece}</span>`;
+      });
+      h = h.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/!!(.+?)!!/g, '<span class="red">$1</span>').replace(/##(.+?)##/g, '<span class="num">$1</span>');
+      return h;
+    }
+
+    /* ---------------- scene contract ----------------
+     * SCENES[name](cx) returns {
+     *   tracks: { name: { init, conv(v)->value, dur, mix(a,b,p)|null (null = step track) } }   (in key order)
+     *   claims: [{ claim, got, ok }]
+     *   ready()                          after tracks and show windows exist (cx.track, cx.seg, cx.win are usable)
+     *   svgLabel, bannerText, pausedText
+     *   benchHtml()                      HTML of the "your turn" box below the question (must hold .readout)
+     *   buildSvg()                       draw the scene's SVG under the overlays
+     *   buildWidgets()                   counters etc. on top of the overlays (cx.widget)
+     *   render(t, free)                  draw the scene at time t (free = the scene's own try-it state or null)
+     *   bindBench()                      wire the bench buttons and stage clicks
+     *   thumb(item)                      HTML for one "thumbs" overlay item
+     *   boxes(stageRect, sx, sy, cam)    [{ kind: "node", label, x, y, w, h }] of what text must not cover
+     *   freeCamera                       camera used while the learner tries (default FULL)
+     *   leaveFree()                      called when the lesson resumes
+     * } */
+    const cx = { sb, lang, T, L, err, resolve, md, esc, fill, D, reduce, lerp, ease, clamp, FULL, FREE: null };
+    if (!SCENES[sceneName]) { err(`unknown scene "${sceneName}"`); }
+    const scene = (SCENES[sceneName] || SCENES.graph)(cx);
+    const claims = scene.claims || [];
+
+    /* ---------------- tracks ---------------- */
+    const cam = (v) => {
+      if (v == null || v === "full") return FULL;
+      const c = sb.cameras && sb.cameras[v] != null ? sb.cameras[v] : v;
+      if (!Array.isArray(c) || c.length !== 3) { err(`bad camera ${JSON.stringify(v)}`); return FULL; }
+      const [cxx, cy, w0] = c, w = Math.min(w0, 960), h = (w * 9) / 16;
+      return [clamp(cxx - w / 2, 0, 960 - w), clamp(cy - h / 2, 0, 540 - h), w, h]; // a shot never shows past the scene
+    };
+    const mixArr = (a, b, p) => a.map((v, i) => lerp(v, b[i], p));
+    cx.mixArr = mixArr;
+    const SPEC = Object.assign({}, scene.tracks);
+    // camera and dim are common to every scene; keep the scene's order (it decides the checker's report order)
+    if (!SPEC.camera) SPEC.camera = { init: "full", conv: cam, dur: DUR_CAM, mix: mixArr };
+    if (!SPEC.dim) SPEC.dim = { init: 1, conv: (v) => +v, dur: DUR_DIM, mix: lerp };
+    for (const k of Object.keys(SPEC)) if (SPEC[k].conv === "camera") SPEC[k].conv = cam;
+    const init = {};
+    for (const k of Object.keys(SPEC)) init[k] = SPEC[k].init;
+    Object.assign(init, sb.initial || {});
+    const tracks = {};
+    for (const k of Object.keys(SPEC)) tracks[k] = [[0, SPEC[k].conv(init[k]), "initial"]];
+    (sb.timeline || []).forEach((item, i) => {
+      const t = resolve(item.at, `(timeline #${i})`);
+      let used = false;
+      for (const k of Object.keys(SPEC)) if (k in item) { tracks[k].push([t, SPEC[k].conv(item[k]), item.at]); used = true; }
+      for (const k of Object.keys(item)) if (k !== "at" && !(k in SPEC)) err(`timeline #${i}: unknown key "${k}" for the ${sceneName} scene`);
+      if (!used) err(`timeline #${i}: nothing to change`);
+    });
+    for (const k of Object.keys(tracks)) tracks[k].sort((a, b) => a[0] - b[0]);
+
+    const memo = new Map();
+    function sampler(name, dur, mix) {
+      if (memo.has(name)) return memo.get(name);
+      const list = tracks[name], startVal = [];
+      const valAt = (t) => {
+        let i = -1;
+        for (let k = 0; k < list.length; k++) { if (list[k][0] <= t) i = k; else break; }
+        if (i <= 0) return list[0][1];
+        if (startVal[i] === undefined) startVal[i] = valAt(list[i][0] - 1e-6);
+        return mix(startVal[i], list[i][1], ease((t - list[i][0]) / (dur * D)));
+      };
+      memo.set(name, valAt);
+      return valAt;
+    }
+    /** A track's value at t (interpolated), or for step tracks the segment { cur, prev, t0, i }. */
+    cx.track = (name) => sampler(name, SPEC[name].dur, SPEC[name].mix);
+    cx.seg = (name, t) => {
+      const list = tracks[name]; let i = 0;
+      for (let k = 0; k < list.length; k++) if (list[k][0] <= t) i = k;
+      return { cur: list[i][1], prev: i > 0 ? list[i - 1][1] : list[i][1], t0: list[i][0], i };
+    };
+    cx.keys = (name) => tracks[name];
+    const camAt = cx.track("camera");
+
+    /* ---------------- show windows ---------------- */
+    const WIN = {};
+    (sb.show || []).forEach((w, i) => {
+      const a = resolve(w.from, `(show ${w.show} #${i})`), b = w.to == null ? 1e9 : resolve(w.to, `(show ${w.show} #${i})`);
+      if (b <= a) err(`show ${w.show} #${i}: ends (${b.toFixed(2)}s) before it starts (${a.toFixed(2)}s)`);
+      (WIN[w.show] = WIN[w.show] || []).push(Object.assign({}, w, { a, b, edges: (w.edges || []).map((e) => e.replace(/\s/g, "")), stagger: w.stagger || 0 }));
+    });
+    cx.WIN = WIN;
+    cx.win = (name, t) => (WIN[name] || []).find((w) => t >= w.a && t < w.b);
+    cx.wins = (name, t) => (WIN[name] || []).filter((w) => t >= w.a && t < w.b);
+    if (scene.ready) scene.ready();
+
+    /* ---------------- DOM ---------------- */
+    const root = document.getElementById(cfg.rootId || "lesson-root");
+    const qa = sb.question;
+    root.innerHTML = `
+<div class="wrap">
+  <header>
+    <div class="eyebrow">${esc(L(sb.eyebrow))}</div>
+    <h1>${esc(L(sb.title))}</h1>
+    ${sb.lede ? `<p class="lede">${L(sb.lede)}</p>` : ""}
+  </header>
+  <section class="player" aria-label="${esc(T.lesson)}">
+    <div class="stage scene-${esc(sceneName)}">
+      <svg class="scene" viewBox="0 0 960 540" role="img" aria-label="${esc(scene.svgLabel || T.graph)}"></svg>
+      <div class="layer"></div>
+      <div class="banner"><b>${esc(scene.bannerText || T.yourSplit)}</b><button class="btn" type="button" data-act="back">${esc(T.back)}</button></div>
+    </div>
+    <div class="captions" aria-live="off"></div>
+    <div class="transport">
+      <button class="play" type="button" aria-label="${esc(T.play)}">▶</button>
+      <div class="scrub"><input type="range" min="0" max="${DUR}" step="0.01" value="0" aria-label="${esc(T.position)}"><div class="time">0:00 / ${fmt(DUR)}</div></div>
+      <div class="opts"><div class="seg" role="group" aria-label="${esc(T.speed)}"></div><button class="tbtn" type="button" aria-pressed="true">${esc(T.captions)}</button></div>
+    </div>
+  </section>
+  <div class="cols">
+    <section aria-label="${esc(T.chapters)}"><h2>${esc(T.chapters)}</h2><ul class="chapters"></ul></section>
+    <section class="bench" aria-label="${esc(T.turn)}">
+      <h2>${esc(T.turn)}</h2>
+      ${qa ? `<p>${md(L(qa.text))}</p><div class="row bench-opts"></div><p class="feedback"></p>` : ""}
+      ${scene.benchHtml()}
+    </section>
+  </div>
+  ${sb.note ? `<p class="note">${L(sb.note)}</p>` : ""}
+</div>`;
+    const $ = (sel) => root.querySelector(sel);
+    const stage = $(".stage"), svg = $("svg.scene"), layer = $(".layer");
+    const NS = "http://www.w3.org/2000/svg";
+    const mk = (tag, attrs = {}, parent = svg) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+    Object.assign(cx, { root, $, stage, svg, layer, mk, NS });
+    scene.buildSvg();
+
+    const BUILD = {
+      headline: (o) => `<div class="hl"${o.size ? ` style="font-size:${+o.size}cqw"` : ""}>${md(L(o.text))}</div>${o.sub ? `<div class="sub">${md(L(o.sub))}</div>` : ""}`,
+      term: (o) => `<div class="term"><span class="t">${md(L(o.text))}</span><span class="d">${md(L(o.sub))}</span></div>`,
+      chip: (o) => `<span class="chip">${md(L(o.text))}</span>`,
+      tag: (o) => `<div class="tag">${md(L(o.text))}</div>`,
+      tags: (o) => `<div class="tags">${o.items.map((it) => `<div class="tag"${it.at ? ` data-a="${resolve(it.at, "(tags)").toFixed(3)}"` : ""}>${md(L(it.text))}</div>`).join("")}</div>`,
+      label: (o) => `<span class="label c${o.color || 0}">${md(L(o.text))}</span>`,
+      vocab: (o) => `<div class="vocab">${o.items.map((it) => `<div${it.at ? ` data-a="${resolve(it.at, "(vocab)").toFixed(3)}"` : ""}><b>${esc(L(it.k))}</b>${md(L(it.text))}</div>`).join("")}</div>`,
+      eq: (o) => `<div class="eq">${md(L(o.text))}</div>`,
+      stamp: (o) => `<div class="stamp">${md(L(o.text))}</div>`,
+      bigq: (o) => `<div class="bigq"><div class="q">?</div><div class="hl">${md(L(o.text))}</div></div>`,
+      compare: (o) => `<div class="cmp">${o.rows.map((r) => `<div class="row ${r.tone || ""}"><span>${md(L(r.label))}</span><span class="k">${md(L(r.value))}</span><span>${md(L(r.note))}</span></div>`).join("")}</div>`,
+      thumbs: (o) => `<div class="thumbs">${o.items.map((it) => scene.thumb(it)).join("")}</div>`,
+      question: () => `<div class="qcard"><span class="e">${esc(T.turn)}</span><span class="q">${md(L(qa && qa.text))}</span><span class="h qh">${esc(L(qa && qa.hint) || T.think)}</span><span class="qbtns">${(qa ? qa.options : []).map((op, i) => `<button class="btn" type="button" data-q="${i}">${esc(L(op.label))}</button>`).join("")}</span><span class="h qans"></span></div>`,
+      html: (o) => L(o.html),
+    };
+    const OV = (sb.overlays || []).map((o, i) => {
+      const lab = `(overlay #${i} ${o.type})`;
+      const a = resolve(o.from, lab), b = o.to == null ? 1e9 : resolve(o.to, lab);
+      if (b <= a) err(`overlay #${i} (${o.type}) ends (${b.toFixed(2)}s) before it starts (${a.toFixed(2)}s)`);
+      const d = document.createElement("div");
+      d.className = "ov ov-" + o.type; d.style.left = (o.x || 0) + "%"; d.style.top = (o.y || 0) + "%";
+      if (o.width) d.style.width = o.width + "cqw";
+      if (!BUILD[o.type]) err(`overlay #${i}: unknown type ${o.type}`);
+      d.innerHTML = BUILD[o.type] ? BUILD[o.type](o) : "";
+      layer.appendChild(d);
+      const label = (d.textContent || "").trim().replace(/\s+/g, " ").slice(0, 48);
+      return { a, b, d, label, type: o.type, parts: [...d.querySelectorAll("[data-a]")].map((e) => ({ e, t: +e.dataset.a })) };
+    });
+    cx.widget = (cls, pos, html) => {
+      const d = document.createElement("div"); d.className = "ov " + cls; d.style.left = pos.x + "%"; d.style.top = pos.y + "%";
+      d.innerHTML = html; layer.appendChild(d); return d;
+    };
+    const widgetEls = scene.buildWidgets() || [];
+
+    /* ---------------- render ---------------- */
+    let lastCam = FULL;
+    const setOp = (el, v) => { el.style.opacity = v; };
+    const fadeIn = reduce ? 0.01 : 0.35, fadeOut = reduce ? 0.01 : 0.25;
+    function ovStyle(el, t, a, b) {
+      const on = t >= a && t < b, o = on ? Math.min(clamp((t - a) / fadeIn), clamp((b - t) / fadeOut)) : 0;
+      el.style.opacity = o;
+      el.style.transform = on && !reduce ? `translateY(${((1 - ease((t - a) / 0.5)) * 0.8).toFixed(3)}cqw)` : "none";
+      return on;
+    }
+    Object.assign(cx, { setOp, ovStyle });
+    function render(t) {
+      const F = cx.FREE;
+      const C = F ? (scene.freeCamera || FULL) : camAt(t);
+      lastCam = C;
+      svg.setAttribute("viewBox", C.map((v) => v.toFixed(1)).join(" "));
+      scene.render(t, F, "scene");
+      for (const o of OV) {
+        const on = !F && ovStyle(o.d, t, o.a, o.b);
+        if (F) { o.d.style.opacity = 0; }
+        for (const p of o.parts) {
+          const po = on && t >= p.t ? clamp((t - p.t) / (reduce ? 0.01 : 0.3)) : 0;
+          p.e.style.opacity = po;
+          p.e.style.transform = po > 0 && po < 1 && !reduce ? `translateY(${((1 - po) * 0.6).toFixed(3)}cqw)` : "none";
+        }
+      }
+      scene.render(t, F, "widgets");
+      renderCaptions(t);
+      renderTransport(t);
+    }
+    cx.render = (t) => render(t == null ? au.currentTime : t);
+
+    /* ---------------- captions ---------------- */
+    const capEl = $(".captions");
+    let capIdx = -2;
+    function renderCaptions(t) {
+      if (cx.FREE) { if (capIdx !== -3) { capEl.textContent = scene.pausedText || T.paused; capIdx = -3; } return; }
+      let i = -1;
+      for (let k = 0; k < SENT.length; k++) if (SENT[k].start <= t) i = k;
+      if (i < 0) i = 0;
+      if (i !== capIdx) {
+        capEl.innerHTML = "";
+        SENT[i].words.forEach((w) => { const s = document.createElement("span"); s.textContent = w.w + " "; capEl.appendChild(s); });
+        capIdx = i;
+      }
+      [...capEl.children].forEach((s, k) => s.classList.toggle("said", t >= SENT[i].words[k].t));
+    }
+
+    /* ---------------- transport ---------------- */
+    const au = document.getElementById(cfg.audioId || "lesson-audio");
+    cx.au = au;
+    const playBtn = $(".play"), scrub = $(".scrub input"), timeEl = $(".time");
+    const CHAP = (sb.chapters || []).map((c, i) => ({ t0: resolve(c.at, `(chapter #${i})`), title: L(c.title) }));
+    const chapBtns = CHAP.map((c) => {
+      const li = document.createElement("li"), b = document.createElement("button");
+      b.type = "button"; b.innerHTML = `<span class="ts">${fmt(c.t0)}</span><span>${esc(c.title)}</span>`;
+      b.addEventListener("click", () => { seek(c.t0 + 0.01); play(); });
+      li.appendChild(b); $(".chapters").appendChild(li); return { t0: c.t0, b };
+    });
+    function renderTransport(t) {
+      if (document.activeElement !== scrub) scrub.value = t;
+      timeEl.textContent = `${fmt(t)} / ${fmt(DUR)}`;
+      let cur = 0; chapBtns.forEach((c, i) => { if (t >= c.t0) cur = i; });
+      chapBtns.forEach((c, i) => c.b.setAttribute("aria-current", String(i === cur && !cx.FREE)));
+    }
+    const QT = qa ? resolve(qa.at || "end", "(question)") : null;
+    let asked = false, raf = 0;
+    function loop() {
+      if (QT != null && !asked && !au.paused && au.currentTime >= QT) { asked = true; au.pause(); au.currentTime = QT; stage.classList.add("asking"); }
+      render(au.currentTime);
+      if (!au.paused) raf = requestAnimationFrame(loop);
+    }
+    function resetAsk(t) { if (QT != null && t < QT - 0.05) { asked = false; stage.classList.remove("asking"); const a = layer.querySelector(".qans"); if (a) a.textContent = ""; } }
+    function play() {
+      if (cx.FREE) cx.leaveFree();
+      if (au.ended || au.currentTime >= DUR - 0.05) { au.currentTime = 0; resetAsk(0); }
+      const p = au.play(); if (p && p.catch) p.catch(() => {});
+    }
+    function seek(t) { if (cx.FREE) cx.leaveFree(); au.currentTime = clamp(t, 0, DUR); resetAsk(au.currentTime); render(au.currentTime); }
+    playBtn.addEventListener("click", () => (au.paused ? play() : au.pause()));
+    au.addEventListener("play", () => { playBtn.textContent = "❚❚"; playBtn.setAttribute("aria-label", T.pause); cancelAnimationFrame(raf); loop(); });
+    au.addEventListener("pause", () => { playBtn.textContent = "▶"; playBtn.setAttribute("aria-label", T.play); render(au.currentTime); });
+    au.addEventListener("seeked", () => render(au.currentTime));
+    au.addEventListener("ended", () => { const b = $(".bench"); b.classList.remove("pulse"); void b.offsetWidth; b.classList.add("pulse"); });
+    scrub.addEventListener("input", () => { if (cx.FREE) cx.leaveFree(); au.currentTime = +scrub.value; resetAsk(+scrub.value); render(+scrub.value); });
+    document.addEventListener("keydown", (e) => {
+      const a = document.activeElement;
+      if (e.code === "Space" && !/INPUT|BUTTON|TEXTAREA|SELECT/.test(a.tagName) && !(a.closest && a.closest(".node, .fpk"))) { e.preventDefault(); au.paused ? play() : au.pause(); }
+    });
+    const SPEEDS = [1, 1.25, 1.5, 1.75, 2], KEY = cfg.storageKey || "lesson-speed";
+    let rate = 1;
+    try { const r = parseFloat(localStorage.getItem(KEY)); if (SPEEDS.includes(r)) rate = r; } catch (e) { /* storage blocked */ }
+    const speedBtns = SPEEDS.map((r) => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = r + "×";
+      b.addEventListener("click", () => setRate(r)); $(".seg").appendChild(b); return { r, b };
+    });
+    function setRate(r) {
+      rate = r; au.playbackRate = r; au.preservesPitch = true;
+      speedBtns.forEach((x) => x.b.setAttribute("aria-pressed", String(x.r === r)));
+      try { localStorage.setItem(KEY, String(r)); } catch (e) { /* storage blocked */ }
+    }
+    setRate(rate);
+    au.addEventListener("loadedmetadata", () => setRate(rate));
+    const ccBtn = $(".tbtn"), playerEl = $(".player");
+    ccBtn.addEventListener("click", () => { const on = ccBtn.getAttribute("aria-pressed") !== "true"; ccBtn.setAttribute("aria-pressed", String(on)); playerEl.classList.toggle("nocc", !on); });
+
+    /* ---------------- your turn ---------------- */
+    cx.readout = $(".readout");
+    cx.enterFree = (state) => { au.pause(); cx.FREE = state; stage.classList.add("free"); render(au.currentTime); };
+    cx.leaveFree = () => { cx.FREE = null; stage.classList.remove("free"); if (scene.leaveFree) scene.leaveFree(); render(au.currentTime); };
+    root.querySelector('[data-act="back"]').addEventListener("click", () => cx.leaveFree());
+    scene.bindBench();
+    if (qa) {
+      const fb = $(".feedback"), opts = $(".bench-opts");
+      qa.options.forEach((op) => {
+        const b = document.createElement("button"); b.type = "button"; b.className = "btn"; b.textContent = L(op.label);
+        b.addEventListener("click", () => { fb.innerHTML = md(L(op.reply)); }); opts.appendChild(b);
+      });
+      layer.querySelectorAll(".qbtns button").forEach((b) => b.addEventListener("click", () => {
+        const op = qa.options[+b.dataset.q];
+        layer.querySelector(".qans").innerHTML = md(L(op.reply));
+        stage.classList.remove("asking");
+        const p = au.play(); if (p && p.catch) p.catch(() => {});
+      }));
+    }
+
+    /* ---------------- diagnostics for scripts/check_lesson.py ---------------- */
+    function stageRect(el) {
+      const s = stage.getBoundingClientRect(), r = el.getBoundingClientRect();
+      return { x: r.left - s.left, y: r.top - s.top, w: r.width, h: r.height };
+    }
+    window.__lesson = {
+      render, duration: DUR, errors, claims, lang, scene: sceneName,
+      tracks: Object.fromEntries(Object.entries(tracks).map(([k, v]) => [k, v.map((x) => [x[0], typeof x[2] === "string" ? x[2] : JSON.stringify(x[2])])])),
+      moveSeconds: Object.fromEntries(Object.keys(SPEC).map((k) => [k, SPEC[k].checkDur != null ? SPEC[k].checkDur : SPEC[k].dur])),
+      overlays: OV.map((o) => ({ a: o.a, b: o.b, label: o.label, type: o.type })),
+      sentences: SENT.map((s) => ({ slide: s.slide, start: s.start, end: s.end, text: s.text })),
+      question: QT,
+      boxes() {
+        const s = stage.getBoundingClientRect(), out = [];
+        const sx = s.width / lastCam[2], sy = s.height / lastCam[3];
+        for (const b of scene.boxes(s, sx, sy, lastCam)) {
+          if (b.x + b.w < 0 || b.y + b.h < 0 || b.x > s.width || b.y > s.height) continue;
+          out.push(b);
+        }
+        [...OV.map((o) => ({ d: o.d, label: o.label })), ...widgetEls].forEach((o) => {
+          // fully shown text only, not mid-fade
+          if (+o.d.style.opacity > 0.9) { const r = stageRect(o.d.firstElementChild || o.d); out.push({ kind: "overlay", label: o.label, x: r.x, y: r.y, w: r.w, h: r.h }); }
+        });
+        return { stage: { w: s.width, h: s.height }, boxes: out };
+      },
+      setRecording(on) { root.classList.toggle("norec", !!on); },
+    };
+    if (scene.expose) Object.assign(window.__lesson, scene.expose());
+    if (errors.length) console.error(`[lesson] ${errors.length} problem(s); see window.__lesson.errors`);
+    render(0);
+  }
+
+  /* =====================================================================================================
+   * Scene "graph": weighted graph, splits, cut counter, balance bars (partitioning labs). Unchanged from v3.
+   * ===================================================================================================== */
+  SCENES.graph = function (cx) {
+    const { sb, T, L, err, resolve, esc, fill, D, lerp, ease, clamp, FULL } = cx;
+    const DUR_POSE = 1.1, DUR_SHAPE = 0.9, DUR_WIRES = 1.0, DUR_COUNT = 1.2;
+    if (!sb.graph) { err('the graph scene needs "graph" in the storyboard'); sb.graph = { nodes: [], edges: [] }; }
+    if (!sb.poses) { err('the graph scene needs "poses" in the storyboard'); sb.poses = { base: {} }; }
+    const NODES = sb.graph.nodes.slice();
+    const EDGES = sb.graph.edges.map((e) => (Array.isArray(e) ? e : [e.u, e.v, e.w]));
+    const K = sb.graph.groups || 2;
+    const CAP = sb.graph.cap != null ? sb.graph.cap : Math.ceil(NODES.length / K);
+    const names = (g) => (g.includes(",") ? g.split(",").map((x) => x.trim()) : g.trim().split(""));
+    function parseSplit(v) {
+      if (v == null || v === "none" || v === "") return null;
+      const s = sb.splits && sb.splits[v] != null ? sb.splits[v] : v;
+      const asn = Object.fromEntries(NODES.map((n) => [n, null]));
+      s.split("|").forEach((g, gi) => names(g).filter(Boolean).forEach((n) => {
+        if (!(n in asn)) err(`split "${s}": unknown node ${n}`); else asn[n] = gi;
+      }));
+      return asn;
+    }
+    /** Colour rank of each group: the group holding the first node name is 0 (blue), and so on. */
+    function colourOf(asn) {
+      const firsts = new Map();
+      for (const n of [...NODES].sort()) if (asn[n] != null && !firsts.has(asn[n])) firsts.set(asn[n], firsts.size);
+      return firsts;
+    }
+    function cutOf(asn) {
+      if (!asn) return null;
+      let c = 0;
+      for (const [u, v, w] of EDGES) if (asn[u] != null && asn[v] != null && asn[u] !== asn[v]) c += w;
+      return c;
+    }
+    function sizes(asn) {
+      const out = Array(K).fill(0); if (!asn) return out;
+      const col = colourOf(asn);
+      for (const n of NODES) if (asn[n] != null) { const c = col.get(asn[n]); if (c < K) out[c]++; }
+      return out;
+    }
+    function legal(asn) {
+      if (!asn || NODES.some((n) => asn[n] == null)) return false;
+      const s = sizes(asn);
+      return s.every((x) => x > 0 && x <= CAP);
+    }
+    function partsStr(asn) {
+      const col = colourOf(asn), groups = [];
+      for (const n of [...NODES].sort()) if (asn[n] != null) { const c = col.get(asn[n]); (groups[c] = groups[c] || []).push(n); }
+      return groups.map((g) => g.join("")).join(" | ");
+    }
+    /* The course's random dealer (Lab 03): mulberry32, two warm-up draws, Fisher–Yates over sorted names. */
+    function mulberry32(seed) {
+      let t = seed >>> 0;
+      return function next() {
+        t += 0x6d2b79f5;
+        let r = Math.imul(t ^ (t >>> 15), 1 | t);
+        r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+        return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    function randomSplit(seed) {
+      const order = [...NODES].sort();
+      const rng = mulberry32(seed); rng(); rng();
+      for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+      const left = new Set(order.slice(0, Math.floor(order.length / 2)));
+      return Object.fromEntries(NODES.map((n) => [n, left.has(n) ? 0 : 1]));
+    }
+
+    /* claims: every number the narration or the text states, checked against the rules above */
+    const claims = [];
+    for (const c of sb.claims || []) {
+      const asn = c.deal != null ? randomSplit(c.deal) : parseSplit(c.split);
+      const got = { split: asn ? partsStr(asn) : null, cut: cutOf(asn), legal: legal(asn) };
+      const want = parseSplit(c.split);
+      const okSplit = c.split == null || (c.deal == null) || (want && partsStr(want) === got.split);
+      const okCut = c.cut == null || c.cut === got.cut;
+      const okLegal = c.legal == null || c.legal === got.legal;
+      const ok = okSplit && okCut && okLegal;
+      claims.push({ claim: c, got, ok });
+      if (!ok) err(`claim failed: ${JSON.stringify(c)} -> ${JSON.stringify(got)}`);
+    }
+
+    const POSES = sb.poses;
+    for (const [pn, p] of Object.entries(POSES)) for (const n of NODES) if (!p[n]) err(`pose ${pn} has no position for ${n}`);
+    const firstPose = Object.keys(POSES)[0];
+    const mixPose = (a, b, p) => { const o = {}; for (const n of NODES) o[n] = cx.mixArr(a[n], b[n], p); return o; };
+    const tracks = {
+      pose: { init: firstPose, conv: (v) => { if (!POSES[v]) { err(`unknown pose ${v}`); return POSES[firstPose]; } return POSES[v]; }, dur: DUR_POSE, mix: mixPose },
+      split: { init: null, conv: (v) => v, dur: DUR_COUNT, mix: null },
+      camera: { init: "full", conv: "camera", dur: 1.3, mix: (a, b, p) => cx.mixArr(a, b, p) },
+      shape: { init: "node", conv: (v) => (v === "cell" ? 0 : 1), dur: DUR_SHAPE, mix: lerp },
+      wires: { init: false, conv: (v) => (v ? 1 : 0), dur: DUR_WIRES, mix: lerp },
+      dim: { init: 1, conv: (v) => +v, dur: 0.6, mix: lerp },
+    };
+    let posAt, shapeAt, wiresAt, dimAt;
+    const win = (name, t) => cx.win(name, t);
+    const edgeIn = (w, u, v) => w && (w.edges.length === 0 || w.edges.includes(`${u}-${v}`) || w.edges.includes(`${v}-${u}`));
+    /** Edge styles (heavy, pulse, flash): several windows can be open at once, each for its own edges. */
+    const edgeOn = (name, t, u, v) => (cx.WIN[name] || []).some((w) => t >= w.a && t < w.b && edgeIn(w, u, v));
+    function splitSeg(t) { return cx.seg("split", t); }
+    function shownCut(t) {
+      const s = splitSeg(t), c1 = cutOf(parseSplit(s.cur)), c0 = cutOf(parseSplit(s.prev));
+      if (c1 == null) return null;
+      if (c0 == null) return c1;
+      return Math.round(lerp(c0, c1, ease((t - s.t0) / (DUR_COUNT * D))));
+    }
+
+    let halves, divider, chip, graph, edgeEls, nodeEls, counter, cv, cbox, balance, bars, capLine, verdict, lastP = null;
+    const S = {
+      tracks, claims,
+      svgLabel: T.graph, bannerText: T.yourSplit, pausedText: T.paused,
+      ready() { posAt = cx.track("pose"); shapeAt = cx.track("shape"); wiresAt = cx.track("wires"); dimAt = cx.track("dim"); },
+      benchHtml() {
+        return `${sb.bench && sb.bench.deal ? `<div class="row"><label for="lesson-seed">${esc(T.deal)}</label><input class="seedbox" id="lesson-seed" type="number" min="0" max="999" value="${sb.bench.seed != null ? sb.bench.seed : 3}"><button class="btn primary" type="button" data-act="deal">${esc(T.dealBtn)}</button></div>` : ""}
+      <p>${esc(T.clickHint)}</p>
+      <div class="readout">${esc(sb.bench && sb.bench.deal ? T.noSplit : T.noSplitNoDeal)}</div>`;
+      },
+      buildSvg() {
+        const { mk } = cx;
+        const divX = (sb.divider && sb.divider.x) || 570;
+        halves = mk("g");
+        mk("rect", { class: "tint0", x: 0, y: 0, width: divX, height: 540 }, halves);
+        mk("rect", { class: "tint1", x: divX, y: 0, width: 960 - divX, height: 540 }, halves);
+        divider = mk("line", { class: "divider", x1: divX, y1: 110, x2: divX, y2: 525 });
+        const chipBox = sb.chip || { x: 175, y: 120, w: 610, h: 395 };
+        chip = mk("g");
+        mk("rect", { class: "chipbody", x: chipBox.x, y: chipBox.y, width: chipBox.w, height: chipBox.h, rx: 18 }, chip);
+        const pins = Math.max(4, Math.floor((chipBox.w - 40) / 48));
+        for (let i = 0; i < pins; i++) {
+          mk("rect", { class: "pin", x: chipBox.x + 30 + i * 48, y: chipBox.y - 14, width: 14, height: 14, rx: 2 }, chip);
+          mk("rect", { class: "pin", x: chipBox.x + 30 + i * 48, y: chipBox.y + chipBox.h, width: 14, height: 14, rx: 2 }, chip);
+        }
+        graph = mk("g");
+        edgeEls = EDGES.map(([u, v, w]) => {
+          const g = mk("g", { class: "edge" }, graph);
+          const wires = Array.from({ length: Math.min(w, 9) }, () => mk("line", { class: "wire" }, g));
+          const main = mk("line", { class: "main" }, g);
+          const wl = mk("g", { class: "wl" }, g);
+          mk("rect", { x: -14, y: -12, width: 28, height: 24, rx: 6 }, wl);
+          mk("text", { x: 0, y: 1 }, wl).textContent = String(w);
+          return { u, v, w, g, wires, main, wl };
+        });
+        nodeEls = NODES.map((n) => {
+          const g = mk("g", { class: "node nu", tabindex: 0, role: "button", "aria-label": fill(T.cell, { n }) }, graph);
+          const r = mk("rect", {}, g);
+          const t = mk("text", { x: 0, y: 1 }, g); t.textContent = n;
+          g.addEventListener("click", () => clickNode(n));
+          g.addEventListener("keydown", (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); clickNode(n); } });
+          return { n, g, r, t };
+        });
+      },
+      buildWidgets() {
+        const W = sb.widgets || {};
+        counter = cx.widget("ov-counter", W.counter || { x: 81, y: 68 }, `<div class="counter"><span class="l">${esc(T.cutsize)}</span><span class="v">0</span></div>`);
+        cv = counter.querySelector(".v"); cbox = counter.querySelector(".counter");
+        balance = cx.widget("ov-balance", W.balance || { x: 77, y: 26 }, `<div class="balance"><span class="l">${esc(T.perSide)}</span><div class="bars">${Array.from({ length: K }, (_, i) => `<div class="bar c${i}"></div>`).join("")}<div class="cap"><span>${esc(fill(T.max, { cap: CAP }))}</span></div></div><span class="verdict"></span></div>`);
+        bars = balance.querySelectorAll(".bar"); capLine = balance.querySelector(".cap"); verdict = balance.querySelector(".verdict");
+        capLine.style.bottom = (CAP / NODES.length) * 100 + "%";
+        return [{ d: counter, label: "counter" }, { d: balance, label: "balance" }];
+      },
+      render(t, F, layer) {
+        const setOp = cx.setOp;
+        const asn = F ? F.asn : parseSplit(splitSeg(t).cur);
+        if (layer === "widgets") {
+          const cw = win("counter", t);
+          const showCounter = F ? !!asn && NODES.some((n) => asn[n] != null) : !!cw;
+          if (F) counter.style.opacity = showCounter ? 1 : 0; else if (cw) cx.ovStyle(counter, t, cw.a, cw.b); else counter.style.opacity = 0;
+          if (showCounter) {
+            const c = F ? cutOf(asn) : shownCut(t);
+            cv.textContent = c == null ? "–" : c;
+            cbox.classList.toggle("bad", c != null && sb.badCut != null && c >= sb.badCut);
+            cbox.classList.toggle("good", c != null && sb.goodCut != null && c === sb.goodCut && legal(asn));
+          }
+          const bw = win("balance", t);
+          const showBal = F ? !!asn : !!bw;
+          if (F) balance.style.opacity = showBal ? 1 : 0; else if (bw) cx.ovStyle(balance, t, bw.a, bw.b); else balance.style.opacity = 0;
+          if (showBal) {
+            const s = sizes(asn);
+            bars.forEach((b, i) => { b.style.height = (s[i] / NODES.length) * 100 + "%"; b.textContent = s[i] || ""; });
+            const capOn = F || !!win("cap", t);
+            capLine.style.opacity = capOn ? 1 : 0;
+            const ok = legal(asn);
+            verdict.textContent = capOn ? (ok ? T.verdictYes : T.verdictNo) : "";
+            verdict.className = "verdict " + (ok ? "yes" : "no");
+          }
+          return;
+        }
+        const P = F ? POSES[sb.freePose || firstPose] : posAt(t);
+        const shape = F ? 1 : shapeAt(t), spread = F ? 0 : wiresAt(t);
+        lastP = P;
+        const chipOn = !F && !!win("chip", t), cellMode = chipOn && shape < 0.5;
+        setOp(chip, chipOn ? 1 : 0);
+        const div = !F && !!win("divider", t);
+        setOp(divider, div ? 0.55 : 0); setOp(halves, div ? 1 : 0);
+        setOp(graph, F ? 1 : dimAt(t));
+        const showCut = F || !!win("cut", t), weights = F || !!win("weights", t);
+        const col = asn ? colourOf(asn) : null;
+        for (const e of edgeEls) {
+          const [x1, y1] = P[e.u], [x2, y2] = P[e.v];
+          const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy) || 1, nx = -dy / len, ny = dx / len;
+          e.wires.forEach((ln, i) => {
+            const o = (i - (e.wires.length - 1) / 2) * 9 * spread;
+            ln.setAttribute("x1", x1 + nx * o); ln.setAttribute("y1", y1 + ny * o);
+            ln.setAttribute("x2", x2 + nx * o); ln.setAttribute("y2", y2 + ny * o);
+            ln.style.opacity = clamp(spread * 1.6);
+          });
+          e.main.setAttribute("x1", x1); e.main.setAttribute("y1", y1); e.main.setAttribute("x2", x2); e.main.setAttribute("y2", y2);
+          e.main.style.opacity = clamp(1 - spread * 1.4);
+          const isCut = showCut && asn && asn[e.u] != null && asn[e.v] != null && asn[e.u] !== asn[e.v];
+          const isHeavy = !F && edgeOn("heavy", t, e.u, e.v);
+          e.main.setAttribute("stroke-width", isHeavy ? 9 : 2.5 + Math.min(e.w, 8) * 0.9);
+          e.g.classList.toggle("cut", !!isCut);
+          e.g.classList.toggle("heavy", isHeavy);
+          e.g.classList.toggle("pulse", !F && edgeOn("pulse", t, e.u, e.v));
+          e.g.classList.toggle("flash", !F && edgeOn("flash", t, e.u, e.v));
+          const mx = (x1 + x2) / 2 + nx * 18, my = (y1 + y2) / 2 + ny * 18;
+          e.wl.setAttribute("transform", `translate(${mx.toFixed(1)} ${my.toFixed(1)})`);
+          setOp(e.wl, weights ? 1 : 0);
+        }
+        const labW = cx.WIN.labels;
+        nodeEls.forEach((N, i) => {
+          const [x, y] = P[N.n];
+          N.g.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+          const R = 25, w = lerp(68, 2 * R, shape), h = lerp(46, 2 * R, shape), rx = lerp(7, R, shape);
+          N.r.setAttribute("x", -w / 2); N.r.setAttribute("y", -h / 2); N.r.setAttribute("width", w); N.r.setAttribute("height", h); N.r.setAttribute("rx", rx);
+          const side = !asn || asn[N.n] == null ? "nu" : "g" + Math.min(col.get(asn[N.n]), 3);
+          N.g.setAttribute("class", "node " + (cellMode ? "ncell" : side));
+          let lab = true;
+          if (!F && labW) { const w0 = labW.find((w) => t >= w.a && t < w.b); lab = !!w0 && t >= w0.a + w0.stagger * i; }
+          N.t.style.opacity = lab ? 1 : 0;
+        });
+      },
+      thumb(item) {
+        const asn = parseSplit(item.split), P = POSES[item.pose || sb.thumbPose || firstPose], col = colourOf(asn);
+        const xs = NODES.map((n) => P[n][0]), ys = NODES.map((n) => P[n][1]);
+        const x0 = Math.min(...xs) - 60, y0 = Math.min(...ys) - 50, w = Math.max(...xs) - x0 + 60, h = Math.max(...ys) - y0 + 50;
+        let s = `<svg viewBox="${x0} ${y0} ${w} ${h}" aria-hidden="true">`;
+        for (const [u, v] of EDGES) {
+          const c = asn[u] !== asn[v];
+          s += `<line x1="${P[u][0]}" y1="${P[u][1]}" x2="${P[v][0]}" y2="${P[v][1]}" stroke="${c ? "var(--cut)" : "var(--edge)"}" stroke-width="${c ? 7 : 5}" ${c ? 'stroke-dasharray="14 9"' : ""}/>`;
+        }
+        for (const n of NODES) s += `<circle cx="${P[n][0]}" cy="${P[n][1]}" r="30" fill="var(--g${col.get(asn[n]) || 0})"/><text x="${P[n][0]}" y="${P[n][1] + 1}" fill="#fff" font-size="30" font-weight="700" text-anchor="middle" dominant-baseline="central" font-family="Source Sans 3, sans-serif">${esc(n)}</text>`;
+        s += "</svg>";
+        const best = item.best ? `<span class="ok" data-a="${resolve(item.best, "(thumb best)").toFixed(3)}">${esc(L(item.bestLabel) || "best")}</span>` : "";
+        return `<div class="thumb${item.best ? " best" : ""}">${s}<span class="c">${esc(partsStr(asn))} · ${esc(T.cut)} ${cutOf(asn)}</span>${best}</div>`;
+      },
+      boxes(s, sx, sy, cam) {
+        const out = [];
+        if (+(graph.style.opacity || 1) < 0.6) return out; // a dimmed graph sits behind the text on purpose
+        nodeEls.forEach((N) => {
+          const [x, y] = lastP[N.n], cxx = (x - cam[0]) * sx, cy = (y - cam[1]) * sy, r = 26 * sx;
+          out.push({ kind: "node", label: N.n, x: cxx - r, y: cy - r, w: 2 * r, h: 2 * r });
+        });
+        return out;
+      },
+      bindBench() {
+        const { root } = cx;
+        const dealBtn = root.querySelector('[data-act="deal"]');
+        if (dealBtn) dealBtn.addEventListener("click", () => {
+          const inp = root.querySelector("#lesson-seed");
+          const s = Math.max(0, Math.min(999, parseInt(inp.value, 10) || 0)); inp.value = s;
+          const asn = randomSplit(s); cx.enterFree({ asn }); cx.readout.innerHTML = describe(asn, fill(T.seed, { s }));
+        });
+      },
+      leaveFree() { cx.readout.textContent = T.backMsg; },
+    };
+    function describe(asn, prefix) {
+      const placed = NODES.filter((n) => asn[n] != null), all = placed.length === NODES.length;
+      const s = sizes(asn);
+      return `${esc(prefix)}${esc(partsStr(asn))} &nbsp; ${esc(T.cut)} ${cutOf(asn)} &nbsp; ${esc(T.sides)} ${s.join(" | ")} &nbsp; ` +
+        (all ? (legal(asn) ? `<span class="ok">${esc(T.legal)}</span>` : `<span class="no">${esc(fill(T.notLegal, { cap: CAP }))}</span>`)
+          : esc(fill(T.toPlace, { list: NODES.filter((n) => asn[n] == null).join(", ") })));
+    }
+    function clickNode(n) {
+      if (!cx.FREE) cx.enterFree({ asn: Object.assign({}, parseSplit(splitSeg(cx.au.currentTime).cur) || Object.fromEntries(NODES.map((k) => [k, null]))) });
+      const a = cx.FREE.asn;
+      a[n] = a[n] == null ? 0 : (a[n] + 1) % K;
+      cx.readout.innerHTML = describe(a, T.yours);
+      cx.render();
+    }
+    return S;
+  };
+
+  /* =====================================================================================================
+   * Scene "floorplan": a B*-tree (left panel) and the floor it packs (right panel).
+   *   Rule (the course's packBstar, written down in Lab 05): walk the tree in preorder, node, then its whole left
+   *   subtree, then its right child. The root sits at (0, 0). A left child goes NEXT DOOR: x = parent.x + parent.w.
+   *   A right child goes UPSTAIRS: x = parent.x. Each block falls until it touches the skyline (the highest top under
+   *   its width), and the skyline rises to the block's top.
+   * ===================================================================================================== */
+  const PAPER = ["#1d4ed8", "#0f6b5c", "#b45309", "#7c3aed", "#be123c", "#0e7490", "#a16207", "#4d7c0f"];
+
+  /** "A(B(C(E,-),-),D)" → { id, left, right }. A name is letters/digits/_; "-" is an empty slot. */
+  function parseTree(str) {
+    let i = 0;
+    const s = String(str).replace(/\s+/g, "");
+    function node() {
+      const m = /^[A-Za-z0-9_]+/.exec(s.slice(i));
+      if (!m) throw new Error(`tree "${str}": a name was expected at position ${i}`);
+      i += m[0].length;
+      const n = { id: m[0], left: null, right: null };
+      if (s[i] === "(") {
+        i++;
+        n.left = slot();
+        if (s[i] !== ",") throw new Error(`tree "${str}": "," expected at position ${i}`);
+        i++;
+        n.right = slot();
+        if (s[i] !== ")") throw new Error(`tree "${str}": ")" expected at position ${i}`);
+        i++;
+      }
+      return n;
+    }
+    function slot() { if (s[i] === "-") { i++; return null; } return node(); }
+    const t = node();
+    if (i !== s.length) throw new Error(`tree "${str}": unexpected "${s.slice(i)}"`);
+    return t;
+  }
+  function treeStr(n) {
+    if (!n) return "-";
+    if (!n.left && !n.right) return n.id;
+    return `${n.id}(${treeStr(n.left)},${treeStr(n.right)})`;
+  }
+  const cloneTree = (n) => (n ? { id: n.id, left: cloneTree(n.left), right: cloneTree(n.right) } : null);
+  function walkOf(n, out = []) { if (n) { out.push(n.id); walkOf(n.left, out); walkOf(n.right, out); } return out; }
+  /** Pack a B*-tree exactly like the course (packBstar in floorplanning-core.js, pack_bstar in common/pack.py). */
+  function packTree(tree, dims) {
+    const pack = {}, contour = [], steps = [];
+    const contourY = (x1, x2) => { let y = 0; for (const g of contour) if (!(g.x2 <= x1 || g.x1 >= x2)) y = Math.max(y, g.h); return y; };
+    function setContour(x1, x2, h) {
+      const next = [];
+      for (const g of contour) {
+        if (g.x2 <= x1 || g.x1 >= x2) next.push(g);
+        else {
+          if (g.x1 < x1) next.push({ x1: g.x1, x2: x1, h: g.h });
+          if (g.x2 > x2) next.push({ x1: x2, x2: g.x2, h: g.h });
+        }
+      }
+      next.push({ x1, x2, h });
+      next.sort((a, b) => a.x1 - b.x1);
+      contour.length = 0; contour.push(...next);
+    }
+    function place(n, x) {
+      if (!n) return;
+      const m = dims[n.id];
+      const y = contourY(x, x + m.w);
+      pack[n.id] = { x, y, w: m.w, h: m.h };
+      setContour(x, x + m.w, y + m.h);
+      steps.push({ id: n.id, contour: contour.map((g) => [g.x1, g.x2, g.h]) });
+      place(n.left, x + m.w);
+      place(n.right, x);
+    }
+    place(tree, 0);
+    return { pack, steps };
+  }
+
+  SCENES.floorplan = function (cx) {
+    const { sb, T, L, err, resolve, esc, fill, D, lerp, ease, clamp } = cx;
+    const DUR_TREE = 1.2, DUR_PLACE = 1.0, STAGGER = 0.55, DUR_PANEL = 0.6, DUR_FREE = 750;
+    const FP = sb.floorplan || {};
+    if (!sb.floorplan) err('the floorplan scene needs "floorplan" in the storyboard');
+    const DATA = FP.data || {};
+    const outline = FP.outline || DATA.outline || { w: 10, h: 8 };
+    const OW = outline.w != null ? outline.w : outline.W, OH = outline.h != null ? outline.h : outline.H;
+    const MODS = (FP.modules || DATA.modules || []).map((m) => ({ id: m.id, w: m.w, h: m.h }));
+    if (!MODS.length) err("floorplan: no modules (give floorplan.modules or build with --data)");
+    const IDS = MODS.map((m) => m.id);
+    const BASE = Object.fromEntries(MODS.map((m) => [m.id, m]));
+    const COLORS = Object.assign({}, Object.fromEntries([...IDS].sort().map((id, i) => [id, PAPER[i % PAPER.length]])), DATA.colors || {}, FP.colors || {});
+    const LABELS = FP.labels || {};
+    const lab = (k) => (LABELS[k] ? L(LABELS[k]) : T[k]);
+
+    /* ---- named trees: storyboard trees + the checker's scenes (build_lesson.py --data) ---- */
+    const NAMED = {};
+    for (const [k, v] of Object.entries(DATA.trees || {})) NAMED[k] = v;
+    for (const [k, v] of Object.entries(FP.trees || {})) NAMED[k] = v;
+    const cache = new Map();
+    function treeSpec(v) {
+      if (v == null) return null;
+      if (typeof v === "string" && NAMED[v] != null) return treeSpec(NAMED[v]);
+      if (typeof v === "string") return { tree: v, rotated: [] };
+      if (v.tree != null) {
+        const base = treeSpec(v.tree);
+        return { tree: base ? base.tree : v.tree, rotated: v.rotated != null ? v.rotated : base ? base.rotated : [] };
+      }
+      return null;
+    }
+    /** Everything about one tree: structure, walk, pack, layout of the tree drawing, bounding box, legality. */
+    function state(v, label = "") {
+      const spec = treeSpec(v);
+      if (!spec) { err(`floorplan: unknown tree ${JSON.stringify(v)} ${label}`); return null; }
+      const key = spec.tree + "|" + [...spec.rotated].sort().join(",");
+      if (cache.has(key)) return cache.get(key);
+      let root;
+      try { root = parseTree(spec.tree); } catch (e) { err(`floorplan: ${e.message} ${label}`); cache.set(key, null); return null; }
+      return makeState(root, new Set(spec.rotated), key, label);
+    }
+    function makeState(root, rot, key, label = "") {
+      const walk = walkOf(root);
+      const seen = new Set(walk);
+      if (walk.length !== seen.size) err(`floorplan: tree ${treeStr(root)} uses a block twice ${label}`);
+      for (const id of walk) if (!BASE[id]) err(`floorplan: tree ${treeStr(root)} has unknown block ${id} ${label}`);
+      const missing = IDS.filter((id) => !seen.has(id));
+      if (missing.length) err(`floorplan: tree ${treeStr(root)} misses ${missing.join(", ")} ${label}`);
+      for (const r of rot) if (!BASE[r]) err(`floorplan: rotated block ${r} is unknown ${label}`);
+      const dims = {};
+      for (const m of MODS) dims[m.id] = rot.has(m.id) ? { w: m.h, h: m.w } : { w: m.w, h: m.h };
+      const { pack, steps } = packTree(root, dims);
+      const parent = {};
+      (function rec(n) { if (!n) return; if (n.left) { parent[n.left.id] = [n.id, "left"]; rec(n.left); } if (n.right) { parent[n.right.id] = [n.id, "right"]; rec(n.right); } })(root);
+      const rects = Object.values(pack);
+      const bw = rects.length ? Math.max(...rects.map((r) => r.x + r.w)) : 0, bh = rects.length ? Math.max(...rects.map((r) => r.y + r.h)) : 0;
+      const area = bw * bh, used = rects.reduce((s, r) => s + r.w * r.h, 0);
+      const st = {
+        key, root, rot, walk, pack, steps, parent, dims, str: treeStr(root),
+        bbox: [bw, bh], area, wasted: area - used, legal: bw <= OW && bh <= OH,
+        layout: layoutTree(root),
+      };
+      if (key) cache.set(key, st);
+      return st;
+    }
+
+    /* ---- geometry of the two panels ---- */
+    const TB = FP.treeBox || [20, 150, 370, 360];       // x, y, w, h of the tree drawing (stage units)
+    const GB = FP.gridBox || [430, 150, 506, 356];      // x, y, w, h of the floor drawing (the top band is for text)
+    const NR = FP.nodeRadius || 21;
+    function layoutTree(root) {
+      const order = [], depth = {};
+      (function rec(n, d) { if (!n) return; rec(n.left, d + 1); order.push(n.id); depth[n.id] = d; rec(n.right, d + 1); })(root, 0);
+      const maxD = Math.max(0, ...Object.values(depth));
+      const dx = TB[2] / Math.max(order.length, 1), dy = Math.min(78, (TB[3] - 2 * NR - 10) / Math.max(maxD, 1));
+      const pos = {};
+      order.forEach((id, i) => { pos[id] = [TB[0] + (i + 0.5) * dx, TB[1] + NR + 6 + depth[id] * dy]; });
+      return pos;
+    }
+    // units → stage: the floor spans the outline and every tree the lesson shows (so a too-wide row still fits)
+    let EXW = OW, EXH = OH;
+    if (FP.extent) { EXW = Math.max(EXW, FP.extent[0]); EXH = Math.max(EXH, FP.extent[1]); }
+    function grow(st) { if (st) { EXW = Math.max(EXW, st.bbox[0]); EXH = Math.max(EXH, st.bbox[1]); } }
+    let U = 1, OX = 0, OY = 0;
+    function fixScale() {
+      const padW = 0.25, padH = 0.25;
+      U = Math.min(GB[2] / (EXW + padW), GB[3] / (EXH + padH));
+      OX = GB[0] + 4; OY = GB[1] + GB[3] - 4;
+    }
+    const sx = (x) => OX + x * U, sy = (y) => OY - y * U;
+
+    /* ---- claims and the checker's own numbers ---- */
+    const claims = [];
+    const near = (a, b) => Math.abs(a - b) < 1e-9;
+    for (const c of FP.claims || sb.claims || []) {
+      const st = state(c.rotated ? { tree: c.tree, rotated: c.rotated } : c.tree, "(claim)");
+      if (!st) { claims.push({ claim: c, got: null, ok: false }); continue; }
+      const got = { tree: st.str, walk: st.walk.join(""), bbox: st.bbox, area: st.area, wasted: st.wasted, legal: st.legal };
+      let ok = true;
+      if (c.walk != null && c.walk.replace(/[^A-Za-z0-9_]/g, "") !== got.walk) ok = false;
+      if (c.bbox && !(near(c.bbox[0], st.bbox[0]) && near(c.bbox[1], st.bbox[1]))) ok = false;
+      for (const k of ["area", "wasted", "legal"]) if (c[k] != null && c[k] !== got[k]) ok = false;
+      for (const [id, p] of Object.entries(c.pos || {})) {
+        const r = st.pack[id];
+        got["pos" + id] = r ? [r.x, r.y] : null;
+        if (!r || !near(r.x, p[0]) || !near(r.y, p[1])) ok = false;
+      }
+      for (const [k, want] of Object.entries(c)) {
+        const m = /^(x|y|w|h)([A-Za-z0-9_]+)$/.exec(k);
+        if (m && st.pack[m[2]]) { got[k] = st.pack[m[2]][m[1]]; if (!near(got[k], want)) ok = false; }
+      }
+      claims.push({ claim: c, got, ok });
+      if (!ok) err(`claim failed: ${JSON.stringify(c)} -> ${JSON.stringify(got)}`);
+    }
+    // the checker JSON (build_lesson.py --data) carries every scene's pack: the engine must agree with it
+    let dataChecked = 0, dataDiffer = 0;
+    for (const [name, want] of Object.entries(DATA.expect || {})) {
+      const st = state(name, "(data)");
+      if (!st) continue;
+      dataChecked++;
+      for (const [id, r] of Object.entries(want)) {
+        const g = st.pack[id];
+        if (!g || !near(g.x, r.x) || !near(g.y, r.y) || !near(g.w, r.w) || !near(g.h, r.h)) {
+          dataDiffer++;
+          err(`engine and checker disagree on ${name}: ${id} engine ${JSON.stringify(g)} checker ${JSON.stringify(r)}`);
+          break;
+        }
+      }
+    }
+
+    /* ---- tracks ---- */
+    const PANELS = { both: [1, 1], tree: [1, 0.22], grid: [0.22, 1], none: [0, 0] };
+    const tracks = {
+      tree: { init: FP.start || Object.keys(NAMED)[0], conv: (v) => v, dur: DUR_TREE, mix: null },
+      placed: { init: "all", conv: (v) => v, dur: DUR_PLACE, mix: null, checkDur: STAGGER },
+      camera: { init: "full", conv: "camera", dur: 1.3, mix: (a, b, p) => cx.mixArr(a, b, p) },
+      panel: { init: "both", conv: (v) => { if (!PANELS[v]) { err(`floorplan: panel must be both, tree, grid or none, not ${v}`); return PANELS.both; } return PANELS[v]; }, dur: DUR_PANEL, mix: (a, b, p) => cx.mixArr(a, b, p) },
+      dim: { init: 1, conv: (v) => +v, dur: 0.6, mix: lerp },
+    };
+    let panelAt, dimAt, TREE_KEYS, PLACE_KEYS;
+    function ready() {
+      panelAt = cx.track("panel"); dimAt = cx.track("dim");
+      TREE_KEYS = cx.keys("tree").map(([t, v, ref]) => ({ t, st: state(v, `(tree key ${ref})`) }));
+      for (const k of TREE_KEYS) grow(k.st);
+      for (const o of sb.overlays || []) if (o.type === "thumbs") for (const it of o.items || []) state(it.tree, "(thumbs)");
+      fixScale();
+      PLACE_KEYS = cx.keys("placed").map(([t, v, ref]) => {
+        let n = v;
+        if (v === "all") n = IDS.length; else if (v === "none") n = 0;
+        else if (typeof v === "string" && /^@?[A-Za-z0-9_]+$/.test(v) && !/^\d+$/.test(v)) n = { upTo: v.replace(/^@/, "") };
+        else n = +v;
+        if (typeof n === "number" && !(n >= 0 && n <= IDS.length)) err(`floorplan: placed must be 0..${IDS.length}, "all", "none" or a block name (key ${ref})`);
+        return { t, n, ref };
+      });
+    }
+    function treeSeg(t) {
+      let i = 0;
+      for (let k = 0; k < TREE_KEYS.length; k++) if (TREE_KEYS[k].t <= t) i = k;
+      return { cur: TREE_KEYS[i].st, prev: i > 0 ? TREE_KEYS[i - 1].st : TREE_KEYS[i].st, t0: TREE_KEYS[i].t, i };
+    }
+    /** When does each block land? Keys of "placed" count blocks in the walk order of the tree shown at that key.
+     *  A jump of several blocks drops them one after the other, STAGGER seconds apart. */
+    function placeTimes(t) {
+      const at = {}; // id → time it starts falling (or undefined = not placed)
+      let count = 0;
+      for (const k of PLACE_KEYS) {
+        if (k.t > t) break;
+        const st = treeSeg(k.t).cur;
+        if (!st) continue;
+        let n = k.n;
+        if (typeof n === "object") { const j = st.walk.indexOf(n.upTo); n = j < 0 ? count : j + 1; }
+        if (k.t === 0 && k.ref === "initial") { st.walk.slice(0, n).forEach((id) => { at[id] = -1e9; }); count = n; continue; }
+        if (n > count) st.walk.slice(count, n).forEach((id, j) => { at[id] = k.t + j * STAGGER * D; });
+        else if (n < count) st.walk.slice(n).forEach((id) => { delete at[id]; });
+        count = n;
+      }
+      return at;
+    }
+
+    /* ---- geometry at time t (units for blocks, stage px for tree nodes) ---- */
+    function geomAt(t, F) {
+      let A, B, q;
+      if (F) { A = F.prev; B = F.cur; q = ease(clamp((performance.now() - F.t0) / (reduce() ? 1 : DUR_FREE))); }
+      else { const s = treeSeg(t); A = s.prev; B = s.cur; q = ease((t - s.t0) / (DUR_TREE * D)); }
+      if (!B) return null;
+      if (!A) A = B;
+      const at = F ? Object.fromEntries(IDS.map((id) => [id, -1e9])) : placeTimes(t);
+      const nodes = {}, rects = {}, nodeFill = {};
+      for (const id of IDS) {
+        const pa = A.layout[id] || B.layout[id], pb = B.layout[id] || pa;
+        nodes[id] = [lerp(pa[0], pb[0], q), lerp(pa[1], pb[1], q)];
+        const ra = A.pack[id] || B.pack[id], rb = B.pack[id] || ra;
+        const turning = A.rot.has(id) !== B.rot.has(id);
+        let r;
+        if (turning) {
+          // a turn: the block keeps A's shape and rotates 90° about its moving centre (so it ends as B's shape)
+          const ca = [ra.x + ra.w / 2, ra.y + ra.h / 2], cb = [rb.x + rb.w / 2, rb.y + rb.h / 2];
+          const c = [lerp(ca[0], cb[0], q), lerp(ca[1], cb[1], q)], ang = 90 * q;
+          const rad = (ang * Math.PI) / 180, ew = Math.abs(ra.w * Math.cos(rad)) + Math.abs(ra.h * Math.sin(rad)), eh = Math.abs(ra.w * Math.sin(rad)) + Math.abs(ra.h * Math.cos(rad));
+          r = { x: c[0] - ew / 2, y: c[1] - eh / 2, w: ew, h: eh, cx: c[0], cy: c[1], bw: ra.w, bh: ra.h, ang };
+        } else {
+          r = { x: lerp(ra.x, rb.x, q), y: lerp(ra.y, rb.y, q), w: lerp(ra.w, rb.w, q), h: lerp(ra.h, rb.h, q), ang: 0 };
+          r.cx = r.x + r.w / 2; r.cy = r.y + r.h / 2; r.bw = r.w; r.bh = r.h;
+        }
+        // placement: fly from the tree node to above the slot, then fall onto the skyline
+        const t0 = at[id];
+        let p = t0 == null ? -1 : clamp((t - t0) / (DUR_PLACE * D), 0, 1);
+        if (t0 != null && t0 < -1e8) p = 1;
+        r.p = p; r.landed = p >= 1;
+        rects[id] = r;
+        nodeFill[id] = p < 0 ? 0 : clamp(p * 3);
+      }
+      const moving = q < 0.999 || Object.values(rects).some((r) => r.p >= 0 && r.p < 1);
+      return { A, B, q, nodes, rects, nodeFill, cur: B, moving };
+    }
+    const reduce = () => cx.reduce;
+    /** Skyline of the landed blocks: the highest top over each stretch of x, from 0 to the right end. */
+    function skyline(rects) {
+      const rs = Object.values(rects).filter((r) => r.landed);
+      const xs = new Set([0]);
+      for (const r of rs) { xs.add(r.x); xs.add(r.x + r.w); }
+      const pts = [...xs].sort((a, b) => a - b);
+      const segs = [];
+      for (let i = 0; i + 1 < pts.length; i++) {
+        const a = pts[i], b = pts[i + 1], mid = (a + b) / 2;
+        let h = 0;
+        for (const r of rs) if (r.x <= mid && mid <= r.x + r.w) h = Math.max(h, r.y + r.h);
+        segs.push([a, b, h]);
+      }
+      return segs;
+    }
+    function bboxOf(rects) {
+      const rs = Object.values(rects).filter((r) => r.landed);
+      if (!rs.length) return null;
+      return [Math.max(...rs.map((r) => r.x + r.w)), Math.max(...rs.map((r) => r.y + r.h)), rs];
+    }
+    const round1 = (v) => Math.round(v * 10) / 10;
+    const num = (v) => (Math.abs(v - Math.round(v)) < 0.05 ? String(Math.round(v)) : round1(v).toFixed(1));
+
+    /* ---- SVG ---- */
+    let gTree, gGrid, gEdges, gNodes, gBadges, gLinks, gBlocks, gFloor, gWaste, gSky, gBox, gBoxLab, gOver, gCoords;
+    let nodeEls = {}, blockEls = {}, edgeEls = new Map(), badgeEls = {}, linkEls = new Map(), coordEls = {};
+    let lastG = null;
+    function buildSvg() {
+      const { mk } = cx;
+      const defs = mk("defs");
+      const pat = mk("pattern", { id: "fp-hatch", width: 8, height: 8, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" }, defs);
+      mk("rect", { width: 8, height: 8, class: "fp-hatch-bg" }, pat);
+      mk("line", { x1: 0, y1: 0, x2: 0, y2: 8, class: "fp-hatch-line" }, pat);
+      const pat2 = mk("pattern", { id: "fp-over", width: 9, height: 9, patternUnits: "userSpaceOnUse", patternTransform: "rotate(-45)" }, defs);
+      mk("line", { x1: 0, y1: 0, x2: 0, y2: 9, class: "fp-over-line" }, pat2);
+      gGrid = mk("g", { class: "fp-grid" });
+      gFloor = mk("g", {}, gGrid);
+      // unit grid inside the outline, the outline itself, the floor line, axis numbers
+      const gl = mk("g", { class: "fp-gridlines" }, gFloor);
+      for (let x = 1; x < OW; x++) mk("line", { x1: sx(x), y1: sy(0), x2: sx(x), y2: sy(OH) }, gl);
+      for (let y = 1; y < OH; y++) mk("line", { x1: sx(0), y1: sy(y), x2: sx(OW), y2: sy(y) }, gl);
+      gOver = mk("rect", { class: "fp-overzone", x: sx(OW), y: sy(EXH + 0.2), width: Math.max(0, sx(EXW + 0.2) - sx(OW)), height: sy(0) - sy(EXH + 0.2) }, gFloor);
+      const gOverT = mk("rect", { class: "fp-overzone", x: sx(0), y: sy(EXH + 0.2), width: sx(OW) - sx(0), height: Math.max(0, sy(OH) - sy(EXH + 0.2)) }, gFloor);
+      gOver = [gOver, gOverT];
+      mk("rect", { class: "fp-outline", x: sx(0), y: sy(OH), width: OW * U, height: OH * U }, gFloor);
+      mk("line", { class: "fp-floorline", x1: sx(0) - 8, y1: sy(0), x2: sx(EXW) + 8, y2: sy(0) }, gFloor);
+      const ax = mk("g", { class: "fp-axis" }, gFloor);
+      for (let x = 0; x <= Math.ceil(EXW); x += 1) if (x % 2 === 0 || x === OW) mk("text", { x: sx(x), y: sy(0) + 17 }, ax).textContent = String(x);
+      for (let y = 2; y <= OH; y += 2) mk("text", { x: sx(0) - 12, y: sy(y) + 1, class: "fp-axis-y" }, ax).textContent = String(y);
+      mk("text", { class: "fp-outline-lab", x: sx(OW) - 6, y: sy(OH) + 18 }, gFloor).textContent = `${OW} × ${OH}`;
+      gWaste = mk("rect", { class: "fp-waste" }, gGrid);
+      gBlocks = mk("g", {}, gGrid);
+      for (const id of IDS) {
+        const g = mk("g", { class: "fpk fpb", tabindex: 0, role: "button", "aria-label": fill(T.blockAria, { n: id }) }, gBlocks);
+        const r = mk("rect", { rx: 3, fill: COLORS[id], stroke: COLORS[id] }, g);
+        const tx = mk("text", { class: "fp-bid" }, g); tx.textContent = id;
+        const dm = mk("text", { class: "fp-dim" }, g);
+        g.addEventListener("click", () => clickBlock(id));
+        g.addEventListener("keydown", (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); clickBlock(id); } });
+        blockEls[id] = { g, r, tx, dm };
+      }
+      gSky = mk("polyline", { class: "fp-sky" }, gGrid);
+      gBox = mk("rect", { class: "fp-bbox" }, gGrid);
+      gBoxLab = mk("g", { class: "fp-bboxlab" }, gGrid);
+      mk("rect", { rx: 6, height: 26 }, gBoxLab); mk("text", { y: 13 }, gBoxLab);
+      gCoords = mk("g", { class: "fp-coords" }, gGrid);
+      for (const id of IDS) { const g = mk("g", {}, gCoords); mk("circle", { r: 4.5 }, g); mk("text", { x: 7, y: -8 }, g); coordEls[id] = g; }
+
+      gTree = mk("g", { class: "fp-tree" });
+      gEdges = mk("g", {}, gTree);
+      gLinks = mk("g", { class: "fp-links" }, gTree);
+      gNodes = mk("g", {}, gTree);
+      gBadges = mk("g", { class: "fp-badges" }, gTree);
+      for (const id of IDS) {
+        const g = mk("g", { class: "fpk fpn", tabindex: 0, role: "button", "aria-label": fill(T.blockAria, { n: id }) }, gNodes);
+        const ring = mk("circle", { r: NR + 6, class: "fp-ring" }, g);
+        const c = mk("circle", { r: NR, stroke: COLORS[id] }, g);
+        const tx = mk("text", { y: 1 }, g); tx.textContent = id;
+        g.addEventListener("click", () => clickBlock(id));
+        g.addEventListener("keydown", (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); clickBlock(id); } });
+        nodeEls[id] = { g, c, tx, ring };
+        const b = mk("g", {}, gBadges); mk("circle", { r: 10.5 }, b); mk("text", { y: 1 }, b); badgeEls[id] = b;
+      }
+    }
+    function edgeEl(key, side) {
+      if (edgeEls.has(key)) return edgeEls.get(key);
+      const ln = cx.mk("line", { class: "fp-edge " + side }, gEdges);
+      edgeEls.set(key, ln); return ln;
+    }
+    function linkEl(key, side) {
+      if (linkEls.has(key)) return linkEls.get(key);
+      const g = cx.mk("g", { class: "fp-link " + side }, gLinks);
+      cx.mk("rect", { rx: 5, height: 22 }, g); cx.mk("text", { y: 11 }, g).textContent = side === "left" ? lab("nextDoor") : lab("upstairs");
+      const w = side === "left" ? lab("nextDoor").length : lab("upstairs").length;
+      g.firstChild.setAttribute("width", w * 7.4 + 14); g.firstChild.setAttribute("x", -(w * 7.4 + 14) / 2);
+      linkEls.set(key, g); return g;
+    }
+
+    /* ---- widgets ---- */
+    let counter, cl, cv, cbox, legalW, lv;
+    function buildWidgets() {
+      const W = sb.widgets || {};
+      counter = cx.widget("ov-counter", W.counter || { x: 80, y: 3 }, `<div class="counter fp-counter"><span class="l"></span><span class="v">0</span></div>`);
+      cl = counter.querySelector(".l"); cv = counter.querySelector(".v"); cbox = counter.querySelector(".counter");
+      legalW = cx.widget("ov-legal", W.legal || { x: 46, y: 21.5 }, `<div class="fp-legal"><span class="v"></span></div>`);
+      lv = legalW.querySelector(".v");
+      return [{ d: counter, label: "counter" }, { d: legalW, label: "legal badge" }];
+    }
+    function metricOf(name, G) {
+      const bb = bboxOf(G.rects);
+      if (/^[xy]:/.test(name)) {
+        const [axis, id] = name.split(":"); const r = G.rects[id];
+        return r && r.landed ? r[axis] : null;
+      }
+      if (!bb) return name === "placed" ? 0 : null;
+      const [w, h, rs] = bb;
+      if (name === "area") return w * h;
+      if (name === "width") return w;
+      if (name === "height") return h;
+      if (name === "wasted") return w * h - rs.reduce((s, r) => s + r.bw * r.bh, 0);
+      if (name === "placed") return rs.length;
+      err(`floorplan: unknown counter metric ${name}`); return null;
+    }
+    const metricLabel = (w) => {
+      if (w.label) return L(w.label);
+      const m = w.metric || "area";
+      if (m.startsWith("x:")) return fill(T.mX, { n: m.slice(2) });
+      if (m.startsWith("y:")) return fill(T.mY, { n: m.slice(2) });
+      return { area: T.mArea, width: T.mWidth, height: T.mHeight, wasted: T.mWasted, placed: "placed" }[m] || m;
+    };
+
+    /* ---- render ---- */
+    function render(t, F, layer) {
+      const G = layer === "widgets" ? lastG : geomAt(t, F);
+      if (!G) return;
+      if (layer === "widgets") return renderWidgets(t, F, G);
+      lastG = G;
+      const setOp = cx.setOp;
+      const [pTree, pGrid] = F ? [1, 1] : panelAt(t);
+      const dim = F ? 1 : dimAt(t);
+      setOp(gTree, pTree * dim); setOp(gGrid, pGrid * dim);
+      const on = (name) => !!F || !!cx.win(name, t);
+      const hl = new Set(F ? (F.sel ? [F.sel] : []) : cx.wins("highlight", t).flatMap((w) => w.ids || []));
+
+      // tree edges: the union of the two trees' links, fading in and out during a change
+      const want = new Map();
+      const addEdges = (st, op) => { for (const [c, [p, side]] of Object.entries(st.parent)) { const k = `${p}>${c}>${side}`; want.set(k, Math.max(want.get(k) || 0, op)); } };
+      addEdges(G.A, 1 - G.q); addEdges(G.B, G.q);
+      for (const [k, el] of edgeEls) if (!want.has(k)) setOp(el, 0);
+      const showLinks = cx.win("links", t);
+      const linkIds = showLinks && showLinks.ids ? new Set(showLinks.ids) : null;
+      for (const [k, el] of linkEls) if (!want.has(k) || !showLinks) setOp(el, 0);
+      for (const [k, op] of want) {
+        const [p, c, side] = k.split(">");
+        const el = edgeEl(k, side);
+        const [x1, y1] = G.nodes[p], [x2, y2] = G.nodes[c];
+        const len = Math.hypot(x2 - x1, y2 - y1) || 1, ux = (x2 - x1) / len, uy = (y2 - y1) / len;
+        el.setAttribute("x1", (x1 + ux * NR).toFixed(1)); el.setAttribute("y1", (y1 + uy * NR).toFixed(1));
+        el.setAttribute("x2", (x2 - ux * NR).toFixed(1)); el.setAttribute("y2", (y2 - uy * NR).toFixed(1));
+        setOp(el, op);
+        if (showLinks && !F && (!linkIds || linkIds.has(c))) {
+          const g = linkEl(k, side);
+          const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, off = side === "left" ? -1 : 1;
+          g.setAttribute("transform", `translate(${(mx + off * 34).toFixed(1)} ${(my - 4).toFixed(1)})`);
+          setOp(g, op * clamp((t - showLinks.a) / 0.4));
+        }
+      }
+      // tree nodes: hollow until their block is picked up, then filled with the block's colour
+      const walkW = !F && cx.win("walk", t);
+      IDS.forEach((id) => {
+        const N = nodeEls[id], [x, y] = G.nodes[id], f = G.nodeFill[id];
+        N.g.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+        N.c.setAttribute("fill", f >= 0.5 ? COLORS[id] : "var(--surface)");
+        N.c.style.fillOpacity = f >= 0.5 ? 1 : 1;
+        N.tx.setAttribute("fill", f >= 0.5 ? "#fff" : COLORS[id]);
+        N.g.classList.toggle("hl", hl.has(id));
+        const bi = G.B.walk.indexOf(id), b = badgeEls[id];
+        b.setAttribute("transform", `translate(${(x + NR * 0.86).toFixed(1)} ${(y - NR * 0.86).toFixed(1)})`);
+        b.lastChild.textContent = String(bi + 1);
+        setOp(b, walkW ? clamp((t - (walkW.a + walkW.stagger * bi)) / 0.3) : 0);
+      });
+
+      // blocks
+      const dimsOn = cx.win("dims", t), coordsW = cx.win("coords", t);
+      const coordIds = coordsW && coordsW.ids ? new Set(coordsW.ids) : null;
+      IDS.forEach((id) => {
+        const E = blockEls[id], r = G.rects[id];
+        if (r.p < 0) { setOp(E.g, 0); setOp(coordEls[id], 0); E.g.setAttribute("aria-hidden", "true"); return; }
+        E.g.removeAttribute("aria-hidden");
+        let x = sx(r.cx - r.bw / 2), w = r.bw * U, h = r.bh * U, yTop = sy(r.cy + r.bh / 2), op = 1, ang = r.ang;
+        if (r.p < 1) {
+          // fly (0..0.42): from the node, growing, to 2.4 units above the slot; fall (0.42..1): ease-in onto the skyline
+          const [nx, ny] = G.nodes[id];
+          const hoverTop = Math.max(GB[1] - 30, yTop - 2.4 * U);
+          if (r.p < 0.42) {
+            const k = ease(r.p / 0.42);
+            const w0 = 2 * NR, h0 = 2 * NR;
+            x = lerp(nx - w0 / 2, x, k); const top = lerp(ny - h0 / 2, hoverTop, k);
+            w = lerp(w0, w, k); h = lerp(h0, h, k); yTop = top; op = clamp(0.35 + k);
+          } else {
+            const k = (r.p - 0.42) / 0.58;
+            yTop = lerp(hoverTop, yTop, k * k);
+          }
+        }
+        E.r.setAttribute("x", (-w / 2).toFixed(1)); E.r.setAttribute("y", (-h / 2).toFixed(1));
+        E.r.setAttribute("width", Math.max(0, w - 2).toFixed(1)); E.r.setAttribute("height", Math.max(0, h - 2).toFixed(1));
+        E.r.setAttribute("transform", "translate(1 1)");
+        const ccx = x + w / 2, ccy = yTop + h / 2;
+        E.g.setAttribute("transform", `translate(${ccx.toFixed(1)} ${ccy.toFixed(1)}) rotate(${(-ang).toFixed(1)})`);
+        E.tx.setAttribute("x", 0); E.tx.setAttribute("y", dimsOn ? -7 : 1);
+        E.tx.setAttribute("transform", `rotate(${ang.toFixed(1)})`);
+        E.dm.textContent = `${num(r.bw)}×${num(r.bh)}`; E.dm.setAttribute("y", 14); E.dm.setAttribute("transform", `rotate(${ang.toFixed(1)})`);
+        setOp(E.dm, dimsOn ? 1 : 0);
+        setOp(E.g, op);
+        E.g.classList.toggle("hl", hl.has(id));
+        const out = r.x + r.w > OW + 1e-6 || r.y + r.h > OH + 1e-6;
+        E.g.classList.toggle("out", r.landed && out);
+        const cg = coordEls[id];
+        if (coordsW && r.landed && (!coordIds || coordIds.has(id))) {
+          cg.setAttribute("transform", `translate(${sx(r.x).toFixed(1)} ${sy(r.y).toFixed(1)})`);
+          // on the floor the label sits inside the block's lower-left corner; higher up, just under the corner
+          // (inside whatever holds the block up), so it never covers the block's own letter
+          cg.lastChild.setAttribute("y", r.y > 0.01 ? 16 : -8);
+          cg.lastChild.textContent = `(${num(r.x)}, ${num(r.y)})`;
+          setOp(cg, clamp((t - coordsW.a) / 0.4));
+        } else setOp(cg, 0);
+      });
+
+      // skyline, bounding box, wasted squares, the zone outside the outline
+      const sky = skyline(G.rects), bb = bboxOf(G.rects);
+      const skyW = cx.win("skyline", t);
+      if (skyW || F) {
+        const pts = [];
+        const right = Math.max(EXW, bb ? bb[0] : 0);
+        for (const [a, b2, h] of sky) { pts.push(`${sx(a).toFixed(1)},${sy(h).toFixed(1)}`, `${sx(b2).toFixed(1)},${sy(h).toFixed(1)}`); }
+        const lastX = sky.length ? sky[sky.length - 1][1] : 0;
+        if (lastX < right) pts.push(`${sx(lastX).toFixed(1)},${sy(0).toFixed(1)}`, `${sx(right).toFixed(1)},${sy(0).toFixed(1)}`);
+        gSky.setAttribute("points", pts.join(" "));
+        setOp(gSky, F ? 1 : clamp((t - skyW.a) / 0.4));
+      } else setOp(gSky, 0);
+      const boxW = cx.win("bbox", t), wasteW = cx.win("wasted", t);
+      if (bb && (boxW || F)) {
+        const [w, h] = bb;
+        for (const [k, v] of Object.entries({ x: sx(0), y: sy(h), width: w * U, height: h * U })) gBox.setAttribute(k, v.toFixed(1));
+        setOp(gBox, F ? 1 : clamp((t - boxW.a) / 0.4));
+        const txt = `${num(w)} × ${num(h)} = ${num(w * h)}`;
+        gBoxLab.lastChild.textContent = txt;
+        const lw = txt.length * 8.6 + 16;
+        gBoxLab.firstChild.setAttribute("width", lw); gBoxLab.firstChild.setAttribute("x", -lw / 2);
+        gBoxLab.lastChild.setAttribute("x", 0);
+        gBoxLab.setAttribute("transform", `translate(${(sx(w) - lw / 2 - 2).toFixed(1)} ${(sy(h) - 32).toFixed(1)})`);
+        setOp(gBoxLab, G.moving ? 0 : F ? 1 : clamp((t - boxW.a) / 0.4));
+      } else { setOp(gBox, 0); setOp(gBoxLab, 0); }
+      if (bb && wasteW && !F) {
+        const [w, h] = bb;
+        for (const [k, v] of Object.entries({ x: sx(0), y: sy(h), width: w * U, height: h * U })) gWaste.setAttribute(k, v.toFixed(1));
+        setOp(gWaste, clamp((t - wasteW.a) / 0.4));
+      } else setOp(gWaste, 0);
+      const sticking = bb && (bb[0] > OW + 1e-6 || bb[1] > OH + 1e-6);
+      gOver.forEach((g) => setOp(g, sticking ? 1 : 0));
+    }
+    function renderWidgets(t, F, G) {
+      const cw = F ? { metric: "area", a: -1, b: 1e9 } : cx.win("counter", t);
+      if (cw) {
+        if (F) counter.style.opacity = 1; else cx.ovStyle(counter, t, cw.a, cw.b);
+        cl.textContent = metricLabel(cw);
+        const v = metricOf(cw.metric || "area", G);
+        // while blocks move the counter counts in whole numbers; at rest it shows the exact value
+        cv.textContent = v == null ? "–" : G.moving ? String(Math.round(v)) : num(v);
+        cbox.classList.toggle("bad", v != null && cw.bad != null && Math.round(v) >= cw.bad);
+        cbox.classList.toggle("good", v != null && cw.good != null && Math.round(v) <= cw.good && Math.abs(v - Math.round(v)) < 0.05);
+      } else counter.style.opacity = 0;
+      const lw = F ? { a: -1, b: 1e9 } : cx.win("legal", t);
+      const bb = bboxOf(G.rects);
+      if (lw && bb) {
+        if (F) legalW.style.opacity = 1; else cx.ovStyle(legalW, t, lw.a, lw.b);
+        const ok = bb[0] <= OW + 1e-6 && bb[1] <= OH + 1e-6;
+        lv.textContent = (ok ? "✓ " : "✗ ") + fill(ok ? T.fits : T.sticks, { w: OW, h: OH });
+        legalW.firstChild.className = "fp-legal " + (ok ? "yes" : "no");
+      } else legalW.style.opacity = 0;
+    }
+
+    /* ---- thumbnails (overlay "thumbs": items { tree, rotated?, label?, best?, bestLabel? }) ---- */
+    function thumb(item) {
+      const st = state(item.rotated ? { tree: item.tree, rotated: item.rotated } : item.tree, "(thumbs)");
+      if (!st) return "";
+      // show the packed blocks with a little room around them, the floor line, and the outline's edge if it is close
+      const W = Math.max(st.bbox[0], Math.min(OW, st.bbox[0] + 1)) + 0.4, H = st.bbox[1] + 1.2, u = 20;
+      let s = `<svg viewBox="-6 -6 ${W * u + 12} ${H * u + 12}" aria-hidden="true">`;
+      s += `<line x1="-4" y1="${H * u}" x2="${W * u + 4}" y2="${H * u}" stroke="var(--ink)" stroke-width="3"/>`;
+      if (OW <= W) s += `<line x1="${OW * u}" y1="0" x2="${OW * u}" y2="${H * u}" stroke="var(--line)" stroke-width="2" stroke-dasharray="6 5"/>`;
+      for (const [id, r] of Object.entries(st.pack)) {
+        const x = r.x * u, y = (H - r.y - r.h) * u;
+        s += `<rect x="${x + 1}" y="${y + 1}" width="${r.w * u - 2}" height="${r.h * u - 2}" rx="2" fill="${COLORS[id]}"/><text x="${x + (r.w * u) / 2}" y="${y + (r.h * u) / 2 + 1}" fill="#fff" font-size="15" font-weight="700" text-anchor="middle" dominant-baseline="central" font-family="Source Sans 3, sans-serif">${esc(id)}</text>`;
+      }
+      s += `<rect x="0" y="${(H - st.bbox[1]) * u}" width="${st.bbox[0] * u}" height="${st.bbox[1] * u}" fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="7 5"/></svg>`;
+      const best = item.best ? `<span class="ok" data-a="${resolve(item.best, "(thumb best)").toFixed(3)}">${esc(L(item.bestLabel) || "best")}</span>` : "";
+      const cap = item.label ? L(item.label) : `${st.bbox[0]} × ${st.bbox[1]} = ${st.area}`;
+      return `<div class="thumb fp-thumb${item.best ? " best" : ""}">${s}<span class="c">${cx.md(cap)}</span>${best}</div>`;
+    }
+
+    /* ---- try it yourself: swap two, turn one, move a leaf ---- */
+    const OPS = (sb.bench && sb.bench.ops) || ["swap", "turn", "move"];
+    let mode = OPS[0];
+    function benchHtml() {
+      const names = { swap: T.opSwap, turn: T.opTurn, move: T.opMove };
+      return `<div class="row fp-ops" role="group">${OPS.map((o) => `<button class="btn" type="button" data-op="${o}" aria-pressed="${o === mode}">${esc(names[o] || o)}</button>`).join("")}<button class="btn" type="button" data-act="fp-reset">${esc(T.opReset)}</button></div>
+      <p>${esc(T.fpHint)}</p>
+      <div class="readout">${esc(T.fpStart)}</div>`;
+    }
+    function describe(st, prefix) {
+      return `${esc(prefix)}${esc(T.tree)} <b>${esc(st.str)}</b>${st.rot.size ? ` (${[...st.rot].join(", ")} ↻)` : ""}<br>${esc(T.box)} ${st.bbox[0]} × ${st.bbox[1]} = <b>${st.area}</b> · ${esc(T.wasted)} ${st.wasted} · ` +
+        (st.legal ? `<span class="ok">${esc(fill(T.fits, { w: OW, h: OH }))}</span>` : `<span class="no">${esc(fill(T.sticks, { w: OW, h: OH }))}</span>`);
+    }
+    function lessonState() { return treeSeg(cx.au.currentTime).cur; }
+    function freeStart() {
+      const st = lessonState();
+      cx.enterFree({ cur: st, prev: st, t0: performance.now() - DUR_FREE, sel: null, start: st });
+      cx.readout.innerHTML = describe(st, "");
+    }
+    let freeRaf = 0;
+    function animateFree() {
+      cancelAnimationFrame(freeRaf);
+      const step = () => { if (!cx.FREE) return; cx.render(); if (performance.now() - cx.FREE.t0 < DUR_FREE + 30) freeRaf = requestAnimationFrame(step); };
+      freeRaf = requestAnimationFrame(step);
+    }
+    function apply(next, msg) {
+      const F = cx.FREE;
+      grow(next);
+      F.prev = F.cur; F.cur = next; F.t0 = performance.now(); F.sel = null;
+      cx.readout.innerHTML = describe(next, msg);
+      animateFree();
+    }
+    function findNode(root, id) { if (!root) return null; if (root.id === id) return root; return findNode(root.left, id) || findNode(root.right, id); }
+    function clickBlock(id) {
+      if (!cx.FREE) freeStart();
+      const F = cx.FREE, st = F.cur;
+      if (mode === "turn") {
+        const rot = new Set(st.rot); rot.has(id) ? rot.delete(id) : rot.add(id);
+        return apply(makeState(cloneTree(st.root), rot, null), fill(T.turned, { a: id }));
+      }
+      if (!F.sel) {
+        if (mode === "move") {
+          const n = findNode(st.root, id);
+          if (n.left || n.right) { cx.readout.textContent = fill(T.pickLeaf, { a: id }); return; }
+          F.sel = id; cx.readout.textContent = fill(T.pickTarget, { a: id }); return cx.render();
+        }
+        F.sel = id; cx.readout.textContent = fill(T.pickSecond, { a: id }); return cx.render();
+      }
+      const a = F.sel;
+      if (a === id) { F.sel = null; cx.readout.textContent = T.sameBlock; return cx.render(); }
+      if (mode === "swap") {
+        const root = cloneTree(st.root);
+        (function rec(n) { if (!n) return; if (n.id === a) n.id = id; else if (n.id === id) n.id = a; rec(n.left); rec(n.right); })(root);
+        // the shapes travel with the names (a turned block stays turned)
+        return apply(makeState(root, new Set(st.rot), null), fill(T.swapped, { a, b: id }));
+      }
+      // move: cut leaf a, hang it under id (left slot first, else right)
+      const root = cloneTree(st.root);
+      const tgt = findNode(root, id);
+      if (tgt.left && tgt.right) { cx.readout.textContent = fill(T.noSlot, { b: id }); F.sel = null; return cx.render(); }
+      (function cut(n) { if (!n) return; if (n.left && n.left.id === a) n.left = null; else if (n.right && n.right.id === a) n.right = null; else { cut(n.left); cut(n.right); } })(root);
+      const t2 = findNode(root, id), side = !t2.left ? "left" : "right";
+      t2[side] = { id: a, left: null, right: null };
+      return apply(makeState(root, new Set(st.rot), null), fill(T.moved, { a, b: id, side: side === "left" ? T.sideLeft : T.sideRight }));
+    }
+    function bindBench() {
+      const btns = [...cx.root.querySelectorAll(".fp-ops [data-op]")];
+      btns.forEach((b) => b.addEventListener("click", () => {
+        mode = b.dataset.op; btns.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+        if (cx.FREE) { cx.FREE.sel = null; cx.render(); }
+      }));
+      const rs = cx.root.querySelector('[data-act="fp-reset"]');
+      if (rs) rs.addEventListener("click", () => { if (!cx.FREE) freeStart(); else apply(cx.FREE.start, ""); });
+    }
+
+    function boxes(s, kx, ky, cam) {
+      const out = [];
+      if (!lastG) return out;
+      const op = (el) => +(el.style.opacity === "" ? 1 : el.style.opacity);
+      if (op(gTree) >= 0.6) IDS.forEach((id) => {
+        const [x, y] = lastG.nodes[id], X = (x - cam[0]) * kx, Y = (y - cam[1]) * ky, r = NR * kx;
+        out.push({ kind: "node", label: id, x: X - r, y: Y - r, w: 2 * r, h: 2 * r });
+      });
+      if (op(gGrid) >= 0.6) IDS.forEach((id) => {
+        const r = lastG.rects[id];
+        if (r.p < 0 || op(blockEls[id].g) < 0.6) return;
+        const bb = blockEls[id].g.getBoundingClientRect();
+        // a block is big: only its centre matters for legibility, so give the checker a box around its letter
+        const X = bb.left - s.left + bb.width / 2, Y = bb.top - s.top + bb.height / 2, h = Math.min(bb.height, 34 * ky), w = Math.min(bb.width, 34 * kx);
+        out.push({ kind: "node", label: `block ${id}`, x: X - w / 2, y: Y - h / 2, w, h });
+      });
+      return out;
+    }
+
+    return {
+      tracks, claims, ready, benchHtml, buildSvg, buildWidgets, render, thumb, boxes, bindBench,
+      svgLabel: T.fpStage, bannerText: T.yourTree, pausedText: T.fpPaused,
+      leaveFree() { cx.readout.textContent = T.fpBack; },
+      expose() {
+        return {
+          floorplan: {
+            dataChecked, dataDiffer, outline: [OW, OH], unit: U,
+            pack(name) { const st = state(name); return st && { tree: st.str, walk: st.walk, pack: st.pack, bbox: st.bbox, area: st.area, wasted: st.wasted, legal: st.legal }; },
+            at(t) { const G = geomAt(t, null); return G && { tree: G.cur.str, rects: G.rects, skyline: skyline(G.rects) }; },
+          },
+        };
+      },
+    };
+  };
+
+  window.LessonEngine = { mount, parseTree, packTree, treeStr };
+})();
+
+</script>
+<script>
+LessonEngine.mount({"sb": {"scene": "floorplan", "pageTitle": {"en": "Lab 05 · Part 4: Too wide: turn a block", "fr": "Lab 05 · Partie 4 : Trop large : tourner un bloc"}, "eyebrow": {"en": "Lab 05 · B*-tree · animated lesson, part 4 of 5", "fr": "Lab 05 · Arbre B* · leçon animée, partie 4 sur 5"}, "title": {"en": "Too wide: turn a block", "fr": "Trop large : tourner un bloc"}, "lede": {"en": "A row of five blocks sticks out of the outline; turning one block on its side makes it fit. Click any block to try a swap, a turn or a move. <a href=\"../../index.html#video\">Back to the video parts<\/a>.", "fr": "Une rangée de cinq blocs dépasse du contour ; tourner un bloc sur le côté la fait tenir. Cliquez sur un bloc pour essayer un échange, une rotation ou un déplacement. <a href=\"../../index.html#video\">Retour aux parties vidéo<\/a>."}, "floorplan": {"start": "rotate_start", "labels": {"nextDoor": {"en": "next door", "fr": "à côté"}, "upstairs": {"en": "upstairs", "fr": "à l'étage"}}, "claims": [{"tree": "rotate_start", "walk": "ABCDE", "pos": {"D": [7, 0], "E": [10, 0]}, "wA": 3, "wB": 2, "wC": 2, "wD": 3, "hD": 1, "wE": 2, "bbox": [12, 3], "legal": false}, {"tree": "rotate_after", "pos": {"D": [7, 0], "E": [8, 0]}, "wD": 1, "hD": 3, "bbox": [10, 3], "legal": true}, {"tree": "golden", "bbox": [9, 3], "area": 27, "wasted": 4, "legal": true}, {"tree": "best", "bbox": [6, 4], "area": 24, "wasted": 1, "legal": true}], "data": {"outline": {"w": 10, "h": 8}, "modules": [{"id": "A", "w": 3, "h": 2}, {"id": "B", "w": 2, "h": 3}, {"id": "C", "w": 2, "h": 2}, {"id": "D", "w": 3, "h": 1}, {"id": "E", "w": 2, "h": 2}], "colors": {"A": "#1d4ed8", "B": "#0f6b5c", "C": "#b45309", "D": "#7c3aed", "E": "#be123c"}, "trees": {"golden": {"tree": "A(B(C(E,-),-),D)", "rotated": []}, "lift": {"tree": "C(B(A(E,-),-),D)", "rotated": []}, "order": {"tree": "A(B(C(-,E),D),-)", "rotated": []}, "floor": {"tree": "A(B(C(-,D(E,-)),-),-)", "rotated": ["A"]}, "swap_start": {"tree": "A(B(C(D,-),-),E)", "rotated": []}, "swap_after": {"tree": "A(B(C(E,-),-),D)", "rotated": []}, "rotate_start": {"tree": "A(B(C(D(E,-),-),-),-)", "rotated": []}, "rotate_after": {"tree": "A(B(C(D(E,-),-),-),-)", "rotated": ["D"]}, "move_start": {"tree": "A(B(C(D,-),-),E)", "rotated": []}, "move_after": {"tree": "A(B(C,D),E)", "rotated": []}, "best": {"tree": "A(D,C(E(B,-),-))", "rotated": []}}, "expect": {"golden": {"A": {"x": 0, "y": 0, "w": 3, "h": 2}, "B": {"x": 3, "y": 0, "w": 2, "h": 3}, "C": {"x": 5, "y": 0, "w": 2, "h": 2}, "D": {"x": 0, "y": 2, "w": 3, "h": 1}, "E": {"x": 7, "y": 0, "w": 2, "h": 2}}, "lift": {"A": {"x": 4, "y": 0, "w": 3, "h": 2}, "B": {"x": 2, "y": 0, "w": 2, "h": 3}, "C": {"x": 0, "y": 0, "w": 2, "h": 2}, "D": {"x": 0, "y": 3, "w": 3, "h": 1}, "E": {"x": 7, "y": 0, "w": 2, "h": 2}}, "order": {"A": {"x": 0, "y": 0, "w": 3, "h": 2}, "B": {"x": 3, "y": 0, "w": 2, "h": 3}, "C": {"x": 5, "y": 0, "w": 2, "h": 2}, "D": {"x": 3, "y": 4, "w": 3, "h": 1}, "E": {"x": 5, "y": 2, "w": 2, "h": 2}}, "floor": {"A": {"x": 0, "y": 0, "w": 2, "h": 3}, "B": {"x": 2, "y": 0, "w": 2, "h": 3}, "C": {"x": 4, "y": 0, "w": 2, "h": 2}, "D": {"x": 4, "y": 2, "w": 3, "h": 1}, "E": {"x": 7, "y": 0, "w": 2, "h": 2}}, "swap_start": {"A": {"x": 0, "y": 0, "w": 3, "h": 2}, "B": {"x": 3, "y": 0, "w": 2, "h": 3}, "C": {"x": 5, "y": 0, "w": 2, "h": 2}, "D": {"x": 7, "y": 0, "w": 3, "h": 1}, "E": {"x": 0, "y": 2, "w": 2, "h": 2}}, "swap_after": {"A": {"x": 0, "y": 0, "w": 3, "h": 2}, "B": {"x": 3, "y": 0, "w": 2, "h": 3}, "C": {"x": 5, "y": 0, "w": 2, "h": 2}, "D": {"x": 0, "y": 2, "w": 3, "h": 1}, "E": {"x": 7, "y": 0, "w": 2, "h": 2}}, "rotate_start": {"A": {"x": 0, "y": 0, "w": 3, "h": 2}, "B": {"x": 3, "y": 0, "w": 2, "h": 3}, "C": {"x": 5, "y": 0, "w": 2, "h": 2}, "D": {"x": 7, "y": 0, "w": 3, "h": 1}, "E": {"x": 10, "y": 0, "w": 2, "h": 2}}, "rotate_after": {"A": {"x": 0, "y": 0, "w": 3, "h": 2}, "B": {"x": 3, "y": 0, "w": 2, "h": 3}, "C": {"x": 5, "y": 0, "w": 2, "h": 2}, "D": {"x": 7, "y": 0, "w": 1, "h": 3}, "E": {"x": 8, "y": 0, "w": 2, "h": 2}}, "move_start": {"A": {"x": 0, "y": 0, "w": 3, "h": 2}, "B": {"x": 3, "y": 0, "w": 2, "h": 3}, "C": {"x": 5, "y": 0, "w": 2, "h": 2}, "D": {"x": 7, "y": 0, "w": 3, "h": 1}, "E": {"x": 0, "y": 2, "w": 2, "h": 2}}, "move_after": {"A": {"x": 0, "y": 0, "w": 3, "h": 2}, "B": {"x": 3, "y": 0, "w": 2, "h": 3}, "C": {"x": 5, "y": 0, "w": 2, "h": 2}, "D": {"x": 3, "y": 3, "w": 3, "h": 1}, "E": {"x": 0, "y": 2, "w": 2, "h": 2}}, "best": {"A": {"x": 0, "y": 0, "w": 3, "h": 2}, "B": {"x": 4, "y": 1, "w": 2, "h": 3}, "C": {"x": 0, "y": 2, "w": 2, "h": 2}, "D": {"x": 3, "y": 0, "w": 3, "h": 1}, "E": {"x": 2, "y": 2, "w": 2, "h": 2}}}}}, "anchors": {"fit": {"slide": 20, "en": "fit", "fr": "tient"}, "three20": {"slide": 20, "en": "three", "fr": "trois"}, "two20": {"slide": 20, "en": "two", "fr": "deux"}, "two20b": {"slide": 20, "en": "two#1", "fr": "deux#1"}, "three20b": {"slide": 20, "en": "three#1", "fr": "trois#1"}, "ten20": {"slide": 20, "en": "ten", "fr": "dix"}, "full": {"slide": 20, "en": "full", "fr": "plein"}, "waiting": {"slide": 20, "en": "waiting", "fr": "attend"}, "lands": {"slide": 21, "en": "lands", "fr": "arrive"}, "ten21": {"slide": 21, "en": "ten", "fr": "dix"}, "twelve": {"slide": 21, "en": "twelve", "fr": "douze"}, "sticks": {"slide": 21, "en": "sticks", "fr": "dépasse"}, "two21": {"slide": 21, "en": "two", "fr": "deux"}, "legal": {"slide": 21, "en": "legal", "fr": "valide"}, "notlegal": {"slide": 21, "en": "not legal", "fr": "pas valide"}, "overlap": {"slide": 22, "en": "overlap", "fr": "chevauchent"}, "skyline": {"slide": 22, "en": "skyline", "fr": "horizon"}, "sticking": {"slide": 22, "en": "sticking", "fr": "dépasser"}, "turn23": {"slide": 23, "en": "turn", "fr": "tourner"}, "side": {"slide": 23, "en": "side", "fr": "côté"}, "turnD": {"slide": 23, "en": "turn#1", "fr": "tournez"}, "tall": {"slide": 23, "en": "tall", "fr": "haut#1"}, "ten23": {"slide": 23, "en": "ten", "fr": "dix"}, "fits": {"slide": 23, "en": "fits", "fr": "tient"}, "three24": {"slide": 24, "en": "three", "fr": "trois"}, "swap24": {"slide": 24, "en": "swap", "fr": "échanger"}, "leaf": {"slide": 24, "en": "leaf", "fr": "feuille"}, "floorplan24": {"slide": 24, "en": "floorplan", "fr": "plan"}, "score24": {"slide": 24, "en": "score", "fr": "score"}, "pause": {"slide": 24, "en": "pause", "fr": "pause"}, "t27": {"slide": 24, "en": "twenty", "fr": "vingt"}, "smallest": {"slide": 24, "en": "smallest", "fr": "petite"}}, "pausing": {"between": 0.55, "scene": 0.9, "question": 1.3, "tail": 2.0}, "pauses": [{"after": "@ten20", "sec": 1.1}, {"after": "@twelve", "sec": 1.1}, {"after": "@tall", "sec": 1.3}, {"after": "@fits", "sec": 1.1}], "initial": {"tree": "rotate_start", "placed": 0, "panel": "both"}, "timeline": [{"at": "@three20", "placed": 4}, {"at": "@lands", "placed": 5}, {"at": "slide:22", "panel": "grid"}, {"at": "slide:23", "panel": "both"}, {"at": "@turnD", "tree": "rotate_after"}, {"at": "slide:24", "tree": "golden"}, {"at": "@pause", "panel": "grid"}], "show": [{"show": "links", "from": "start", "to": "slide:21"}, {"show": "counter", "from": "@three20+1.0", "to": "slide:22", "metric": "width", "good": 10, "bad": 11, "label": {"en": "row width", "fr": "largeur de la rangée"}}, {"show": "highlight", "from": "@waiting", "to": "slide:22", "ids": ["E"]}, {"show": "coords", "from": "@ten21", "to": "slide:22", "ids": ["E"]}, {"show": "legal", "from": "@sticks", "to": "slide:24"}, {"show": "skyline", "from": "@skyline", "to": "slide:23"}, {"show": "dims", "from": "slide:23", "to": "@turnD"}, {"show": "highlight", "from": "@side", "to": "slide:24", "ids": ["D"]}, {"show": "counter", "from": "slide:23", "to": "slide:24", "metric": "width", "good": 10, "bad": 11, "label": {"en": "row width", "fr": "largeur de la rangée"}}, {"show": "highlight", "from": "@swap24", "to": "@leaf", "ids": ["A", "C"]}, {"show": "highlight", "from": "@leaf", "to": "@floorplan24", "ids": ["E"]}, {"show": "bbox", "from": "@floorplan24", "to": "end"}, {"show": "counter", "from": "@score24", "to": "end", "metric": "area", "label": {"en": "box area", "fr": "aire de la boîte"}}], "overlays": [{"from": "start", "to": "slide:21", "x": 2, "y": 3, "type": "headline", "text": {"en": "No: the row does **not fit**", "fr": "Non : la rangée **ne tient pas**"}, "sub": {"en": "{the outline is already full@full}{, and E still waits@waiting}", "fr": "{le contour est déjà plein@full}{, et E attend encore@waiting}"}}, {"from": "@three20", "to": "slide:21", "x": 50, "y": 26, "type": "eq", "text": {"en": "{3@three20} {+ 2@two20} {+ 2@two20b} {+ 3@three20b} {= **10**@ten20}", "fr": "{3@three20} {+ 2@two20} {+ 2@two20b} {+ 3@three20b} {= **10**@ten20}"}}, {"from": "slide:21", "to": "slide:22", "x": 2, "y": 3, "type": "headline", "text": {"en": "E **sticks out**", "fr": "E **dépasse**"}, "sub": {"en": "{E at x = 10@ten21}{, a row 12 wide@twelve} {· 2 squares too many@two21}", "fr": "{E en x = 10@ten21}{, une rangée de 12 de large@twelve} {· 2 cases de trop@two21}"}}, {"from": "@legal", "to": "@notlegal", "x": 52, "y": 34, "type": "term", "text": {"en": "Legal", "fr": "Valide"}, "sub": {"en": "every block inside the outline", "fr": "chaque bloc dans le contour"}}, {"from": "@notlegal", "to": "slide:22", "x": 50, "y": 38, "type": "stamp", "text": {"en": "not legal", "fr": "pas valide"}}, {"from": "slide:22", "to": "slide:23", "x": 2, "y": 3, "type": "headline", "text": {"en": "The only way to **fail**", "fr": "La seule façon d'**échouer**"}, "sub": {"en": "{blocks drop onto the skyline@skyline}", "fr": "{les blocs tombent sur la ligne d'horizon@skyline}"}}, {"from": "@overlap", "to": "slide:23", "x": 52, "y": 34, "type": "tags", "items": [{"text": {"en": "✓ never overlap", "fr": "✓ jamais de chevauchement"}, "at": "@overlap"}, {"text": {"en": "✗ sticking out", "fr": "✗ dépasser"}, "at": "@sticking"}]}, {"from": "slide:23", "to": "slide:24", "x": 2, "y": 3, "type": "headline", "text": {"en": "**Turn** a block", "fr": "**Tourner** un bloc"}, "sub": {"en": "{D: 3 × 1 → 1 × 3@tall} {· the row is 10 wide@ten23}", "fr": "{D : 3 × 1 → 1 × 3@tall} {· la rangée fait 10 de large@ten23}"}}, {"from": "@turn23", "to": "@turnD", "x": 52, "y": 34, "type": "term", "text": {"en": "Turn", "fr": "Rotation"}, "sub": {"en": "the block's width and height swap", "fr": "la largeur et la hauteur du bloc s'échangent"}}, {"from": "slide:24", "to": "@pause", "x": 2, "y": 3, "type": "headline", "text": {"en": "Three small **changes**", "fr": "Trois petits **changements**"}, "sub": {"en": "{each one: a new floorplan, a new score@score24}", "fr": "{chacun : un nouveau plan, un nouveau score@score24}"}}, {"from": "@three24", "to": "@pause", "x": 48, "y": 30, "type": "vocab", "items": [{"at": "@three24", "k": {"en": "Turn", "fr": "Tourner"}, "text": {"en": "a block on its side", "fr": "un bloc sur le côté"}}, {"at": "@swap24", "k": {"en": "Swap", "fr": "Échanger"}, "text": {"en": "two names in the tree", "fr": "deux noms dans l'arbre"}}, {"at": "@leaf", "k": {"en": "Move", "fr": "Déplacer"}, "text": {"en": "a leaf to a free spot", "fr": "une feuille vers une place libre"}}]}, {"from": "@pause", "to": "end", "x": 2, "y": 3, "type": "headline", "text": {"en": "Can a tree beat **27**?", "fr": "Un arbre peut-il battre **27** ?"}, "sub": {"en": "{and what is the smallest box?@smallest}", "fr": "{et quelle est la plus petite boîte ?@smallest}"}}, {"from": "@pause", "to": "end", "x": 2, "y": 30, "type": "question"}], "question": {"at": "slide:24:end+0.4", "text": {"en": "Can any tree beat **27** squares? What is the smallest box?", "fr": "Un arbre peut-il battre **27** cases ? Quelle est la plus petite boîte ?"}, "hint": {"en": "The five blocks cover 23 squares, so no box can be smaller than that.", "fr": "Les cinq blocs couvrent 23 cases : aucune boîte ne peut être plus petite."}, "options": [{"label": {"en": "No, 27 is the best", "fr": "Non, 27 est le mieux"}, "reply": {"en": "It can be beaten. The best trees need a box of 6 × 4 = ##24## squares, with only 1 wasted. Part 5 shows one of them.", "fr": "On peut faire mieux. Les meilleurs arbres ont une boîte de 6 × 4 = ##24## cases, avec 1 seule case perdue. La partie 5 en montre un."}}, {"label": {"en": "Yes, down to 23", "fr": "Oui, jusqu'à 23"}, "reply": {"en": "Close. Many trees beat 27, but no box of 23 can hold the five blocks: the best is 6 × 4 = ##24##, with 1 wasted square. Part 5 shows one of them.", "fr": "Presque. Beaucoup d'arbres battent 27, mais aucune boîte de 23 ne peut contenir les cinq blocs : le mieux est 6 × 4 = ##24##, avec 1 case perdue. La partie 5 en montre un."}}, {"label": {"en": "Yes, 24: a 6 × 4 box", "fr": "Oui, 24 : une boîte de 6 × 4"}, "reply": {"en": "Yes. Many trees beat 27, and the best need only 6 × 4 = ##24## squares, with 1 wasted. Part 5 shows one of them.", "fr": "Oui. Beaucoup d'arbres battent 27, et les meilleurs n'ont besoin que de 6 × 4 = ##24## cases, avec 1 perdue. La partie 5 en montre un."}}]}, "chapters": [{"at": "start", "title": {"en": "Every block next door", "fr": "Chaque bloc à côté"}}, {"at": "slide:21", "title": {"en": "Sticking out", "fr": "Un bloc qui dépasse"}}, {"at": "slide:22", "title": {"en": "The only way to fail", "fr": "La seule façon d'échouer"}}, {"at": "slide:23", "title": {"en": "Turn a block", "fr": "Tourner un bloc"}}, {"at": "slide:24", "title": {"en": "Pause and guess", "fr": "Pause et devinette"}}], "bench": {"ops": ["swap", "turn", "move"]}, "note": {"en": "Numbers come from the lab's checker (bstar_check.py --json); the engine re-packs every tree and checks them.", "fr": "Les nombres viennent du vérificateur du lab (bstar_check.py --json) ; le moteur recalcule chaque arbre et les vérifie."}}, "timing": {"lang": "fr", "slides": [20, 24], "source": "edge-tts", "voice": "fr-FR-RemyMultilingualNeural", "rate": "-4%", "words": "exact", "duration": 86.99, "sentences": [{"slide": 20, "text": "Non, elle ne tient pas.", "start": 0.104, "end": 1.562, "pause_after": 0.55, "words": [{"w": "Non", "t": 0.104}, {"w": "elle", "t": 0.755}, {"w": "ne", "t": 0.911}, {"w": "tient", "t": 1.042}, {"w": "pas", "t": 1.25}]}, {"slide": 20, "text": "Chaque bloc va à côté : trois, deux, deux et trois font dix.", "start": 2.548, "end": 6.637, "pause_after": 1.1, "words": [{"w": "Chaque", "t": 2.548}, {"w": "bloc", "t": 2.822}, {"w": "va", "t": 3.134}, {"w": "à", "t": 3.251}, {"w": "côté", "t": 3.303}, {"w": "trois", "t": 4.137}, {"w": "deux", "t": 4.827}, {"w": "deux", "t": 5.413}, {"w": "et", "t": 5.647}, {"w": "trois", "t": 5.725}, {"w": "font", "t": 5.934}, {"w": "dix", "t": 6.103}]}, {"slide": 20, "text": "Le contour est déjà plein, et E attend encore.", "start": 8.21, "end": 11.023, "pause_after": 1.4500000000000002, "words": [{"w": "Le", "t": 8.21}, {"w": "contour", "t": 8.353}, {"w": "est", "t": 8.822}, {"w": "déjà", "t": 8.861}, {"w": "plein", "t": 9.135}, {"w": "et", "t": 9.942}, {"w": "E", "t": 10.046}, {"w": "attend", "t": 10.098}, {"w": "encore", "t": 10.411}]}, {"slide": 21, "text": "E arrive en x égal dix, donc la rangée fait douze cases de large.", "start": 12.895, "end": 16.775, "pause_after": 1.1, "words": [{"w": "E", "t": 12.895}, {"w": "arrive", "t": 13.064}, {"w": "en", "t": 13.415}, {"w": "x", "t": 13.533}, {"w": "égal", "t": 13.767}, {"w": "dix", "t": 14.04}, {"w": "donc", "t": 14.848}, {"w": "la", "t": 15.043}, {"w": "rangée", "t": 15.147}, {"w": "fait", "t": 15.538}, {"w": "douze", "t": 15.707}, {"w": "cases", "t": 15.941}, {"w": "de", "t": 16.163}, {"w": "large", "t": 16.254}]}, {"slide": 21, "text": "E dépasse du contour de deux cases.", "start": 18.291, "end": 20.413, "pause_after": 0.55, "words": [{"w": "E", "t": 18.291}, {"w": "dépasse", "t": 18.473}, {"w": "du", "t": 18.889}, {"w": "contour", "t": 18.994}, {"w": "de", "t": 19.514}, {"w": "deux", "t": 19.645}, {"w": "cases", "t": 19.775}]}, {"slide": 21, "text": "Un plan de masse est valide seulement si chaque bloc est dans le contour.", "start": 21.425, "end": 24.954, "pause_after": 0.55, "words": [{"w": "Un", "t": 21.425}, {"w": "plan", "t": 21.555}, {"w": "de", "t": 21.777}, {"w": "masse", "t": 21.907}, {"w": "est", "t": 22.402}, {"w": "valide", "t": 22.454}, {"w": "seulement", "t": 22.779}, {"w": "si", "t": 23.209}, {"w": "chaque", "t": 23.417}, {"w": "bloc", "t": 23.665}, {"w": "est", "t": 24.016}, {"w": "dans", "t": 24.055}, {"w": "le", "t": 24.173}, {"w": "contour", "t": 24.251}]}, {"slide": 21, "text": "Cette rangée n'est donc pas valide.", "start": 25.959, "end": 27.756, "pause_after": 1.4500000000000002, "words": [{"w": "Cette", "t": 25.959}, {"w": "rangée", "t": 26.22}, {"w": "n'est", "t": 26.623}, {"w": "donc", "t": 26.74}, {"w": "pas", "t": 26.975}, {"w": "valide", "t": 27.105}]}, {"slide": 22, "text": "Remarquez que les blocs ne se chevauchent jamais.", "start": 29.678, "end": 32.087, "pause_after": 0.55, "words": [{"w": "Remarquez", "t": 29.678}, {"w": "que", "t": 30.29}, {"w": "les", "t": 30.42}, {"w": "blocs", "t": 30.525}, {"w": "ne", "t": 30.928}, {"w": "se", "t": 31.097}, {"w": "chevauchent", "t": 31.228}, {"w": "jamais", "t": 31.592}]}, {"slide": 22, "text": "Chaque bloc tombe sur la ligne d'horizon, donc il ne peut jamais atterrir dans un autre.", "start": 33.095, "end": 37.561, "pause_after": 0.55, "words": [{"w": "Chaque", "t": 33.095}, {"w": "bloc", "t": 33.434}, {"w": "tombe", "t": 33.824}, {"w": "sur", "t": 34.098}, {"w": "la", "t": 34.254}, {"w": "ligne", "t": 34.345}, {"w": "d'horizon", "t": 34.566}, {"w": "donc", "t": 35.491}, {"w": "il", "t": 35.699}, {"w": "ne", "t": 35.79}, {"w": "peut", "t": 35.882}, {"w": "jamais", "t": 36.012}, {"w": "atterrir", "t": 36.311}, {"w": "dans", "t": 36.767}, {"w": "un", "t": 36.871}, {"w": "autre", "t": 37.027}]}, {"slide": 22, "text": "Avec un arbre B-étoile, dépasser est la seule façon d'échouer.", "start": 38.565, "end": 42.315, "pause_after": 1.4500000000000002, "words": [{"w": "Avec", "t": 38.565}, {"w": "un", "t": 38.878}, {"w": "arbre", "t": 38.956}, {"w": "B-étoile", "t": 39.359}, {"w": "dépasser", "t": 40.479}, {"w": "est", "t": 41.013}, {"w": "la", "t": 41.065}, {"w": "seule", "t": 41.182}, {"w": "façon", "t": 41.417}, {"w": "d'échouer", "t": 41.742}]}, {"slide": 23, "text": "On peut tourner un bloc sur le côté : sa largeur et sa hauteur s'échangent.", "start": 44.175, "end": 48.289, "pause_after": 0.55, "words": [{"w": "On", "t": 44.175}, {"w": "peut", "t": 44.357}, {"w": "tourner", "t": 44.487}, {"w": "un", "t": 44.8}, {"w": "bloc", "t": 44.891}, {"w": "sur", "t": 45.177}, {"w": "le", "t": 45.307}, {"w": "côté", "t": 45.385}, {"w": "sa", "t": 46.271}, {"w": "largeur", "t": 46.401}, {"w": "et", "t": 47.065}, {"w": "sa", "t": 47.117}, {"w": "hauteur", "t": 47.273}, {"w": "s'échangent", "t": 47.573}]}, {"slide": 23, "text": "Tournez D, et il fait une case de large et trois de haut.", "start": 49.301, "end": 52.348, "pause_after": 1.3, "words": [{"w": "Tournez", "t": 49.301}, {"w": "D", "t": 49.627}, {"w": "et", "t": 50.395}, {"w": "il", "t": 50.486}, {"w": "fait", "t": 50.629}, {"w": "une", "t": 50.812}, {"w": "case", "t": 50.955}, {"w": "de", "t": 51.189}, {"w": "large", "t": 51.293}, {"w": "et", "t": 51.658}, {"w": "trois", "t": 51.697}, {"w": "de", "t": 51.905}, {"w": "haut", "t": 52.036}]}, {"slide": 23, "text": "La rangée fait maintenant dix de large : elle tient pile, et elle est de nouveau valide.", "start": 54.118, "end": 58.441, "pause_after": 1.1, "words": [{"w": "La", "t": 54.118}, {"w": "rangée", "t": 54.261}, {"w": "fait", "t": 54.574}, {"w": "maintenant", "t": 54.717}, {"w": "dix", "t": 55.108}, {"w": "de", "t": 55.316}, {"w": "large", "t": 55.42}, {"w": "elle", "t": 56.215}, {"w": "tient", "t": 56.293}, {"w": "pile", "t": 56.514}, {"w": "et", "t": 57.282}, {"w": "elle", "t": 57.334}, {"w": "est", "t": 57.451}, {"w": "de", "t": 57.491}, {"w": "nouveau", "t": 57.595}, {"w": "valide", "t": 57.855}]}, {"slide": 24, "text": "Tourner est l'un des trois petits changements.", "start": 60.005, "end": 62.115, "pause_after": 0.55, "words": [{"w": "Tourner", "t": 60.005}, {"w": "est", "t": 60.552}, {"w": "l'un", "t": 60.695}, {"w": "des", "t": 60.917}, {"w": "trois", "t": 61.034}, {"w": "petits", "t": 61.242}, {"w": "changements", "t": 61.503}]}, {"slide": 24, "text": "On peut aussi échanger deux noms dans l'arbre, comme avec A et C.", "start": 63.083, "end": 66.624, "pause_after": 0.55, "words": [{"w": "On", "t": 63.083}, {"w": "peut", "t": 63.239}, {"w": "aussi", "t": 63.356}, {"w": "échanger", "t": 63.681}, {"w": "deux", "t": 64.124}, {"w": "noms", "t": 64.267}, {"w": "dans", "t": 64.437}, {"w": "l'arbre", "t": 64.593}, {"w": "comme", "t": 65.426}, {"w": "avec", "t": 65.609}, {"w": "A", "t": 65.934}, {"w": "et", "t": 66.142}, {"w": "C", "t": 66.221}]}, {"slide": 24, "text": "Ou déplacer une feuille, un bloc sans enfant, vers une place libre de l'arbre.", "start": 67.633, "end": 72.086, "pause_after": 0.55, "words": [{"w": "Ou", "t": 67.633}, {"w": "déplacer", "t": 67.724}, {"w": "une", "t": 68.193}, {"w": "feuille", "t": 68.31}, {"w": "un", "t": 69.091}, {"w": "bloc", "t": 69.183}, {"w": "sans", "t": 69.43}, {"w": "enfant", "t": 69.586}, {"w": "vers", "t": 70.55}, {"w": "une", "t": 70.693}, {"w": "place", "t": 70.823}, {"w": "libre", "t": 71.11}, {"w": "de", "t": 71.409}, {"w": "l'arbre", "t": 71.5}]}, {"slide": 24, "text": "Chaque changement donne un nouveau plan de masse, avec un nouveau score.", "start": 73.079, "end": 76.738, "pause_after": 0.55, "words": [{"w": "Chaque", "t": 73.079}, {"w": "changement", "t": 73.405}, {"w": "donne", "t": 73.939}, {"w": "un", "t": 74.147}, {"w": "nouveau", "t": 74.212}, {"w": "plan", "t": 74.485}, {"w": "de", "t": 74.681}, {"w": "masse", "t": 74.811}, {"w": "avec", "t": 75.605}, {"w": "un", "t": 75.827}, {"w": "nouveau", "t": 75.879}, {"w": "score", "t": 76.126}]}, {"slide": 24, "text": "Faites une pause et devinez : un arbre peut-il battre vingt-sept ?", "start": 77.72, "end": 81.249, "pause_after": 1.3, "words": [{"w": "Faites", "t": 77.72}, {"w": "une", "t": 77.981}, {"w": "pause", "t": 78.124}, {"w": "et", "t": 78.501}, {"w": "devinez", "t": 78.553}, {"w": "un", "t": 79.478}, {"w": "arbre", "t": 79.595}, {"w": "peut-il", "t": 79.999}, {"w": "battre", "t": 80.298}, {"w": "vingt-sept", "t": 80.572}]}, {"slide": 24, "text": "Et quelle est la plus petite boîte ?", "start": 82.993, "end": 84.621, "pause_after": 2.0, "words": [{"w": "Et", "t": 82.993}, {"w": "quelle", "t": 83.084}, {"w": "est", "t": 83.332}, {"w": "la", "t": 83.384}, {"w": "plus", "t": 83.514}, {"w": "petite", "t": 83.696}, {"w": "boîte", "t": 84.048}]}]}, "lang": "fr", "storageKey": "lab05-lesson-speed"});
+</script>
+</body>
+</html>
