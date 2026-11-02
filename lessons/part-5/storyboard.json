@@ -1,0 +1,231 @@
+{
+  "scene": "floorplan",
+  "pageTitle": { "en": "Lab 05 · Part 5: The tightest floorplan, your turn", "fr": "Lab 05 · Partie 5 : Le plan le plus serré, à vous" },
+  "eyebrow": { "en": "Lab 05 · B*-tree · animated lesson, part 5 of 5", "fr": "Lab 05 · Arbre B* · leçon animée, partie 5 sur 5" },
+  "title": { "en": "The tightest floorplan, your turn", "fr": "Le plan le plus serré, à vous" },
+  "lede": { "en": "One of the best trees packs the five blocks in a 6 × 4 box with a single wasted square, and no box can do better. Then pick your track. Click any block to try a swap, a turn or a move. <a href=\"../../index.html#video\">Back to the video parts</a>.", "fr": "L'un des meilleurs arbres range les cinq blocs dans une boîte de 6 × 4 avec une seule case perdue, et aucune boîte ne fait mieux. Ensuite, choisissez votre parcours. Cliquez sur un bloc pour essayer un échange, une rotation ou un déplacement. <a href=\"../../index.html#video\">Retour aux parties vidéo</a>." },
+
+  "floorplan": {
+    "start": "golden",
+    "labels": {
+      "nextDoor": { "en": "next door", "fr": "à côté" },
+      "upstairs": { "en": "upstairs", "fr": "à l'étage" }
+    },
+    "claims": [
+      { "tree": "golden", "pos": { "D": [0, 2] }, "bbox": [9, 3], "area": 27, "wasted": 4, "legal": true },
+      { "tree": "best", "walk": "ADCEB",
+        "pos": { "A": [0, 0], "D": [3, 0], "C": [0, 2], "E": [2, 2], "B": [4, 1] },
+        "yB": 1, "wB": 2, "hB": 3, "bbox": [6, 4], "area": 24, "wasted": 1, "legal": true },
+      { "tree": "lift", "pos": { "D": [0, 3] }, "legal": true },
+      { "tree": "rotate_start", "bbox": [12, 3], "legal": false },
+      { "tree": "rotate_after", "bbox": [10, 3], "legal": true }
+    ]
+  },
+
+  "anchors": {
+    "t27":        { "slide": 25, "en": "twenty", "fr": "vingt" },
+    "t24":        { "slide": 25, "en": "twenty#1", "fr": "vingt#1" },
+    "bestTree":   { "slide": 25, "en": "best trees", "fr": "meilleurs arbres" },
+    "placesA":    { "slide": 25, "en": "places A", "fr": "place A" },
+    "Bcomes":     { "slide": 25, "en": "B comes", "fr": "B vient" },
+
+    "skyline26":  { "slide": 26, "en": "skyline", "fr": "horizon" },
+    "topD":       { "slide": 26, "en": "top of D", "fr": "haut de D" },
+    "lands26":    { "slide": 26, "en": "lands", "fr": "arrive" },
+    "yone":       { "slide": 26, "en": "equals one", "fr": "égal un" },
+    "box26":      { "slide": 26, "en": "box", "fr": "boîte" },
+    "t24b":       { "slide": 26, "en": "twenty", "fr": "vingt" },
+    "wasted26":   { "slide": 26, "en": "one square", "fr": "seule case" },
+
+    "t23":        { "slide": 27, "en": "twenty", "fr": "vingt" },
+    "thick":      { "slide": 27, "en": "one square thick", "fr": "épais" },
+    "blockB":     { "slide": 27, "en": "Block B", "fr": "bloc B" },
+    "tooThick":   { "slide": 27, "en": "too thick", "fr": "trop épais" },
+    "t24c":       { "slide": 27, "en": "twenty#2", "fr": "vingt#2" },
+
+    "yourself":   { "slide": 28, "en": "yourself", "fr": "vous-même" },
+    "browser":    { "slide": 28, "en": "browser", "fr": "navigateur" },
+    "drop28":     { "slide": 28, "en": "drop", "fr": "tomber" },
+    "challenges": { "slide": 28, "en": "challenges", "fr": "défis" },
+    "lift28":     { "slide": 28, "en": "Lift", "fr": "Soulevez" },
+    "row28":      { "slide": 28, "en": "row", "fr": "rangée" },
+    "reach":      { "slide": 28, "en": "reach", "fr": "atteignez" },
+
+    "python29":   { "slide": 29, "en": "Python", "fr": "Python" },
+    "rules":      { "slide": 29, "en": "rules", "fr": "règles" },
+    "answer":     { "slide": 29, "en": "answer", "fr": "réponses" },
+    "compares":   { "slide": 29, "en": "compares", "fr": "compare" },
+
+    "nextdoor30": { "slide": 30, "en": "next door", "fr": "côté" },
+    "upstairs30": { "slide": 30, "en": "upstairs", "fr": "étage" },
+    "walk30":     { "slide": 30, "en": "Walk", "fr": "Parcourez" },
+    "drops30":    { "slide": 30, "en": "drops", "fr": "tombe" },
+    "skyline30":  { "slide": 30, "en": "skyline", "fr": "horizon" },
+    "box30":      { "slide": 30, "en": "bounding", "fr": "englobante" },
+    "wasted30":   { "slide": 30, "en": "wasted", "fr": "perdues" },
+    "overlaps":   { "slide": 30, "en": "overlaps", "fr": "chevauche" },
+    "outline30":  { "slide": 30, "en": "outline", "fr": "contour" },
+
+    "browser31":  { "slide": 31, "en": "browser", "fr": "navigateur" },
+    "python31":   { "slide": 31, "en": "Python", "fr": "Python" },
+    "checklist":  { "slide": 31, "en": "checklist", "fr": "contrôle" },
+    "quiz":       { "slide": 31, "en": "quiz", "fr": "quiz" },
+    "seqpair":    { "slide": 31, "en": "sequence", "fr": "paire" },
+    "instead":    { "slide": 31, "en": "instead", "fr": "lieu" },
+    "pause31":    { "slide": 31, "en": "Pause", "fr": "pause" },
+    "t24d":       { "slide": 31, "en": "twenty", "fr": "vingt" },
+    "qend":       { "slide": 31, "en": "squares", "fr": "vingt", "edge": "end" },
+    "yes31":      { "slide": 31, "en": "Yes", "fr": "Oui" },
+    "seqpair2":   { "slide": 31, "en": "sequence#1", "fr": "paire#1" },
+    "nextlab":    { "slide": 31, "en": "next lab", "fr": "prochain lab" }
+  },
+
+  "pausing": { "between": 0.55, "scene": 0.9, "question": 1.3, "tail": 2.0 },
+  "pauses": [
+    { "after": "@t24", "sec": 1.1 },
+    { "after": "@lands26", "sec": 1.1 },
+    { "after": "@t24b", "sec": 1.1 },
+    { "after": "@drop28", "sec": 1.3 }
+  ],
+
+  "initial": { "tree": "golden", "placed": "all", "panel": "both" },
+  "timeline": [
+    { "at": "@bestTree", "tree": "best", "placed": 0 },
+    { "at": "@placesA", "placed": 4 },
+    { "at": "@lands26", "placed": 5 },
+    { "at": "slide:27", "panel": "grid" },
+    { "at": "slide:28", "panel": "both", "placed": 0 },
+    { "at": "@drop28", "placed": "all" },
+    { "at": "@challenges", "panel": "grid" },
+    { "at": "slide:29", "panel": "both" },
+    { "at": "slide:30", "panel": "tree" },
+    { "at": "@drops30", "panel": "grid" }
+  ],
+
+  "show": [
+    { "show": "bbox", "from": "start", "to": "@bestTree" },
+    { "show": "counter", "from": "start", "to": "@bestTree", "metric": "area",
+      "label": { "en": "box area", "fr": "aire de la boîte" } },
+    { "show": "walk", "from": "@placesA", "to": "slide:26", "stagger": 0.55 },
+    { "show": "highlight", "from": "@Bcomes", "to": "@box26", "ids": ["B"] },
+
+    { "show": "skyline", "from": "@skyline26", "to": "slide:27" },
+    { "show": "highlight", "from": "@topD", "to": "@box26", "ids": ["D"] },
+    { "show": "coords", "from": "@yone", "to": "slide:27", "ids": ["B"] },
+    { "show": "bbox", "from": "@box26", "to": "slide:28" },
+    { "show": "counter", "from": "@box26", "to": "slide:28", "metric": "area", "good": 24,
+      "label": { "en": "box area", "fr": "aire de la boîte" } },
+    { "show": "wasted", "from": "@wasted26", "to": "slide:27" },
+
+    { "show": "highlight", "from": "@blockB", "to": "slide:28", "ids": ["B"] },
+    { "show": "dims", "from": "@blockB", "to": "slide:28" },
+
+    { "show": "skyline", "from": "@drop28", "to": "@reach" },
+    { "show": "bbox", "from": "@reach", "to": "slide:29" },
+    { "show": "counter", "from": "@reach", "to": "slide:29", "metric": "area", "good": 24,
+      "label": { "en": "box area", "fr": "aire de la boîte" } },
+
+    { "show": "walk", "from": "@rules", "to": "slide:30", "stagger": 0.3 },
+    { "show": "coords", "from": "@answer", "to": "slide:30" },
+
+    { "show": "links", "from": "@nextdoor30", "to": "slide:31" },
+    { "show": "walk", "from": "@walk30", "to": "slide:31", "stagger": 0.3 },
+    { "show": "skyline", "from": "@skyline30", "to": "slide:31" },
+    { "show": "bbox", "from": "@box30", "to": "slide:31" },
+    { "show": "wasted", "from": "@wasted30", "to": "slide:31" },
+    { "show": "counter", "from": "@box30", "to": "slide:31", "metric": "area", "good": 24,
+      "label": { "en": "box area", "fr": "aire de la boîte" } },
+    { "show": "legal", "from": "@outline30", "to": "slide:31" },
+
+    { "show": "bbox", "from": "@t24d", "to": "end" },
+    { "show": "counter", "from": "@t24d", "to": "end", "metric": "area", "good": 24,
+      "label": { "en": "box area", "fr": "aire de la boîte" } }
+  ],
+
+  "overlays": [
+    { "from": "start", "to": "slide:26", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "Yes: many trees beat **27**", "fr": "Oui : on peut battre **27**" },
+      "sub": { "en": "{the best need only 24 squares@t24} {· here is one@bestTree}", "fr": "{les meilleurs n'ont besoin que de 24 cases@t24} {· en voici un@bestTree}" } },
+    { "from": "@t27", "to": "@bestTree", "x": 52, "y": 30, "type": "eq",
+      "text": { "en": "{27@t27} {→ **24**@t24}", "fr": "{27@t27} {→ **24**@t24}" } },
+
+    { "from": "slide:26", "to": "slide:27", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "B is lifted by the **skyline**", "fr": "B soulevé par l'**horizon**" },
+      "sub": { "en": "{B lands at y = 1@yone} {· 6 × 4 = 24@t24b} {· 1 wasted square@wasted26}", "fr": "{B arrive en y = 1@yone} {· 6 × 4 = 24@t24b} {· 1 case perdue@wasted26}" } },
+
+    { "from": "slide:27", "to": "slide:28", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "Why not **23**?", "fr": "Pourquoi pas **23** ?" },
+      "sub": { "en": "{B is too thick@tooThick}", "fr": "{B est trop épais@tooThick}" } },
+    { "from": "@t23", "to": "slide:28", "x": 3, "y": 30, "type": "tags",
+      "items": [ { "text": { "en": "23 squares, nothing wasted?", "fr": "23 cases, rien de perdu ?" }, "at": "@t23" },
+                 { "text": { "en": "= a strip **1** square thick", "fr": "= une bande épaisse d'**1** case" }, "at": "@thick" },
+                 { "text": { "en": "✗ B is 2 × 3: too thick", "fr": "✗ B fait 2 × 3 : trop épais" }, "at": "@tooThick" },
+                 { "text": { "en": "✓ **24** is the best possible", "fr": "✓ **24** est le mieux possible" }, "at": "@t24c" } ] },
+
+    { "from": "slide:28", "to": "slide:29", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "Build floorplans **yourself**", "fr": "À vous de **construire**" },
+      "sub": { "en": "{the browser lab@browser}{: edit the tree, watch each block drop@drop28}", "fr": "{le lab du navigateur@browser} {: modifiez l'arbre, regardez chaque bloc tomber@drop28}" } },
+    { "from": "@challenges", "to": "slide:29", "x": 2, "y": 27, "type": "tag",
+      "text": { "en": "The **challenges** check your tree", "fr": "Les **défis** vérifient votre arbre" } },
+    { "from": "@lift28", "to": "slide:29", "x": 2, "y": 36, "type": "thumbs",
+      "items": [ { "tree": "lift", "label": { "en": "Lift D", "fr": "Soulever D" } } ] },
+    { "from": "@row28", "to": "slide:29", "x": 2, "y": 65, "type": "thumbs",
+      "items": [ { "tree": "rotate_after", "label": { "en": "Make the row fit", "fr": "Tenir la rangée" } } ] },
+
+    { "from": "slide:29", "to": "slide:30", "x": 2, "y": 3, "type": "headline", "size": 3.6,
+      "text": { "en": "Python: write the **packer**", "fr": "Python : écrivez le **placement**" },
+      "sub": { "en": "{the examples file gives the exact rules@rules}", "fr": "{le fichier d'exemples donne les règles exactes@rules}" } },
+    { "from": "@python29", "to": "slide:30", "x": 46, "y": 28, "type": "tag",
+      "text": { "en": "{**Python** track: your packer@python29} {vs the checker@compares}", "fr": "{Parcours **Python** : votre code@python29} {face au vérificateur@compares}" } },
+
+    { "from": "slide:30", "to": "slide:31", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "**Remember**", "fr": "**À retenir**" } },
+    { "from": "@nextdoor30", "to": "@drops30", "x": 48, "y": 28, "type": "vocab",
+      "items": [ { "at": "@nextdoor30", "k": { "en": "Left child", "fr": "Enfant gauche" }, "text": { "en": "next door", "fr": "à côté" } },
+                 { "at": "@upstairs30", "k": { "en": "Right child", "fr": "Enfant droit" }, "text": { "en": "upstairs, same left edge", "fr": "à l'étage, même bord gauche" } },
+                 { "at": "@walk30", "k": { "en": "Walk", "fr": "Parcours" }, "text": { "en": "node, left side, right child", "fr": "nœud, côté gauche, enfant droit" } } ] },
+    { "from": "@drops30", "to": "slide:31", "x": 2, "y": 30, "type": "vocab",
+      "items": [ { "at": "@drops30", "k": { "en": "Drop", "fr": "Tomber" }, "text": { "en": "onto the skyline", "fr": "sur la ligne d'horizon" } },
+                 { "at": "@box30", "k": { "en": "Score", "fr": "Score" }, "text": { "en": "bounding box, wasted squares", "fr": "boîte englobante, cases perdues" } },
+                 { "at": "@overlaps", "k": { "en": "Check", "fr": "Vérifier" }, "text": { "en": "never overlaps, can stick out", "fr": "jamais de chevauchement, peut dépasser" } } ] },
+
+    { "from": "slide:31", "to": "@pause31", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "Your **turn**", "fr": "À **vous**" },
+      "sub": { "en": "{browser lab@browser31}{, Python@python31} {· checklist@checklist} {· quiz@quiz}", "fr": "{lab du navigateur@browser31}{, Python@python31} {· liste de contrôle@checklist} {· quiz@quiz}" } },
+    { "from": "@seqpair", "to": "@pause31", "x": 2, "y": 30, "type": "term",
+      "text": { "en": "Sequence pair", "fr": "Paire de séquences" },
+      "sub": { "en": "two lists of names {instead of a tree@instead}", "fr": "deux listes de noms {au lieu d'un arbre@instead}" } },
+    { "from": "@pause31", "to": "end", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "Are **two lists** enough?", "fr": "**Deux listes** suffisent-elles ?" },
+      "sub": { "en": "{our best floorplan, 24 squares@t24d}", "fr": "{notre meilleur plan, 24 cases@t24d}" } },
+    { "from": "@pause31", "to": "@yes31", "x": 2, "y": 30, "type": "question" },
+    { "from": "@yes31", "to": "end", "x": 2, "y": 30, "type": "term",
+      "text": { "en": "Yes: two lists are enough", "fr": "Oui : deux listes suffisent" },
+      "sub": { "en": "{the sequence pair@seqpair2}{, in the next lab@nextlab}", "fr": "{la paire de séquences@seqpair2}{, dans le prochain lab@nextlab}" } }
+  ],
+
+  "question": {
+    "at": "@qend+0.4",
+    "text": { "en": "Can **two lists** of names describe our best floorplan, with **24** squares?", "fr": "**Deux listes** de noms peuvent-elles décrire notre meilleur plan, à **24** cases ?" },
+    "hint": { "en": "The tree only says who goes next door and who goes upstairs. Could the order of names in two lists say the same?", "fr": "L'arbre dit seulement qui va à côté et qui va à l'étage. L'ordre des noms dans deux listes pourrait-il dire la même chose ?" },
+    "options": [
+      { "label": { "en": "Yes, two lists are enough", "fr": "Oui, deux listes suffisent" },
+        "reply": { "en": "Yes. Two lists of the five names can give exactly this 6 × 4 = ##24## floorplan. That's the sequence pair, in the next lab.", "fr": "Oui. Deux listes des cinq noms peuvent donner exactement ce plan de 6 × 4 = ##24##. C'est la paire de séquences, dans le prochain lab." } },
+      { "label": { "en": "No, it needs a tree", "fr": "Non, il faut un arbre" },
+        "reply": { "en": "It doesn't. Two lists of the five names can give exactly this 6 × 4 = ##24## floorplan. That's the sequence pair, in the next lab.", "fr": "Pas besoin. Deux listes des cinq noms peuvent donner exactement ce plan de 6 × 4 = ##24##. C'est la paire de séquences, dans le prochain lab." } },
+      { "label": { "en": "Only worse floorplans", "fr": "Seulement des plans moins bons" },
+        "reply": { "en": "Not only. Two lists of the five names can give exactly this 6 × 4 = ##24## floorplan, one of the best. That's the sequence pair, in the next lab.", "fr": "Pas seulement. Deux listes des cinq noms peuvent donner exactement ce plan de 6 × 4 = ##24##, l'un des meilleurs. C'est la paire de séquences, dans le prochain lab." } }
+    ]
+  },
+  "chapters": [
+    { "at": "start", "title": { "en": "Beating 27", "fr": "Battre 27" } },
+    { "at": "slide:26", "title": { "en": "B is lifted by the skyline", "fr": "B soulevé par la ligne d'horizon" } },
+    { "at": "slide:27", "title": { "en": "Why not 23?", "fr": "Pourquoi pas 23 ?" } },
+    { "at": "slide:28", "title": { "en": "Browser lab track", "fr": "Parcours lab du navigateur" } },
+    { "at": "slide:29", "title": { "en": "Python track", "fr": "Parcours Python" } },
+    { "at": "slide:30", "title": { "en": "Remember", "fr": "À retenir" } },
+    { "at": "slide:31", "title": { "en": "Your turn", "fr": "À vous" } }
+  ],
+  "bench": { "ops": ["swap", "turn", "move"] },
+  "note": { "en": "Numbers come from the lab's checker (bstar_check.py --json); the engine re-packs every tree and checks them.", "fr": "Les nombres viennent du vérificateur du lab (bstar_check.py --json) ; le moteur recalcule chaque arbre et les vérifie." }
+}
