@@ -1,0 +1,156 @@
+{
+  "scene": "floorplan",
+  "pageTitle": { "en": "Lab 05 · Part 2: Walking the tree", "fr": "Lab 05 · Partie 2 : Parcourir l'arbre" },
+  "eyebrow": { "en": "Lab 05 · B*-tree · animated lesson, part 2 of 5", "fr": "Lab 05 · Arbre B* · leçon animée, partie 2 sur 5" },
+  "title": { "en": "Walking the tree", "fr": "Parcourir l'arbre" },
+  "lede": { "en": "The walk places the five blocks one by one: next door, next door, next door, then upstairs. Click any block to try a swap, a turn or a move. <a href=\"../../index.html#video\">Back to the video parts</a>.", "fr": "Le parcours pose les cinq blocs un par un : à côté, à côté, à côté, puis à l'étage. Cliquez sur un bloc pour essayer un échange, une rotation ou un déplacement. <a href=\"../../index.html#video\">Retour aux parties vidéo</a>." },
+
+  "floorplan": {
+    "start": "golden",
+    "labels": {
+      "nextDoor": { "en": "next door", "fr": "à côté" },
+      "upstairs": { "en": "upstairs", "fr": "à l'étage" }
+    },
+    "claims": [
+      { "tree": "golden", "walk": "ABCED",
+        "pos": { "A": [0, 0], "B": [3, 0], "C": [5, 0], "E": [7, 0], "D": [0, 2] },
+        "wA": 3, "hA": 2, "wB": 2, "wC": 2, "legal": true },
+      { "tree": "lift", "pos": { "D": [0, 3] }, "hB": 3 }
+    ]
+  },
+
+  "anchors": {
+    "next8":   { "slide": 8, "en": "next door", "fr": "côté" },
+    "three8":  { "slide": 8, "en": "three", "fr": "trois" },
+    "wide":    { "slide": 8, "en": "wide", "fr": "large" },
+    "floor":   { "slide": 8, "en": "floor", "fr": "sol" },
+    "walk":    { "slide": 9, "en": "walk", "fr": "parcours" },
+    "node":    { "slide": 9, "en": "node", "fr": "nœud" },
+    "left":    { "slide": 9, "en": "left", "fr": "gauche" },
+    "right":   { "slide": 9, "en": "right", "fr": "droit" },
+    "goes":    { "slide": 9, "en": "goes", "fr": "donne" },
+    "next10":  { "slide": 10, "en": "next door", "fr": "côté" },
+    "five":    { "slide": 10, "en": "five", "fr": "cinq" },
+    "lands":   { "slide": 10, "en": "lands", "fr": "arrive" },
+    "seven":   { "slide": 10, "en": "seven", "fr": "sept" },
+    "three":   { "slide": 10, "en": "three", "fr": "trois" },
+    "plus":    { "slide": 10, "en": "plus", "fr": "plus" },
+    "plus2":   { "slide": 10, "en": "plus#1", "fr": "plus#1" },
+    "makes":   { "slide": 10, "en": "makes", "fr": "font" },
+    "back":    { "slide": 11, "en": "back", "fr": "revient" },
+    "upstairs":{ "slide": 11, "en": "upstairs", "fr": "étage" },
+    "like":    { "slide": 11, "en": "like", "fr": "comme" },
+    "top":     { "slide": 11, "en": "top", "fr": "pose" },
+    "two":     { "slide": 11, "en": "two", "fr": "deux" },
+    "placed":  { "slide": 12, "en": "placed", "fr": "placés" },
+    "outline": { "slide": 12, "en": "outline", "fr": "contour" },
+    "pause":   { "slide": 12, "en": "pause", "fr": "pause" },
+    "swap":    { "slide": 12, "en": "swap", "fr": "échange" },
+    "two12":   { "slide": 12, "en": "two", "fr": "deux" }
+  },
+
+  "pausing": { "between": 0.55, "scene": 0.9, "question": 1.3, "tail": 2.0 },
+  "pauses": [
+    { "after": "@three8", "sec": 1.1 },
+    { "after": "@makes", "sec": 1.3 },
+    { "after": "@top", "sec": 1.1 }
+  ],
+
+  "initial": { "tree": "golden", "placed": 1, "panel": "both" },
+  "timeline": [
+    { "at": "@next8+0.3", "placed": 2 },
+    { "at": "slide:9", "panel": "tree" },
+    { "at": "slide:10", "panel": "both" },
+    { "at": "@next10", "placed": 3 },
+    { "at": "@lands", "placed": 4 },
+    { "at": "@top", "placed": 5 },
+    { "at": "@pause", "panel": "grid" }
+  ],
+
+  "show": [
+    { "show": "links", "from": "start", "to": "slide:9" },
+    { "show": "coords", "from": "start", "to": "end", "ids": ["A"] },
+    { "show": "coords", "from": "@next8+1.3", "to": "end", "ids": ["B"] },
+    { "show": "highlight", "from": "@next8", "to": "slide:9", "ids": ["B"] },
+    { "show": "counter", "from": "@next8+1.3", "to": "@floor", "metric": "x:B", "label": { "en": "x of B", "fr": "x de B" } },
+    { "show": "counter", "from": "@floor", "to": "slide:9", "metric": "y:B", "label": { "en": "y of B", "fr": "y de B" } },
+
+    { "show": "highlight", "from": "@node", "to": "@left", "ids": ["A"] },
+    { "show": "highlight", "from": "@left", "to": "@right", "ids": ["B", "C", "E"] },
+    { "show": "highlight", "from": "@right", "to": "@goes", "ids": ["D"] },
+    { "show": "walk", "from": "@goes", "to": "end", "stagger": 0.3 },
+
+    { "show": "highlight", "from": "@next10", "to": "@lands", "ids": ["C"] },
+    { "show": "coords", "from": "@next10+1.0", "to": "end", "ids": ["C"] },
+    { "show": "counter", "from": "@next10+1.0", "to": "@lands", "metric": "x:C", "label": { "en": "x of C", "fr": "x de C" } },
+    { "show": "highlight", "from": "@lands", "to": "@three", "ids": ["E"] },
+    { "show": "coords", "from": "@lands+1.0", "to": "end", "ids": ["E"] },
+    { "show": "counter", "from": "@lands+1.0", "to": "slide:11", "metric": "x:E", "label": { "en": "x of E", "fr": "x de E" } },
+    { "show": "dims", "from": "@three", "to": "slide:11" },
+    { "show": "highlight", "from": "@three", "to": "slide:11", "ids": ["A", "B", "C"] },
+
+    { "show": "highlight", "from": "@back", "to": "slide:12", "ids": ["D"] },
+    { "show": "highlight", "from": "@like", "to": "@top", "ids": ["A"] },
+    { "show": "coords", "from": "@top+1.0", "to": "end", "ids": ["D"] },
+    { "show": "counter", "from": "@top+1.0", "to": "slide:12", "metric": "y:D", "label": { "en": "y of D", "fr": "y de D" } },
+
+    { "show": "counter", "from": "@placed", "to": "@pause", "metric": "placed",
+      "label": { "en": "blocks placed", "fr": "blocs placés" } },
+    { "show": "legal", "from": "@outline", "to": "end" },
+    { "show": "highlight", "from": "@swap", "to": "end", "ids": ["A", "C"] }
+  ],
+
+  "overlays": [
+    { "from": "start", "to": "slide:9", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "B goes **next door**", "fr": "B va **à côté**" },
+      "sub": { "en": "{x = 3@three8}{ = 0 + 3@wide} {· on the floor, y = 0@floor}", "fr": "{x = 3@three8}{ = 0 + 3@wide} {· sur le sol, y = 0@floor}" } },
+
+    { "from": "slide:9", "to": "slide:10", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "The **walk order**", "fr": "L'**ordre de parcours**" },
+      "sub": { "en": "{node → left side → right child@right} {· A, B, C, E, then D@goes}", "fr": "{nœud → côté gauche → enfant droit@right} {· A, B, C, E, puis D@goes}" } },
+    { "from": "@walk", "to": "slide:10", "x": 56, "y": 22, "type": "term",
+      "text": { "en": "Walk order", "fr": "Ordre de parcours" },
+      "sub": { "en": "the fixed order the blocks are placed in", "fr": "l'ordre fixe dans lequel on pose les blocs" } },
+
+    { "from": "slide:10", "to": "slide:11", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "**Next door**, and again", "fr": "**À côté**, et encore" },
+      "sub": { "en": "{C at x = 5@five} {· E at x = 7@seven} {· the widths add up@three}", "fr": "{C en x = 5@five} {· E en x = 7@seven} {· les largeurs s'additionnent@three}" } },
+    { "from": "@three", "to": "slide:11", "x": 52, "y": 33, "type": "eq",
+      "text": { "en": "{3@three} {+ 2@plus} {+ 2@plus2} {= **7**@makes}", "fr": "{3@three} {+ 2@plus} {+ 2@plus2} {= **7**@makes}" } },
+
+    { "from": "slide:11", "to": "slide:12", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "Back to **D**: upstairs", "fr": "Retour à **D** : à l'étage" },
+      "sub": { "en": "{x = 0, like A@like} {· on top of A, y = 2@two}", "fr": "{x = 0, comme A@like} {· posé sur A, y = 2@two}" } },
+
+    { "from": "slide:12", "to": "@swap", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "All **five** placed", "fr": "Les **cinq** sont placés" },
+      "sub": { "en": "{every one inside the outline@outline}", "fr": "{chacun dans le contour@outline}" } },
+    { "from": "@swap", "to": "end", "x": 2, "y": 3, "type": "headline",
+      "text": { "en": "Swap **A** and **C**?", "fr": "Échanger **A** et **C** ?" },
+      "sub": { "en": "{does D still land at y = 2?@two12}", "fr": "{D arrive-t-il encore en y = 2 ?@two12}" } },
+    { "from": "@pause", "to": "end", "x": 2, "y": 30, "type": "question" }
+  ],
+
+  "question": {
+    "at": "slide:12:end+0.4",
+    "text": { "en": "Swap **A** and **C**: does **D** still land at y = 2?", "fr": "On échange **A** et **C** : **D** arrive-t-il encore en y = 2 ?" },
+    "hint": { "en": "C becomes the root and A takes C's old place. Look at what ends up under D.", "fr": "C devient la racine et A prend l'ancienne place de C. Regardez ce qui se retrouve sous D." },
+    "options": [
+      { "label": { "en": "Yes, still y = 2", "fr": "Oui, toujours y = 2" },
+        "reply": { "en": "Not quite. After the swap, B sits under part of D, and B is ##3## tall, so D lands at y = ##3##, one square higher. Part 3 shows why.", "fr": "Pas tout à fait. Après l'échange, B est sous une partie de D, et B fait ##3## de haut : D arrive en y = ##3##, une case plus haut. La partie 3 montre pourquoi." } },
+      { "label": { "en": "No, higher", "fr": "Non, plus haut" },
+        "reply": { "en": "Yes. B is ##3## tall and now sits under part of D, so D lands at y = ##3##, one square higher. Part 3 shows why.", "fr": "Oui. B fait ##3## de haut et se trouve maintenant sous une partie de D : D arrive en y = ##3##, une case plus haut. La partie 3 montre pourquoi." } },
+      { "label": { "en": "No, lower, on the floor", "fr": "Non, plus bas, sur le sol" },
+        "reply": { "en": "D still has blocks under it: C, and part of B. B is ##3## tall, so D lands at y = ##3##, one square higher. Part 3 shows why.", "fr": "D a encore des blocs dessous : C, et une partie de B. B fait ##3## de haut, donc D arrive en y = ##3##, une case plus haut. La partie 3 montre pourquoi." } }
+    ]
+  },
+  "chapters": [
+    { "at": "start", "title": { "en": "B goes next door", "fr": "B va à côté" } },
+    { "at": "slide:9", "title": { "en": "The walk order", "fr": "L'ordre de parcours" } },
+    { "at": "slide:10", "title": { "en": "C and E", "fr": "C et E" } },
+    { "at": "slide:11", "title": { "en": "D goes upstairs", "fr": "D monte à l'étage" } },
+    { "at": "slide:12", "title": { "en": "Pause and guess", "fr": "Pause et devinette" } }
+  ],
+  "bench": { "ops": ["swap", "turn", "move"] },
+  "note": { "en": "Numbers come from the lab's checker (bstar_check.py --json); the engine re-packs every tree and checks them.", "fr": "Les nombres viennent du vérificateur du lab (bstar_check.py --json) ; le moteur recalcule chaque arbre et les vérifie." }
+}
